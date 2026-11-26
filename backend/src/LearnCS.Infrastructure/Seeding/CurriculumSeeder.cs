@@ -1,5 +1,6 @@
 using System.Text.Json;
 using LearnCS.Domain.Curriculum;
+using LearnCS.Domain.Knowledge;
 using LearnCS.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -296,6 +297,115 @@ public static class CurriculumSeeder
         }
 
         await db.SaveChangesAsync(cancellationToken);
+
+        await SyncKnowledgeConceptsAsync(db, doc, cancellationToken);
+    }
+
+    private static async Task SyncKnowledgeConceptsAsync(
+        AppDbContext db,
+        CurriculumSeedDocument doc,
+        CancellationToken cancellationToken)
+    {
+        if (doc.Concepts.Count == 0) return;
+
+        var existingBySlug = await db.Concepts
+            .ToDictionaryAsync(c => c.Slug.ToLower(), cancellationToken);
+        var changed = false;
+
+        // Archive legacy orphan 'strings-text' only when full 40-concept catalog is synced and it has zero FK references
+        if (doc.Concepts.Count >= 20 && existingBySlug.TryGetValue("strings-text", out var legacyStrings)
+            && legacyStrings.Status != ConceptStatus.Archived)
+        {
+            var hasRefs = await db.Lessons.AnyAsync(l => l.ConceptId == legacyStrings.Id, cancellationToken)
+                || await db.Questions.AnyAsync(q => q.ConceptId == legacyStrings.Id, cancellationToken)
+                || await db.LearningResources.AnyAsync(r => r.ConceptId == legacyStrings.Id, cancellationToken)
+                || await db.ConceptMasteries.AnyAsync(m => m.ConceptId == legacyStrings.Id, cancellationToken);
+            if (!hasRefs)
+            {
+                legacyStrings.Archive();
+                changed = true;
+            }
+        }
+
+        foreach (var c in doc.Concepts)
+        {
+            var slug = ConceptMapping.ResolveSlug(c.Id);
+            var difficulty = ConceptMapping.ResolveDifficulty(c.Id);
+
+            if (!existingBySlug.TryGetValue(slug, out var kc))
+            {
+                kc = Concept.Create(c.TitleEn, slug, c.Domain, difficulty, c.DescriptionEn, 45);
+                kc.Publish();
+                db.Concepts.Add(kc);
+                existingBySlug[slug] = kc;
+                changed = true;
+            }
+            else if (kc.Status == ConceptStatus.Draft)
+            {
+                kc.Publish();
+                changed = true;
+            }
+        }
+
+        if (changed)
+        {
+            await db.SaveChangesAsync(cancellationToken);
+        }
+
+        if (doc.Concepts.Count >= 20)
+        {
+            var existingEdges = await db.ConceptRelationships
+                .AsNoTracking()
+                .Select(e => e.SourceConceptId + "|" + e.TargetConceptId)
+                .ToHashSetAsync(cancellationToken);
+
+            var prereqPairs = new (string SourceSlug, string TargetSlug, RelationType Type)[]
+            {
+                ("computer-basics", "data-representation", RelationType.Prerequisite),
+                ("data-representation", "internet-foundations", RelationType.Related),
+                ("data-representation", "programming-basics", RelationType.Prerequisite),
+                ("functions-methods", "memory-model", RelationType.Prerequisite),
+                ("arrays-lists", "stacks-queues", RelationType.Prerequisite),
+                ("arrays-lists", "hash-tables", RelationType.Prerequisite),
+                ("linked-lists", "trees-heaps", RelationType.Prerequisite),
+                ("trees-heaps", "graphs", RelationType.Prerequisite),
+                ("searching-algorithms", "binary-search", RelationType.BuildsOn),
+                ("sorting-algorithms", "binary-search", RelationType.Related),
+                ("recursion", "greedy-algorithms", RelationType.Related),
+                ("recursion", "dynamic-programming", RelationType.Prerequisite),
+                ("graphs", "graph-algorithms", RelationType.Prerequisite),
+                ("propositional-logic", "sets-relations-proofs", RelationType.Prerequisite),
+                ("sets-relations-proofs", "counting-combinatorics", RelationType.Prerequisite),
+                ("binary-search", "cp-foundations", RelationType.Prerequisite),
+                ("cp-foundations", "two-pointers", RelationType.BuildsOn),
+                ("counting-combinatorics", "cp-number-theory", RelationType.Prerequisite),
+                ("trees-heaps", "cp-range-queries", RelationType.Prerequisite),
+                ("databases-intro", "database-design", RelationType.Prerequisite),
+                ("sql-fundamentals", "acid-transactions", RelationType.Prerequisite),
+                ("computer-basics", "os-processes-threads", RelationType.Prerequisite),
+                ("os-processes-threads", "os-cpu-scheduling", RelationType.Prerequisite),
+                ("os-processes-threads", "os-virtual-memory", RelationType.Prerequisite),
+                ("internet-foundations", "computer-networking", RelationType.Prerequisite),
+                ("oop", "software-engineering", RelationType.Prerequisite),
+            };
+
+            var addedEdges = false;
+            foreach (var (srcSlug, dstSlug, relType) in prereqPairs)
+            {
+                if (!existingBySlug.TryGetValue(srcSlug, out var src) || !existingBySlug.TryGetValue(dstSlug, out var dst))
+                    continue;
+                var key = src.Id + "|" + dst.Id;
+                if (existingEdges.Contains(key)) continue;
+                db.ConceptRelationships.Add(ConceptRelationship.Create(src.Id, dst.Id, relType));
+                existingEdges.Add(key);
+                addedEdges = true;
+            }
+
+            if (addedEdges)
+            {
+                await db.SaveChangesAsync(cancellationToken);
+            }
+        }
     }
 
     public static async Task UpsertQuestionBankAsync(

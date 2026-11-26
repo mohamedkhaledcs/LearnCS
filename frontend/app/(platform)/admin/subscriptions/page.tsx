@@ -23,11 +23,19 @@ interface AdminPlanDto {
   id: string;
   name: string;
   badge?: string | null;
+  descriptionEn?: string;
+  descriptionAr?: string;
   price: number;
+  monthlyPrice?: number;
   originalMonthlyPrice?: number | null;
   annualPrice: number;
+  originalAnnualPrice?: number | null;
   features: string[];
+  featuresEn?: string[];
   featuresAr: string[];
+  isPopular?: boolean;
+  isActive?: boolean;
+  displayOrder?: number;
   subscribersCount: number;
   pendingRequestsCount: number;
 }
@@ -75,9 +83,14 @@ export default function AdminSubscriptionsPage() {
 
   // Plan editor (SuperAdmin)
   const [editPlan, setEditPlan] = useState<AdminPlanDto | null>(null);
+  const [planName, setPlanName] = useState("");
+  const [planDescEn, setPlanDescEn] = useState("");
+  const [planDescAr, setPlanDescAr] = useState("");
   const [monthlyPrice, setMonthlyPrice] = useState("0");
   const [annualPrice, setAnnualPrice] = useState("0");
   const [badgeText, setBadgeText] = useState("");
+  const [planIsPopular, setPlanIsPopular] = useState(false);
+  const [planIsActive, setPlanIsActive] = useState(true);
 
   const loadAll = useCallback(async () => {
     setLoading(true);
@@ -136,14 +149,25 @@ export default function AdminSubscriptionsPage() {
     if (!editPlan) return;
     setActing(editPlan.id);
     setError(null);
+    setFeedback(null);
     try {
       await apiClient.put(`/api/admin/subscriptions/plans/${editPlan.id}`, {
+        name: planName.trim() || editPlan.name,
+        badge: badgeText.trim() || null,
+        descriptionEn: planDescEn.trim() || editPlan.descriptionEn || editPlan.name,
+        descriptionAr: planDescAr.trim() || editPlan.descriptionAr || editPlan.name,
         monthlyPrice: Number(monthlyPrice),
+        originalMonthlyPrice: editPlan.originalMonthlyPrice ?? null,
         annualPrice: Number(annualPrice),
-        badge: badgeText || null
+        originalAnnualPrice: editPlan.originalAnnualPrice ?? null,
+        featuresEn: editPlan.featuresEn || editPlan.features || [],
+        featuresAr: editPlan.featuresAr || [],
+        isPopular: planIsPopular,
+        isActive: planIsActive,
+        displayOrder: editPlan.displayOrder ?? 1
       });
       setEditPlan(null);
-      setFeedback("Subscription plan pricing updated.");
+      setFeedback("Subscription plan pricing and metadata updated.");
       await loadAll();
     } catch (err: any) {
       setError(err?.response?.data?.message || "Could not update plan.");
@@ -220,9 +244,14 @@ export default function AdminSubscriptionsPage() {
                   className="w-full"
                   onClick={() => {
                     setEditPlan(p);
-                    setMonthlyPrice(String(p.price));
+                    setPlanName(p.name);
+                    setPlanDescEn(p.descriptionEn || "");
+                    setPlanDescAr(p.descriptionAr || "");
+                    setMonthlyPrice(String(p.monthlyPrice ?? p.price));
                     setAnnualPrice(String(p.annualPrice));
                     setBadgeText(p.badge || "");
+                    setPlanIsPopular(Boolean(p.isPopular));
+                    setPlanIsActive(p.isActive ?? true);
                   }}
                 >
                   <Edit3 className="h-3.5 w-3.5 me-1.5" />
@@ -332,18 +361,44 @@ export default function AdminSubscriptionsPage() {
         onClose={() => setEditPlan(null)}
         title={editPlan ? `Edit Plan: ${editPlan.name}` : ""}
       >
-        <div className="space-y-4 pt-2">
-          <div className="space-y-1.5">
-            <label className="text-xs font-medium">Monthly Price ($)</label>
-            <Input type="number" step="0.01" value={monthlyPrice} onChange={(e) => setMonthlyPrice(e.target.value)} />
+        <div className="space-y-3 pt-2">
+          <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-1">
+              <label className="text-xs font-medium">Plan Name</label>
+              <Input value={planName} onChange={(e) => setPlanName(e.target.value)} />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium">Marketing Badge</label>
+              <Input value={badgeText} onChange={(e) => setBadgeText(e.target.value)} placeholder="e.g. Most Popular" />
+            </div>
           </div>
-          <div className="space-y-1.5">
-            <label className="text-xs font-medium">Annual Price ($)</label>
-            <Input type="number" step="0.01" value={annualPrice} onChange={(e) => setAnnualPrice(e.target.value)} />
+          <div className="space-y-1">
+            <label className="text-xs font-medium">Description (EN)</label>
+            <Input value={planDescEn} onChange={(e) => setPlanDescEn(e.target.value)} />
           </div>
-          <div className="space-y-1.5">
-            <label className="text-xs font-medium">Marketing Badge</label>
-            <Input value={badgeText} onChange={(e) => setBadgeText(e.target.value)} placeholder="e.g. Most Popular" />
+          <div className="space-y-1">
+            <label className="text-xs font-medium">Description (AR)</label>
+            <Input value={planDescAr} onChange={(e) => setPlanDescAr(e.target.value)} />
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-1">
+              <label className="text-xs font-medium">Monthly Price ($)</label>
+              <Input type="number" step="0.01" value={monthlyPrice} onChange={(e) => setMonthlyPrice(e.target.value)} />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium">Annual Price ($)</label>
+              <Input type="number" step="0.01" value={annualPrice} onChange={(e) => setAnnualPrice(e.target.value)} />
+            </div>
+          </div>
+          <div className="flex items-center gap-4 text-xs">
+            <label className="flex items-center gap-1.5">
+              <input type="checkbox" checked={planIsPopular} onChange={(e) => setPlanIsPopular(e.target.checked)} />
+              Highlight Popular
+            </label>
+            <label className="flex items-center gap-1.5">
+              <input type="checkbox" checked={planIsActive} onChange={(e) => setPlanIsActive(e.target.checked)} />
+              Plan Active
+            </label>
           </div>
           <div className="flex justify-end gap-2 pt-2">
             <Button variant="outline" onClick={() => setEditPlan(null)}>Cancel</Button>

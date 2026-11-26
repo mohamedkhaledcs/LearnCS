@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
+import ReactMarkdown from "react-markdown";
 import { apiClient } from "@/lib/api/client";
 import { useAuth } from "@/lib/auth/auth-context";
 import { useI18n } from "@/lib/i18n/i18n-context";
@@ -12,6 +13,7 @@ import {
   pickLocalized
 } from "@/lib/i18n/platform-labels";
 import { InteractiveRegistry } from "@/components/curriculum/interactive-registry";
+import { InteractiveCodePlayground } from "@/components/curriculum/interactive-code-playground";
 import {
   SectionQuestions,
   type SectionQuestionFeedback,
@@ -26,19 +28,14 @@ import {
   ArrowLeft,
   ArrowRight,
   BookOpen,
-  Check,
   CheckCircle2,
   Clock,
   Code2,
-  Copy,
   ExternalLink,
   Layers,
   Lock,
-  Play,
-  RotateCcw,
   Share2,
   Sparkles,
-  Terminal,
   Loader2,
   AlertCircle
 } from "lucide-react";
@@ -82,6 +79,8 @@ interface UnitDetailsDto {
   estimatedMinutes: number;
   version: number;
   isFreeTier: boolean;
+  hasSubscriptionAccess?: boolean;
+  isSubscriptionLocked?: boolean;
   quizPassPercentage: number;
   quizQuestionCount: number;
   hasQuizPool: boolean;
@@ -131,8 +130,6 @@ export default function UnitLearningPage() {
   const [loading, setLoading] = useState(true);
   const [markingSection, setMarkingSection] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [traceState, setTraceState] = useState<"idle" | "running" | "done">("idle");
-  const [copiedSectionId, setCopiedSectionId] = useState<string | null>(null);
   const restoredUnitRef = useRef<string | null>(null);
 
   const canPreview = Boolean(
@@ -170,7 +167,6 @@ export default function UnitLearningPage() {
       if (!unit || unit.sections.length === 0) return;
       const clamped = Math.max(0, Math.min(unit.sections.length - 1, nextIdx));
       setActiveIdx(clamped);
-      setTraceState("idle");
       const targetSec = unit.sections[clamped];
       if (user && targetSec?.id) {
         apiClient
@@ -182,23 +178,6 @@ export default function UnitLearningPage() {
     },
     [unit, user]
   );
-
-  const handleRunTrace = () => {
-    setTraceState("running");
-    setTimeout(() => {
-      setTraceState("done");
-    }, 350);
-  };
-
-  const handleCopySnippet = async (sectionId: string, code: string) => {
-    try {
-      await navigator.clipboard.writeText(code);
-      setCopiedSectionId(sectionId);
-      setTimeout(() => setCopiedSectionId(null), 1500);
-    } catch {
-      // Clipboard API unavailable in restricted context
-    }
-  };
 
   useEffect(() => {
     fetchUnit();
@@ -312,6 +291,11 @@ export default function UnitLearningPage() {
               <Clock className="h-3 w-3" />
               {unit.estimatedMinutes} {isAr ? "د" : "min"}
             </Badge>
+            {canPreview && !unit.isFreeTier && (
+              <Badge variant="outline" className="text-xs border-indigo-500/40 text-indigo-300">
+                {isAr ? "معاينة إدارية" : "Admin Review Access"}
+              </Badge>
+            )}
             {unit.isCompleted && (
               <Badge variant="success" className="gap-1">
                 <CheckCircle2 className="h-3 w-3" />
@@ -329,6 +313,28 @@ export default function UnitLearningPage() {
             {pickLocalized(unit.description, lang)}
           </p>
         </div>
+
+        {/* Subscription Gate */}
+        {unit.isSubscriptionLocked && (
+          <div className="rounded-xl border border-indigo-500/40 bg-indigo-950/25 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 text-sm font-semibold text-indigo-200">
+                <Lock className="h-4 w-4 text-indigo-400" />
+                {isAr
+                  ? "هذه الوحدة تتطلب اشتراكاً مدفوعاً مفعلاً لإكمال التمارين والاختبار."
+                  : "Premium Unit: Active paid subscription required to complete checkpoints and take the quiz."}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {isAr
+                  ? "يمكنك معاينة أهداف الوحدة وطلب الترقية من صفحة الباقات."
+                  : "You can inspect objectives below or request an upgrade from the Plans page."}
+              </p>
+            </div>
+            <Button asChild size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white shrink-0">
+              <Link href="/plans">{isAr ? "ترقية الاشتراك" : "View Plans"}</Link>
+            </Button>
+          </div>
+        )}
 
         {/* Shared Across Paths Callout */}
         {unit.appearsInPaths.length > 1 && (
@@ -475,111 +481,60 @@ export default function UnitLearningPage() {
           </CardHeader>
 
           <CardContent className="p-6 space-y-6">
-            {/* Prose Explanation */}
+            {/* Rich Markdown Prose Explanation */}
             {pickLocalized(activeSection.content, lang) && (
-              <div className="prose prose-invert max-w-none whitespace-pre-line text-sm md:text-base leading-relaxed text-slate-200">
-                {pickLocalized(activeSection.content, lang)}
+              <div className="space-y-3 text-sm md:text-base leading-relaxed text-slate-200">
+                <ReactMarkdown
+                  components={{
+                    h2: ({ children }) => (
+                      <h2 className="text-lg font-bold text-white mt-4 mb-2">{children}</h2>
+                    ),
+                    h3: ({ children }) => (
+                      <h3 className="text-base font-semibold text-indigo-300 mt-3 mb-1.5">{children}</h3>
+                    ),
+                    p: ({ children }) => <p className="leading-relaxed text-slate-200">{children}</p>,
+                    ul: ({ children }) => (
+                      <ul className="list-disc list-inside space-y-1.5 text-slate-200 ps-2">{children}</ul>
+                    ),
+                    ol: ({ children }) => (
+                      <ol className="list-decimal list-inside space-y-1.5 text-slate-200 ps-2">{children}</ol>
+                    ),
+                    strong: ({ children }) => (
+                      <strong className="font-semibold text-white">{children}</strong>
+                    ),
+                    code: ({ children }) => (
+                      <code
+                        dir="ltr"
+                        className="inline-block rounded bg-slate-900 border border-white/10 px-1.5 py-0.5 font-mono text-xs text-cyan-300"
+                      >
+                        {children}
+                      </code>
+                    ),
+                    blockquote: ({ children }) => (
+                      <blockquote className="border-s-2 border-indigo-500 ps-3 italic text-slate-300">
+                        {children}
+                      </blockquote>
+                    )
+                  }}
+                >
+                  {pickLocalized(activeSection.content, lang)}
+                </ReactMarkdown>
               </div>
             )}
 
-            {/* Code Walkthrough (Strictly LTR) */}
+            {/* Interactive Code Playground */}
             {(activeSection.codeSnippet || activeSection.type === "code") && (
-              <div className="space-y-3">
-                {activeSection.codeSnippet && (
-                  <div className="rounded-xl border border-white/10 bg-slate-950 overflow-hidden" dir="ltr">
-                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 bg-slate-900/70 px-4 py-2 text-xs text-slate-400 font-mono">
-                      <div className="flex items-center gap-2">
-                        <span className="uppercase tracking-wider text-cyan-400">
-                          {activeSection.codeLanguage || "code"}
-                        </span>
-                        <span className="text-slate-600">|</span>
-                        <span>LearnCS Code Lab</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => handleCopySnippet(activeSection.id, activeSection.codeSnippet || "")}
-                          className="inline-flex items-center gap-1 rounded border border-white/10 bg-white/5 px-2 py-1 text-[11px] text-slate-300 hover:bg-white/10 transition-colors"
-                        >
-                          {copiedSectionId === activeSection.id ? (
-                            <>
-                              <Check className="h-3 w-3 text-emerald-400" />
-                              Copied
-                            </>
-                          ) : (
-                            <>
-                              <Copy className="h-3 w-3" />
-                              Copy
-                            </>
-                          )}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleRunTrace}
-                          disabled={traceState === "running"}
-                          className="inline-flex items-center gap-1 rounded border border-emerald-500/40 bg-emerald-600/20 px-2.5 py-1 text-[11px] font-medium text-emerald-300 hover:bg-emerald-600/30 transition-colors"
-                        >
-                          {traceState === "running" ? (
-                            <Loader2 className="h-3 w-3 animate-spin" />
-                          ) : (
-                            <Play className="h-3 w-3" />
-                          )}
-                          Run Trace
-                        </button>
-                        {traceState === "done" && (
-                          <button
-                            type="button"
-                            onClick={() => setTraceState("idle")}
-                            className="inline-flex items-center gap-1 rounded border border-white/10 bg-white/5 px-2 py-1 text-[11px] text-slate-300 hover:bg-white/10 transition-colors"
-                          >
-                            <RotateCcw className="h-3 w-3" />
-                            Reset
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                    <pre className="p-4 text-xs md:text-sm text-emerald-300 overflow-x-auto font-mono text-left leading-relaxed">
-                      <code>{activeSection.codeSnippet}</code>
-                    </pre>
-                  </div>
-                )}
-
-                {activeSection.codeExplanation && (
-                  <div className="rounded-lg border border-white/10 bg-white/[0.03] p-4 text-sm text-slate-200 leading-relaxed">
-                    {pickLocalized(activeSection.codeExplanation, lang)}
-                  </div>
-                )}
-
-                {activeSection.expectedOutput && (
-                  <div
-                    className={`rounded-lg border p-3.5 font-mono text-xs transition-colors ${
-                      traceState === "done"
-                        ? "border-emerald-500/50 bg-emerald-950/35 text-emerald-200"
-                        : "border-emerald-500/20 bg-emerald-950/20 text-emerald-300"
-                    }`}
-                    dir="ltr"
-                  >
-                    <div className="flex items-start gap-2">
-                      <Terminal className="h-4 w-4 mt-0.5 shrink-0 text-emerald-400" />
-                      <div className="space-y-1 flex-1">
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="text-emerald-400 font-semibold">
-                            {traceState === "done"
-                              ? "Trace Execution Complete (exit code 0):"
-                              : traceState === "running"
-                              ? "Executing trace..."
-                              : "Expected Output:"}
-                          </span>
-                          {traceState === "done" && (
-                            <span className="text-[10px] text-emerald-400/80 uppercase">Verified Output</span>
-                          )}
-                        </div>
-                        <pre className="whitespace-pre-wrap text-left">{activeSection.expectedOutput}</pre>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <InteractiveCodePlayground
+                key={activeSection.id}
+                sectionId={activeSection.id}
+                initialCode={activeSection.codeSnippet}
+                language={activeSection.codeLanguage}
+                expectedOutput={activeSection.expectedOutput}
+                explanation={
+                  activeSection.codeExplanation ? pickLocalized(activeSection.codeExplanation, lang) : null
+                }
+                isAr={isAr}
+              />
             )}
 
             {/* Interactive Lab */}
@@ -593,7 +548,16 @@ export default function UnitLearningPage() {
             )}
 
             {/* Inline Checkpoint Questions OR Direct Mark Complete */}
-            {activeSection.inlineQuestions && activeSection.inlineQuestions.length > 0 ? (
+            {unit.isSubscriptionLocked ? (
+              <div className="pt-2 flex justify-end">
+                <Button asChild variant="outline" className="border-indigo-500/40 text-indigo-300">
+                  <Link href="/plans">
+                    <Lock className="h-4 w-4 me-2" />
+                    {isAr ? "قم بالترقية لإكمال هذا القسم" : "Upgrade Plan to Complete"}
+                  </Link>
+                </Button>
+              </div>
+            ) : activeSection.inlineQuestions && activeSection.inlineQuestions.length > 0 ? (
               <SectionQuestions
                 key={activeSection.id}
                 sectionId={activeSection.id}
@@ -647,16 +611,18 @@ export default function UnitLearningPage() {
       )}
 
       {/* Unit Mastery Final Assessment */}
-      <UnitQuiz
-        unitId={unit.id}
-        pathId={pathId}
-        lang={lang}
-        passPercentage={unit.quizPassPercentage}
-        questionCount={unit.quizQuestionCount}
-        canPreview={canPreview}
-        sectionsComplete={allRequiredSectionsComplete}
-        onQuizCompleted={() => fetchUnit()}
-      />
+      {!unit.isSubscriptionLocked && (
+        <UnitQuiz
+          unitId={unit.id}
+          pathId={pathId}
+          lang={lang}
+          passPercentage={unit.quizPassPercentage}
+          questionCount={unit.quizQuestionCount}
+          canPreview={canPreview}
+          sectionsComplete={allRequiredSectionsComplete}
+          onQuizCompleted={() => fetchUnit()}
+        />
+      )}
 
       {/* External References & Recent Attempts */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

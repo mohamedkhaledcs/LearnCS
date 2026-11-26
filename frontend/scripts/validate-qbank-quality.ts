@@ -123,8 +123,8 @@ function validateQuestionBankQuality() {
       const mapped = unit.assessmentQuestionIds || [];
       totalMappings += mapped.length;
       if (mapped.length < minMappedPerUnit) minMappedPerUnit = mapped.length;
-      if (mapped.length < 8) {
-        errors.push(`Unit ${unit.id} has only ${mapped.length} mapped questions (expected >= 8)`);
+      if (mapped.length < 15) {
+        errors.push(`Unit ${unit.id} has only ${mapped.length} mapped questions (expected >= 15)`);
       }
       for (const qid of mapped) {
         if (!seenIds.has(qid)) errors.push(`Unit ${unit.id} maps missing question ID ${qid}`);

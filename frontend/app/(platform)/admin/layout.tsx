@@ -20,7 +20,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     );
   }
 
-  const isAdmin = user?.roles?.some((r) => r === "Admin" || r === "SuperAdmin");
+  const isAdmin = user?.roles?.some((r) => r === "Admin" || r === "SuperAdmin" || r === "ContentManager");
 
   if (!isAdmin) {
     return (

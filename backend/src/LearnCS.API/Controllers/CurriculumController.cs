@@ -5,6 +5,7 @@ using LearnCS.Domain.Curriculum;
 using LearnCS.Domain.Gamification;
 using LearnCS.Domain.Intelligence;
 using LearnCS.Domain.Platform;
+using LearnCS.Domain.Subscriptions;
 using LearnCS.Infrastructure.Persistence;
 using LearnCS.Infrastructure.Seeding;
 using Microsoft.AspNetCore.Authorization;
@@ -53,12 +54,50 @@ public class CurriculumController(AppDbContext db) : ApiControllerBase
     private bool HasElevatedPreviewRole() =>
         User.IsInRole("Admin") || User.IsInRole("SuperAdmin") || User.IsInRole("ContentManager");
 
+    private async Task<bool> HasActivePaidSubscriptionAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        if (userId == Guid.Empty) return false;
+        var now = DateTime.UtcNow;
+        return await db.UserSubscriptions.AsNoTracking()
+            .AnyAsync(s => s.UserId == userId
+                && s.PlanId != "plan-free"
+                && s.Status == SubscriptionStatus.Active
+                && (s.ExpiresAt == null || s.ExpiresAt > now),
+                cancellationToken);
+    }
+
+    [HttpGet("concepts")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetCanonicalConcepts(CancellationToken cancellationToken)
+    {
+        var includeUnpublished = HasElevatedPreviewRole();
+        var concepts = await db.CanonicalConcepts
+            .AsNoTracking()
+            .Where(c => includeUnpublished || c.PublishStatus == ContentPublishStatus.Published)
+            .OrderBy(c => c.Domain)
+            .ThenBy(c => c.Id)
+            .Select(c => new
+            {
+                c.Id,
+                Title = new { en = c.TitleEn, ar = c.TitleAr },
+                Description = new { en = c.DescriptionEn, ar = c.DescriptionAr },
+                c.Domain,
+                PublishStatus = c.PublishStatus.ToString()
+            })
+            .ToListAsync(cancellationToken);
+
+        return Ok(concepts);
+    }
+
     [HttpGet("paths")]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPaths(CancellationToken cancellationToken)
     {
         var userId = GetUserId();
+        var isElevated = HasElevatedPreviewRole();
+        var hasPaidSubscription = isElevated || await HasActivePaidSubscriptionAsync(userId, cancellationToken);
         var completedUnits = await GetCompletedUnitSetAsync(userId, cancellationToken);
         var inProgressUnits = userId == Guid.Empty
             ? []
@@ -68,7 +107,7 @@ public class CurriculumController(AppDbContext db) : ApiControllerBase
                 .ToHashSetAsync(cancellationToken);
 
         var paths = await db.CurriculumPaths
-            .Where(p => p.PublishStatus == ContentPublishStatus.Published)
+            .Where(p => isElevated || p.PublishStatus == ContentPublishStatus.Published)
             .OrderBy(p => p.DisplayOrder)
             .Include(p => p.Modules.OrderBy(m => m.DisplayOrder))
                 .ThenInclude(m => m.Placements.OrderBy(pl => pl.DisplayOrder))
@@ -105,12 +144,13 @@ public class CurriculumController(AppDbContext db) : ApiControllerBase
                 TargetAudience = p.TargetAudienceEn != null ? new { en = p.TargetAudienceEn, ar = p.TargetAudienceAr ?? p.TargetAudienceEn } : null,
                 p.Category,
                 p.DisplayOrder,
+                PublishStatus = p.PublishStatus.ToString(),
                 Prerequisites = pathPrereqs,
                 RecommendedNextPaths = TryDeserialize<List<string>>(p.RecommendedNextPathsJson) ?? [],
                 TotalUnits = allPathUnitIds.Count,
                 CompletedUnits = completedInPath,
                 ProgressPercent = allPathUnitIds.Count > 0 ? Math.Round((decimal)completedInPath / allPathUnitIds.Count * 100m, 1) : 0m,
-                IsUnlocked = missingPathPrereqs.Count == 0 || HasElevatedPreviewRole(),
+                IsUnlocked = missingPathPrereqs.Count == 0 || isElevated,
                 Modules = p.Modules.OrderBy(m => m.DisplayOrder).Select(m => new
                 {
                     m.Id,
@@ -118,12 +158,14 @@ public class CurriculumController(AppDbContext db) : ApiControllerBase
                     Description = new { en = m.DescriptionEn, ar = m.DescriptionAr },
                     m.DisplayOrder,
                     Units = m.Placements.OrderBy(pl => pl.DisplayOrder)
-                        .Where(pl => pl.Unit != null && pl.Unit.PublishStatus == ContentPublishStatus.Published)
+                        .Where(pl => pl.Unit != null && (isElevated || pl.Unit.PublishStatus == ContentPublishStatus.Published))
                         .Select(pl =>
                         {
                             var u = pl.Unit!;
                             var unitPrereqs = TryDeserialize<List<PrereqRuleDto>>(u.PrerequisitesJson) ?? [];
-                            var unlocked = HasElevatedPreviewRole() || unitPrereqs.Where(r => r.Enforcement == "hard_lock").All(r => EvaluateRule(r, completedUnits, pathMap));
+                            var hasSubscriptionAccess = u.IsFreeTier || hasPaidSubscription;
+                            var prereqUnlocked = unitPrereqs.Where(r => r.Enforcement == "hard_lock").All(r => EvaluateRule(r, completedUnits, pathMap));
+                            var unlocked = isElevated || (hasSubscriptionAccess && prereqUnlocked);
                             return new
                             {
                                 u.Id,
@@ -133,6 +175,8 @@ public class CurriculumController(AppDbContext db) : ApiControllerBase
                                 u.Difficulty,
                                 u.EstimatedMinutes,
                                 u.IsFreeTier,
+                                HasSubscriptionAccess = hasSubscriptionAccess,
+                                IsSubscriptionLocked = !hasSubscriptionAccess,
                                 Tags = TryDeserialize<List<string>>(u.TagsJson) ?? [],
                                 InteractiveModuleIds = TryDeserialize<List<string>>(u.InteractiveModuleIdsJson) ?? [],
                                 Prerequisites = unitPrereqs,
@@ -165,10 +209,13 @@ public class CurriculumController(AppDbContext db) : ApiControllerBase
             .AsNoTracking()
             .FirstOrDefaultAsync(u => u.Id == normalizedId, cancellationToken);
 
-        if (unit == null)
+        var isElevated = HasElevatedPreviewRole();
+        if (unit == null || (!isElevated && unit.PublishStatus != ContentPublishStatus.Published))
             return NotFound(new { message = $"Learning unit '{unitId}' was not found." });
 
         var userId = GetUserId();
+        var hasPaidSubscription = isElevated || await HasActivePaidSubscriptionAsync(userId, cancellationToken);
+        var hasSubscriptionAccess = unit.IsFreeTier || hasPaidSubscription;
         var completedUnits = await GetCompletedUnitSetAsync(userId, cancellationToken);
         var sectionProgresses = userId == Guid.Empty
             ? new Dictionary<string, UserSectionProgress>()
@@ -278,6 +325,8 @@ public class CurriculumController(AppDbContext db) : ApiControllerBase
             unit.EstimatedMinutes,
             unit.Version,
             unit.IsFreeTier,
+            HasSubscriptionAccess = hasSubscriptionAccess,
+            IsSubscriptionLocked = !hasSubscriptionAccess,
             unit.QuizPassPercentage,
             unit.QuizQuestionCount,
             HasQuizPool = anyMappedCount > 0,
@@ -296,7 +345,7 @@ public class CurriculumController(AppDbContext db) : ApiControllerBase
             Status = completedUnits.Contains(normalizedId) ? "completed" : (unitProgress?.Status.ToString().ToLowerInvariant() ?? "not_started"),
             MasteryScore = unitProgress?.MasteryScore ?? (completedUnits.Contains(normalizedId) ? 100m : 0m),
             LastSectionId = unitProgress?.LastSectionId,
-            IsUnlocked = HasElevatedPreviewRole() || missingUnitPrereqs.Count == 0,
+            IsUnlocked = isElevated || (hasSubscriptionAccess && missingUnitPrereqs.Count == 0),
             MissingPrerequisites = missingUnitPrereqs.Distinct().ToList(),
             Sections = sanitizedSections,
             RecentQuizAttempts = recentAttempts
@@ -362,6 +411,21 @@ public class CurriculumController(AppDbContext db) : ApiControllerBase
             .FirstOrDefaultAsync(s => s.Id == sectionId, cancellationToken);
         if (section == null)
             return NotFound(new { message = $"Section '{sectionId}' was not found." });
+
+        if (!HasElevatedPreviewRole())
+        {
+            var unit = await db.ReusableUnits.AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == section.UnitId, cancellationToken);
+            if (unit != null && !unit.IsFreeTier && !await HasActivePaidSubscriptionAsync(userId, cancellationToken))
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new
+                {
+                    code = "SUBSCRIPTION_REQUIRED",
+                    message = "An active paid subscription is required to complete this premium learning unit.",
+                    unitId = section.UnitId
+                });
+            }
+        }
 
         var inlineQuestions = TryDeserialize<List<InlineQuestionFullDto>>(section.InlineQuestionsJson) ?? [];
         var feedback = new List<object>();
@@ -471,6 +535,16 @@ public class CurriculumController(AppDbContext db) : ApiControllerBase
             .FirstOrDefaultAsync(u => u.Id == normalizedUnitId, cancellationToken);
         if (unit == null)
             return NotFound(new { message = $"Learning unit '{unitId}' not found." });
+
+        if (!unit.IsFreeTier && !HasElevatedPreviewRole() && !await HasActivePaidSubscriptionAsync(userId, cancellationToken))
+        {
+            return StatusCode(StatusCodes.Status403Forbidden, new
+            {
+                code = "SUBSCRIPTION_REQUIRED",
+                message = "An active paid subscription is required to take quizzes in this premium learning unit.",
+                unitId = normalizedUnitId
+            });
+        }
 
         // Enforce required section completion unless elevated admin preview
         var isAdminPreview = (request?.PreviewMode ?? false) && HasElevatedPreviewRole();
@@ -741,7 +815,7 @@ public class CurriculumController(AppDbContext db) : ApiControllerBase
                 .FirstOrDefaultAsync(u => u.Id == normalizedUnitId, cancellationToken);
             if (unit?.Concept != null)
             {
-                var slugCandidate = unit.ConceptId.Replace("concept-", "");
+                var slugCandidate = ConceptMapping.ResolveSlug(unit.ConceptId);
                 var knowledgeConcept = await db.Concepts.AsNoTracking()
                     .FirstOrDefaultAsync(c => c.Slug == slugCandidate || c.Title.ToLower() == unit.Concept.TitleEn.ToLower(), cancellationToken);
                 if (knowledgeConcept != null)

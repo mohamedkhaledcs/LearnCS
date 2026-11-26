@@ -27,6 +27,7 @@ export function SortingVisualizer() {
   const isAr = language === "ar";
 
   const [initialArray, setInitialArray] = useState<number[]>(DEFAULT_ARRAY);
+  const [arrayInput, setArrayInput] = useState<string>(DEFAULT_ARRAY.join(", "));
   const [algorithm, setAlgorithm] = useState<"bubble" | "selection">("bubble");
   const [steps, setSteps] = useState<SortStep[]>([]);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
@@ -204,6 +205,20 @@ export function SortingVisualizer() {
   const generateRandom = () => {
     const newArr = Array.from({ length: 9 }, () => Math.floor(Math.random() * 85) + 12);
     setInitialArray(newArr);
+    setArrayInput(newArr.join(", "));
+  };
+
+  const applyCustomArray = (e: React.FormEvent) => {
+    e.preventDefault();
+    const parsed = arrayInput
+      .split(",")
+      .map((s) => parseInt(s.trim(), 10))
+      .filter((n) => !isNaN(n))
+      .slice(0, 12);
+    if (parsed.length >= 2) {
+      setInitialArray(parsed);
+      setArrayInput(parsed.join(", "));
+    }
   };
 
   const currentStep = steps[currentStepIndex] || {
@@ -275,6 +290,21 @@ export function SortingVisualizer() {
             <Shuffle className="w-3.5 h-3.5" />
             {isAr ? "مصفوفة عشوائية" : "Randomize"}
           </button>
+          <form onSubmit={applyCustomArray} className="flex items-center gap-1.5" dir="ltr">
+            <input
+              type="text"
+              value={arrayInput}
+              onChange={(e) => setArrayInput(e.target.value)}
+              aria-label="Custom numbers"
+              className="w-40 rounded-xl border border-white/10 bg-black/40 px-2.5 py-1 text-xs font-mono text-white"
+            />
+            <button
+              type="submit"
+              className="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-medium text-white"
+            >
+              {isAr ? "تطبيق" : "Apply"}
+            </button>
+          </form>
         </div>
       </div>
 

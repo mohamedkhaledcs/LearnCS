@@ -99,7 +99,7 @@ app.MapGet("/api/health", CheckHealthAsync).WithTags("Health");
 // ── Database: schemas + migrations + seed ─────────────────────────────────────
 if (app.Environment.IsDevelopment())
 {
-    await app.Services.InitialiseDatabaseAsync();
+    await app.Services.InitialiseDatabaseAsync(app.Configuration);
 }
 
 app.Run();

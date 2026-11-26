@@ -130,7 +130,7 @@ public static class DependencyInjection
     /// Creates PostgreSQL schemas, applies migrations, and optionally seeds dev data.
     /// Called once at startup.
     /// </summary>
-    public static async Task InitialiseDatabaseAsync(this IServiceProvider services)
+    public static async Task InitialiseDatabaseAsync(this IServiceProvider services, IConfiguration? configuration = null)
     {
         using var scope = services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -151,6 +151,6 @@ public static class DependencyInjection
         await db.Database.MigrateAsync();
 
         // Seed development data
-        await DataSeeder.SeedAsync(db);
+        await DataSeeder.SeedAsync(db, configuration);
     }
 }

@@ -265,13 +265,13 @@ export function KnowledgeGraphSection() {
 
       if (isReducedMotion) {
         gsap.set([titleRef.current, graphRef.current, readyRef.current], { autoAlpha: 1 });
-        gsap.set(q(".knode"), { autoAlpha: 1, scale: 1 });
+        gsap.set(q(".knode"), { autoAlpha: 1, scale: 1, xPercent: -50, yPercent: -50 });
         gsap.set(q(".kedge"), { autoAlpha: 1 });
         return;
       }
 
       // Initial states
-      gsap.set(q(".knode"), { autoAlpha: 0, scale: 0.5 });
+      gsap.set(q(".knode"), { autoAlpha: 0, scale: 0.5, xPercent: -50, yPercent: -50 });
       gsap.set(q(".kedge"), { autoAlpha: 0 });
       gsap.set(graphRef.current, { autoAlpha: 0, scale: 1.05 });
       gsap.set(titleRef.current, { autoAlpha: 0, y: -30 });
@@ -358,13 +358,14 @@ export function KnowledgeGraphSection() {
           </h2>
         </div>
 
-        {/* Layer B: Graph Stage */}
+        {/* Layer B: Graph Stage (dir="ltr" locks coordinate math symmetric across EN/AR) */}
         <div
           ref={graphRef}
+          dir="ltr"
           className="relative w-full max-w-[1200px] flex-1 my-6 mx-auto invisible"
         >
-          {/* Graph container: uses 100% of flex-1 height */}
-          <div className="absolute inset-0 w-full left-1/2 -translate-x-1/2 h-full">
+          {/* Graph container: uses 100% of flex-1 height cleanly centered */}
+          <div className="absolute inset-0 w-full h-full">
             <div 
               className="absolute inset-0 transition-transform duration-75 touch-none"
               style={{ transform: `translate(${pan.x}px, ${pan.y}px)` }}
@@ -426,20 +427,23 @@ export function KnowledgeGraphSection() {
                 return (
                   <div
                     key={node.id}
-                    className={`knode knode-${node.id} absolute z-10 -translate-x-1/2 -translate-y-1/2 cursor-pointer transition-all duration-300 ${
-                      isDimmed ? "opacity-20 scale-90" : "opacity-100 scale-100"
-                    } ${isHovered ? "scale-110 z-20" : ""}`}
+                    className={`knode knode-${node.id} absolute z-10 cursor-pointer transition-opacity duration-300 ${
+                      isDimmed ? "opacity-20" : "opacity-100"
+                    } ${isHovered ? "z-20" : ""}`}
                     style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
                     onMouseEnter={() => setHoveredNodeId(node.id)}
                     onMouseLeave={() => setHoveredNodeId(null)}
                     onClick={() => setActiveNode(node)}
                   >
                     <div
-                      className={`px-3 py-1.5 md:px-5 md:py-2.5 rounded-full backdrop-blur-xl border transition-all duration-300 ${style.pill} ${
-                        isHovered ? style.glow : ""
-                      }`}
+                      className={`px-1.5 py-0.5 sm:px-3.5 sm:py-1.5 md:px-5 md:py-2.5 rounded-full backdrop-blur-xl border transition-transform duration-300 ${
+                        isHovered ? `scale-110 ${style.glow}` : isDimmed ? "scale-90" : "scale-100"
+                      } ${style.pill}`}
                     >
-                      <span className="text-xs md:text-sm font-bold text-white whitespace-nowrap tracking-wide">
+                      <span
+                        dir="auto"
+                        className="block max-w-[74px] sm:max-w-none text-center leading-tight text-[8.5px] sm:text-xs md:text-sm font-bold text-white whitespace-normal sm:whitespace-nowrap tracking-normal sm:tracking-wide"
+                      >
                         {t.knowledgeGraph.nodes[node.id as keyof typeof t.knowledgeGraph.nodes] || node.label}
                       </span>
                     </div>

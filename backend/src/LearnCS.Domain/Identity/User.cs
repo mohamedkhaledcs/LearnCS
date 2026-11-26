@@ -76,4 +76,11 @@ public class User : SoftDeletableEntity
         PasswordHash = newHash;
         SetUpdated();
     }
+
+    public void ClearLockout()
+    {
+        FailedLoginAttempts = 0;
+        LockoutUntil = null;
+        SetUpdated();
+    }
 }

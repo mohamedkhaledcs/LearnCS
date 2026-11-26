@@ -26,7 +26,8 @@ export function BinarySearchVisualizer({ initialTarget = 23 }: { initialTarget?:
   const { language } = useI18n();
   const isAr = language === "ar";
 
-  const [array] = useState<number[]>(DEFAULT_ARRAY);
+  const [array, setArray] = useState<number[]>(DEFAULT_ARRAY);
+  const [arrayInput, setArrayInput] = useState<string>(DEFAULT_ARRAY.join(", "));
   const [target, setTarget] = useState<number>(initialTarget);
   const [targetInput, setTargetInput] = useState<string>(initialTarget.toString());
   const [steps, setSteps] = useState<BinarySearchStep[]>([]);
@@ -132,6 +133,19 @@ export function BinarySearchVisualizer({ initialTarget = 23 }: { initialTarget?:
     setTargetInput(newVal.toString());
   };
 
+  const handleApplyArray = (raw: string) => {
+    const parsed = raw
+      .split(",")
+      .map((s) => parseInt(s.trim(), 10))
+      .filter((n) => !isNaN(n))
+      .slice(0, 14)
+      .sort((a, b) => a - b);
+    if (parsed.length > 0) {
+      setArray(parsed);
+      setArrayInput(parsed.join(", "));
+    }
+  };
+
   const currentStep: BinarySearchStep | undefined = steps[currentStepIndex];
 
   return (
@@ -179,6 +193,28 @@ export function BinarySearchVisualizer({ initialTarget = 23 }: { initialTarget?:
               </button>
             ))}
           </div>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleApplyArray(arrayInput);
+            }}
+            className="flex items-center gap-1"
+            dir="ltr"
+          >
+            <input
+              type="text"
+              value={arrayInput}
+              onChange={(e) => setArrayInput(e.target.value)}
+              aria-label="Custom sorted array"
+              className="w-40 px-2 py-1 bg-black/40 border border-white/10 rounded-lg text-xs font-mono text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            />
+            <button
+              type="submit"
+              className="px-2 py-1 bg-white/10 hover:bg-white/20 text-xs text-white rounded-lg transition-colors"
+            >
+              {isAr ? "مصفوفة" : "Array"}
+            </button>
+          </form>
           <form
             onSubmit={(e) => {
               e.preventDefault();

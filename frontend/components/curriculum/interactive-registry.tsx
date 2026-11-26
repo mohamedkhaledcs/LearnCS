@@ -20,6 +20,9 @@ import { DpTableVisualizer } from "./dp-table-visualizer";
 import { SqlQueryVisualizer } from "./sql-query-visualizer";
 import { OsSchedulerVisualizer } from "./os-scheduler-visualizer";
 import { NetworkPacketVisualizer } from "./network-packet-visualizer";
+import { ArrayVisualizer } from "./array-visualizer";
+import { RecursionVisualizer } from "./recursion-visualizer";
+import { MemoryHeapVisualizer } from "./memory-heap-visualizer";
 import { BrainCircuit } from "lucide-react";
 
 interface InteractiveRegistryProps {
@@ -49,7 +52,10 @@ const RECOGNIZED_MODULES = new Set([
   "dp-table-visualizer",
   "sql-query-visualizer",
   "os-scheduler-visualizer",
-  "network-packet-visualizer"
+  "network-packet-visualizer",
+  "array-visualizer",
+  "recursion-visualizer",
+  "memory-heap-visualizer"
 ]);
 
 const UNIT_TO_VISUALIZER: Record<string, string> = {
@@ -61,7 +67,10 @@ const UNIT_TO_VISUALIZER: Record<string, string> = {
   "unit-variables-foundations": "variables-visualizer",
   "unit-conditions-foundations": "truth-table-visualizer",
   "unit-loops-foundations": "loops-visualizer",
-  "unit-arrays-foundations": "two-pointers-visualizer",
+  "unit-memory-foundations": "memory-heap-visualizer",
+  "unit-arrays-foundations": "array-visualizer",
+  "unit-array-cp-patterns": "array-visualizer",
+  "unit-recursion-foundations": "recursion-visualizer",
   "unit-oop-inheritance-polymorphism": "oop-dispatch-visualizer",
   "unit-dm-propositional-logic": "truth-table-visualizer",
   "unit-linked-lists-foundations": "linked-list-visualizer",
@@ -77,7 +86,10 @@ const UNIT_TO_VISUALIZER: Record<string, string> = {
   "unit-dp-foundations": "dp-table-visualizer",
   "unit-sql-fundamentals": "sql-query-visualizer",
   "unit-sql-joins-aggregations": "sql-query-visualizer",
+  "unit-db-normalization-foundations": "sql-query-visualizer",
+  "unit-db-indexing-foundations": "sql-query-visualizer",
   "unit-os-cpu-scheduling": "os-scheduler-visualizer",
+  "unit-os-virtual-memory": "memory-heap-visualizer",
   "unit-networking-protocols": "network-packet-visualizer",
   "unit-networking-http-dns": "network-packet-visualizer"
 };
@@ -140,6 +152,12 @@ export function InteractiveRegistry({
       return <OsSchedulerVisualizer />;
     case "network-packet-visualizer":
       return <NetworkPacketVisualizer />;
+    case "array-visualizer":
+      return <ArrayVisualizer />;
+    case "recursion-visualizer":
+      return <RecursionVisualizer />;
+    case "memory-heap-visualizer":
+      return <MemoryHeapVisualizer />;
     default:
       return (
         <div className="p-8 rounded-3xl bg-neutral-900/70 border border-white/10 text-center shadow-xl">

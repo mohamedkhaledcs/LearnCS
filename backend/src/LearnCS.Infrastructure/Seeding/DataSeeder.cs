@@ -9,6 +9,7 @@ using LearnCS.Domain.Platform;
 using LearnCS.Domain.Subscriptions;
 using LearnCS.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace LearnCS.Infrastructure.Seeding;
 
@@ -18,7 +19,15 @@ namespace LearnCS.Infrastructure.Seeding;
 /// </summary>
 public static class DataSeeder
 {
-    public static async Task SeedAsync(AppDbContext db)
+    private static string? GetConfigOrEnv(IConfiguration? configuration, string envVarName, string configKey)
+    {
+        var envVal = Environment.GetEnvironmentVariable(envVarName);
+        if (!string.IsNullOrWhiteSpace(envVal)) return envVal;
+        var cfgVal = configuration?[configKey];
+        return string.IsNullOrWhiteSpace(cfgVal) ? null : cfgVal;
+    }
+
+    public static async Task SeedAsync(AppDbContext db, IConfiguration? configuration = null)
     {
         await SeedRolesAsync(db);
         await SeedSubscriptionPlansAsync(db);
@@ -29,7 +38,7 @@ public static class DataSeeder
         await SeedProjectsAsync(db);
         await SeedCareerAsync(db);
         await SeedGamificationAsync(db);
-        await SeedUsersAsync(db);
+        await SeedUsersAsync(db, configuration);
         await CurriculumSeeder.SeedFromJsonIfPresentAsync(db);
     }
 
@@ -506,7 +515,31 @@ public static class DataSeeder
     // ─────────────────────────────────────────────────────────────────────────
     private static async Task SeedSubscriptionPlansAsync(AppDbContext db)
     {
-        if (await db.SubscriptionPlans.AnyAsync()) return;
+        if (await db.SubscriptionPlans.AnyAsync())
+        {
+            var readyPlan = await db.SubscriptionPlans.FirstOrDefaultAsync(p => p.Id == "plan-ready");
+            if (readyPlan != null && readyPlan.FeaturesEnJson.Contains("All 11 CS Learning Paths", StringComparison.Ordinal))
+            {
+                readyPlan.Update(
+                    readyPlan.Name,
+                    readyPlan.Badge,
+                    readyPlan.DescriptionEn,
+                    readyPlan.DescriptionAr,
+                    readyPlan.MonthlyPrice,
+                    readyPlan.OriginalMonthlyPrice,
+                    readyPlan.AnnualPrice,
+                    readyPlan.OriginalAnnualPrice,
+                    """["Full Access to All 9 CS Learning Paths","Discrete Math & Competitive Programming Sheets","Expanded Question Bank Analytics & AI Tutor","Verified Track Completion Certificates"]""",
+                    """["وصول كامل لجميع المسارات التعليمية الـ 9","شيتات Discrete Math وCompetitive Programming","تحليلات بنك الأسئلة ومساعد AI الموسع","شهادات إتمام المسارات الموثقة"]""",
+                    """{"tier":"ready","maxPaths":9,"aiMessagesPerDay":100,"certificates":true,"cpPractice":true}""",
+                    readyPlan.IsPopular,
+                    readyPlan.IsActive,
+                    readyPlan.DisplayOrder
+                );
+                await db.SaveChangesAsync();
+            }
+            return;
+        }
 
         var plans = new[]
         {
@@ -551,9 +584,9 @@ public static class DataSeeder
                 originalMonthlyPrice: 29m,
                 annualPrice: 180m,
                 originalAnnualPrice: 288m,
-                featuresEnJson: """["Full Access to All 11 CS Learning Paths","Discrete Math & Competitive Programming Sheets","Expanded Question Bank Analytics & AI Tutor","Verified Track Completion Certificates"]""",
-                featuresArJson: """["وصول كامل لجميع المسارات التعليمية الـ 11","شيتات Discrete Math وCompetitive Programming","تحليلات بنك الأسئلة ومساعد AI الموسع","شهادات إتمام المسارات الموثقة"]""",
-                entitlementsJson: """{"tier":"ready","maxPaths":11,"aiMessagesPerDay":100,"certificates":true,"cpPractice":true}""",
+                featuresEnJson: """["Full Access to All 9 CS Learning Paths","Discrete Math & Competitive Programming Sheets","Expanded Question Bank Analytics & AI Tutor","Verified Track Completion Certificates"]""",
+                featuresArJson: """["وصول كامل لجميع المسارات التعليمية الـ 9","شيتات Discrete Math وCompetitive Programming","تحليلات بنك الأسئلة ومساعد AI الموسع","شهادات إتمام المسارات الموثقة"]""",
+                entitlementsJson: """{"tier":"ready","maxPaths":9,"aiMessagesPerDay":100,"certificates":true,"cpPractice":true}""",
                 displayOrder: 3,
                 badge: "Most Popular",
                 isPopular: true
@@ -642,7 +675,7 @@ public static class DataSeeder
     // ─────────────────────────────────────────────────────────────────────────
     // SAMPLE USERS & PLATFORM OWNER BOOTSTRAP
     // ─────────────────────────────────────────────────────────────────────────
-    private static async Task SeedUsersAsync(AppDbContext db)
+    private static async Task SeedUsersAsync(AppDbContext db, IConfiguration? configuration)
     {
         var adminRole = await db.Roles.FirstAsync(r => r.Name == "Admin");
         var superAdminRole = await db.Roles.FirstAsync(r => r.Name == "SuperAdmin");
@@ -656,10 +689,10 @@ public static class DataSeeder
 
         if (admin == null)
         {
-            var bootstrapPassword = Environment.GetEnvironmentVariable("LEARNCS_DEV_ADMIN_PASSWORD")
+            var bootstrapPassword = GetConfigOrEnv(configuration, "LEARNCS_DEV_ADMIN_PASSWORD", "Bootstrap:SuperAdminPassword")
                 ?? throw new InvalidOperationException(
-                    "Required environment variable LEARNCS_DEV_ADMIN_PASSWORD is not set. "
-                    + "Set a strong password before running the application for the first time.");
+                    "SuperAdmin bootstrap password is not configured. Set environment variable LEARNCS_DEV_ADMIN_PASSWORD "
+                    + "or local secret 'Bootstrap:SuperAdminPassword' (via dotnet user-secrets) before first startup.");
             admin = User.Create("admin", "admin@learncs.dev", BCrypt.Net.BCrypt.HashPassword(bootstrapPassword));
             admin.VerifyEmail();
             db.Users.Add(admin);
@@ -679,13 +712,18 @@ public static class DataSeeder
             {
                 admin.VerifyEmail();
             }
-            var resetDevPassword = Environment.GetEnvironmentVariable("LEARNCS_RESET_DEV_ADMIN");
+            var resetDevPassword = GetConfigOrEnv(configuration, "LEARNCS_RESET_DEV_ADMIN", "Bootstrap:ResetSuperAdmin");
             if (string.Equals(resetDevPassword, "true", StringComparison.OrdinalIgnoreCase))
             {
-                var newPassword = Environment.GetEnvironmentVariable("LEARNCS_DEV_ADMIN_PASSWORD")
+                var newPassword = GetConfigOrEnv(configuration, "LEARNCS_DEV_ADMIN_PASSWORD", "Bootstrap:SuperAdminPassword")
                     ?? throw new InvalidOperationException(
-                        "LEARNCS_RESET_DEV_ADMIN is true but LEARNCS_DEV_ADMIN_PASSWORD is not set.");
+                        "SuperAdmin reset is enabled, but LEARNCS_DEV_ADMIN_PASSWORD / Bootstrap:SuperAdminPassword is not set.");
                 admin.UpdatePasswordHash(BCrypt.Net.BCrypt.HashPassword(newPassword));
+                admin.ClearLockout();
+            }
+            else if (admin.FailedLoginAttempts > 0 || admin.IsLockedOut())
+            {
+                admin.ClearLockout();
             }
         }
 
@@ -740,9 +778,8 @@ public static class DataSeeder
         // Seed demo learners only on fresh empty user databases (beyond admin)
         if (await db.Users.CountAsync() > 1) return;
 
-        var devDemoPass1 = Environment.GetEnvironmentVariable("LEARNCS_DEV_LEARNER_PASSWORD")
-            ?? throw new InvalidOperationException(
-                "Required environment variable LEARNCS_DEV_LEARNER_PASSWORD is not set for demo seeding.");
+        var devDemoPass1 = GetConfigOrEnv(configuration, "LEARNCS_DEV_LEARNER_PASSWORD", "Bootstrap:DemoLearnerPassword");
+        if (string.IsNullOrWhiteSpace(devDemoPass1)) return;
         var ahmed = User.Create("ahmed_learner", "ahmed@learncs.dev", BCrypt.Net.BCrypt.HashPassword(devDemoPass1));
         ahmed.VerifyEmail();
         db.Users.Add(ahmed);
@@ -755,9 +792,12 @@ public static class DataSeeder
         db.StudyStreaks.Add(StudyStreak.Create(ahmed.Id));
         db.LearnerLevelRecords.Add(LearnerLevelRecord.Create(ahmed.Id));
 
-        var devDemoPass2 = Environment.GetEnvironmentVariable("LEARNCS_DEV_LEARNER2_PASSWORD")
-            ?? throw new InvalidOperationException(
-                "Required environment variable LEARNCS_DEV_LEARNER2_PASSWORD is not set for demo seeding.");
+        var devDemoPass2 = GetConfigOrEnv(configuration, "LEARNCS_DEV_LEARNER2_PASSWORD", "Bootstrap:DemoLearner2Password");
+        if (string.IsNullOrWhiteSpace(devDemoPass2))
+        {
+            await db.SaveChangesAsync();
+            return;
+        }
         var sara = User.Create("sara_dev", "sara@learncs.dev", BCrypt.Net.BCrypt.HashPassword(devDemoPass2));
         sara.VerifyEmail();
         db.Users.Add(sara);

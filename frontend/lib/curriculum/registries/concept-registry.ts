@@ -131,6 +131,18 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Visual architecture & computer systems overview map.",
               "ar": "خريطة تعلم شاملة لعلوم الحاسوب وهندسة المعالجات."
             }
+          },
+          {
+            "title": "MDN: How the Web & Operating Hardware Interact",
+            "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Web_standards/How_the_web_works",
+            "type": "documentation",
+            "source": "MDN",
+            "category": "Systems",
+            "language": "en",
+            "description": {
+              "en": "Client/server hardware execution overview.",
+              "ar": "نظرة عامة على تنفيذ الطلبات والعتاد."
+            }
           }
         ],
         "sections": [
@@ -143,8 +155,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Every modern computer builds upon three core hardware pillars connected via motherboard buses:\n\n1. CPU (Central Processing Unit): Contains the Control Unit (coordinating instruction flow), ALU (Arithmetic Logic Unit doing math/logic), and tiny ultra-fast Registers.\n2. RAM (Primary Volatile Memory): Stores active programs and data in fast random-access cells, cleared when power turns off.\n3. Secondary Storage (SSD/HDD): Non-volatile persistent drives preserving files and programs even without electricity.\n4. Input/Output & Operating System: Keyboard, display, network card, and disk interact safely through Kernel system calls rather than raw hardware writes.",
-              "ar": "يقوم الحاسوب الحديث على ركائز عتادية مترابطة عبر اللوحة الأم:\n\n1. المعالج (CPU): يضم وحدة التحكم، ووحدة الحساب والمنطق (ALU)، ومسجلات سريعة جداً (Registers).\n2. الذاكرة العشوائية (RAM): ذاكرة عمل سريعة لكنها متطايرة (تُمسح عند انقطاع الكهرباء).\n3. التخزين الثانوي (SSD/HDD): ذاكرة دائمة تحفظ البرامج والملفات بعد الإغلاق.\n4. نظام التشغيل (OS) والمدخلات والمخرجات: يدير الأجهزة والذاكرة عبر استدعاءات النظام (System Calls) بأمان."
+              "en": "Every modern computer builds upon three core hardware pillars connected via motherboard buses:\n\n1. CPU (Central Processing Unit): Contains the Control Unit (coordinating instruction flow), ALU (Arithmetic Logic Unit doing math/logic), and tiny ultra-fast Registers.\n2. RAM (Primary Volatile Memory): Stores active programs and data in fast random-access cells, cleared when power turns off.\n3. Secondary Storage (SSD/HDD): Non-volatile persistent drives preserving files and programs even without electricity.\n4. Input/Output & Operating System: Keyboard, display, network card, and disk interact safely through Kernel system calls rather than raw hardware writes.\n\n### Concrete Memory & Latency Walkthrough\n1. Program binary opens from NVMe SSD (~50 microseconds latency) into DDR DRAM (~80 nanoseconds).\n2. The CPU prefetcher pulls hot 64-byte cache lines into L1 Cache (~1 nanosecond) before execution.\n3. Registers sit directly inside ALU execution ports (~0.3 nanoseconds), holding active operands while the Program Counter increments instruction by instruction.",
+              "ar": "يقوم الحاسوب الحديث على ركائز عتادية مترابطة عبر اللوحة الأم:\n\n1. المعالج (CPU): يضم وحدة التحكم، ووحدة الحساب والمنطق (ALU)، ومسجلات سريعة جداً (Registers).\n2. الذاكرة العشوائية (RAM): ذاكرة عمل سريعة لكنها متطايرة (تُمسح عند انقطاع الكهرباء).\n3. التخزين الثانوي (SSD/HDD): ذاكرة دائمة تحفظ البرامج والملفات بعد الإغلاق.\n4. نظام التشغيل (OS) والمدخلات والمخرجات: يدير الأجهزة والذاكرة عبر استدعاءات النظام (System Calls) بأمان.\n\n### تتبع عملي لتدرج الذاكرة والسرعة\n1. يُحمَّل ملف البرنامج من قرص SSD (بزمن وصول ~50 ميكروثانية) إلى ذاكرة DRAM (~80 نانوثانية).\n2. يجلب المعالج خطوط بيانات بحجم 64 بايت إلى L1 Cache (~1 نانوثانية) لتسريع الوصول المتتالي.\n3. تحتفظ الـ Registers بالمعاملات النشطة مباشرة بجوار وحدة ALU (~0.3 نانوثانية) مع تقدم عداد البرنامج PC."
             },
             "questions": [
               {
@@ -242,7 +254,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "نموذج برمجي لدورة الجلب وفك الشفرة والتنفيذ"
             },
             "isRequired": true,
-            "content": "// Conceptual CPU Execution Pipeline\nint pc = 0; // Program Counter points to next instruction\nwhile (cpuRunning) {\n    uint32_t raw = ram.fetchInstruction(pc);   // 1. FETCH from RAM\n    Operation op = controlUnit.decode(raw);    // 2. DECODE opcode & operands\n    alu.execute(op, registers);                // 3. EXECUTE in ALU / Registers\n    pc++;                                      // 4. Advance Program Counter\n}",
+            "content": {
+              "en": "### How to Explore This Simulation\n- Notice how each instruction moves cleanly through **Fetch** -> **Decode** -> **Execute**.\n- Try modifying variables inside **Live JS Sandbox** to observe sequential execution step by step and measure loop timing in milliseconds.",
+              "ar": "### خطوات تطبيق العملي وتعديل التجربة\n- راقب مرور كل تعليمة بمراحل الجلب ثم فك التشفير ثم التنفيذ.\n- جرّب تبويب **Live JS Sandbox** لتعديل عدد الدورات وملاحظة تأثير التكرار على الزمن."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "This loop captures the heartbeat of every processor: billions of times per second (Hz), the CPU fetches a binary word from RAM at `pc`, decodes what operation to perform, executes it on registers, and advances `pc`.",
@@ -295,7 +310,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "مختبر محاكاة دورة المعالج والذاكرة التفاعلي"
             },
             "isRequired": true,
-            "content": "cpu-cycle-visualizer",
+            "content": {
+              "en": "### Guided Lab: Fetch, Decode, Execute Cycle\nInspect how the Program Counter (PC), Instruction Register, Control Unit, ALU, and DRAM bus coordinate step by step.\n\n**Experiments to Run:**\n1. Step forward through `LOAD`, `ADD`, and `STORE` instructions while watching the PC increment.\n2. Notice how register reads operate in a single clock beat whereas RAM lookups stall longer.\n3. Compare Control Unit decoding against ALU arithmetic output.",
+              "ar": "### المعمل التفاعلي: دورة الجلب وفك التشفير والتنفيذ\nتتبّع تفاعل عداد البرنامج PC ووحدة التحكم ووحدة الحساب والمنطق ALU وذاكرة RAM خطوة بخطوة.\n\n**تجارب مقترحة:**\n1. انتقل عبر تعليمات الجلب والجمع والتخزين مع مراقبة تغير قيمة PC.\n2. لاحظ سرعة قراءة المسجلات مقارنة بتأخير الوصول إلى RAM.\n3. قارن بين فك التشفير المنطقي ونتيجة وحدة ALU."
+            },
             "interactiveModuleId": "cpu-cycle-visualizer"
           },
           {
@@ -307,8 +325,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• RAM vs Storage confusion: Saving a file writes to persistent disk (SSD), while running a variable/app resides in volatile RAM.\n• Hardware protection: Ordinary apps cannot directly access another app's physical RAM thanks to the OS & MMU memory isolation.",
-              "ar": "• الخلط بين RAM و SSD: حفظ الملف يخزن على SSD الدائم، أما تشغيل المتغيرات والتطبيقات فيحدث داخل RAM المؤقتة.\n• عزل الذاكرة: لا تستطيع البرامج العادية العبث بذاكرة برامج أخرى بفضل حماية نظام التشغيل."
+              "en": "• RAM vs Storage confusion: Saving a file writes to persistent disk (SSD), while running a variable/app resides in volatile RAM.\n• Hardware protection: Ordinary apps cannot directly access another app's physical RAM thanks to the OS & MMU memory isolation.\n\n### Diagnostic Checklist Before Optimization\n- **Don't treat SSD speed like RAM speed:** Frequent unbuffered disk writes bottleneck orders of magnitude worse than pure CPU math.\n- **Verify privilege boundaries:** Hardware ports and raw memory belong exclusively to Kernel Mode; user apps interact via OS System Calls.",
+              "ar": "• الخلط بين RAM و SSD: حفظ الملف يخزن على SSD الدائم، أما تشغيل المتغيرات والتطبيقات فيحدث داخل RAM المؤقتة.\n• عزل الذاكرة: لا تستطيع البرامج العادية العبث بذاكرة برامج أخرى بفضل حماية نظام التشغيل.\n\n### قائمة تحقق هندسية قبل التحسين\n- **لا تخلط بين سرعة القرص و RAM:** الكتابة المتكررة للقرص تبطئ النظام بآلاف المرات مقارنة بعمليات الـ CPU.\n- **احترم حدود الصلاحيات:** إدارة العتاد حكر على Kernel Mode بينما تطلب البرامج الخدمات عبر System Calls."
             },
             "questions": [
               {
@@ -357,8 +375,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Key Takeaways:\n- CPU = Control Unit + ALU + Registers driving the Fetch-Decode-Execute heartbeat.\n- Memory Hierarchy trades size for speed: Registers -> L1/L2/L3 Cache -> RAM (volatile) -> SSD/HDD (persistent).\n- OS kernels isolate processes, manage virtual memory, and broker safe I/O through System Calls.\n\nReview Question: Remember why keeping data contiguous matters when you study Arrays vs Linked Lists later!",
-              "ar": "أهم النقاط الأساسية:\n- المعالج يجمع وحدة التحكم وALU والمسجلات لتنفيذ دورة الجلب وفك الشفرة والتنفيذ.\n- هرمية الذاكرة توازن بين السرعة والسعة: المسجلات ثم Cache ثم RAM المتطايرة ثم التخزين الدائم.\n- نظام التشغيل يعزل العمليات ويوفر بوابة آمنة للعتاد عبر استدعاءات النظام."
+              "en": "Key Takeaways:\n- CPU = Control Unit + ALU + Registers driving the Fetch-Decode-Execute heartbeat.\n- Memory Hierarchy trades size for speed: Registers -> L1/L2/L3 Cache -> RAM (volatile) -> SSD/HDD (persistent).\n- OS kernels isolate processes, manage virtual memory, and broker safe I/O through System Calls.\n\nReview Question: Remember why keeping data contiguous matters when you study Arrays vs Linked Lists later!\n\n### Hands-On Mastery Exercise\nTrace one full program startup from clicking an executable icon to executing its first `ADD` instruction inside the CPU, naming all 4 storage tiers crossed.",
+              "ar": "أهم النقاط الأساسية:\n- المعالج يجمع وحدة التحكم وALU والمسجلات لتنفيذ دورة الجلب وفك الشفرة والتنفيذ.\n- هرمية الذاكرة توازن بين السرعة والسعة: المسجلات ثم Cache ثم RAM المتطايرة ثم التخزين الدائم.\n- نظام التشغيل يعزل العمليات ويوفر بوابة آمنة للعتاد عبر استدعاءات النظام.\n\n### تمرين تطبيقي عملي\nتتبّع خطوات تشغيل برنامج من لحظة النقر عليه في القرص حتى تنفيذ أول عملية `ADD` بالمعالج مع تسمية طبقات التخزين الأربع."
             }
           }
         ],
@@ -372,7 +390,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "PRE-OS-E-002",
           "PRE-CPU-E-003",
           "PRE-RAM-E-004",
-          "PRE-BUS-H-005"
+          "PRE-BUS-H-005",
+          "EXP-CPU-101",
+          "EXP-CPU-102",
+          "EXP-CPU-103",
+          "EXP-CPU-104",
+          "EXP-CPU-105"
         ]
       }
     ]
@@ -468,6 +491,18 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Fixed width integer sizes, ranges, and floating-point limits.",
               "ar": "مرجع أحجام الأنواع الأساسية وحدود الأعداد الصحيحة والعشرية."
             }
+          },
+          {
+            "title": "MDN: Bitwise Representation & Operators",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_operators",
+            "type": "documentation",
+            "source": "MDN",
+            "category": "Encoding",
+            "language": "en",
+            "description": {
+              "en": "JavaScript number encoding and bitwise representation reference.",
+              "ar": "مرجع تمثيل الأرقام والعمليات البتية."
+            }
           }
         ],
         "sections": [
@@ -480,8 +515,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Transistors represent two voltage states: 0 (OFF) and 1 (ON), called a Bit. Grouping 8 bits forms 1 Byte (2⁸ = 256 combinations: 0..255).\n\nBecause raw binary is hard to read (`01000001`), engineers use Hexadecimal (Base-16: digits 0-9, A-F) since 4 bits fit cleanly into 1 Hex digit (`0100 0001` -> `0x41`).\n\nText Characters map integers to glyphs: ASCII assigns 65 (`0x41`) -> `'A'`, while UTF-8 expands cleanly across Arabic letters (`'أ'`), CJK scripts, and emojis without breaking ASCII.",
-              "ar": "تعتمد المعالجات على حالتين للتيار الكهربائي (0 و 1) تُعرفان بالبت (Bit). كل 8 بتات تشكل بايت (Byte) يتسع لـ 256 قيمة.\n\nلتسهيل القراءة نستخدم النظام الست عشري (Hexadecimal) لأن كل خانة فيه (من 0 إلى F) تعادل 4 بتات بالضبط، فيُمثَّل البايت بخانتين مثل `0x41`.\n\nلتمثيل النصوص: يخصص معيار ASCII الرقم 65 لحرف `'A'`، بينما يدعم معيار UTF-8/Unicode جميع اللغات العالمية بما فيها العربية والإيموجي."
+              "en": "Transistors represent two voltage states: 0 (OFF) and 1 (ON), called a Bit. Grouping 8 bits forms 1 Byte (2⁸ = 256 combinations: 0..255).\n\nBecause raw binary is hard to read (`01000001`), engineers use Hexadecimal (Base-16: digits 0-9, A-F) since 4 bits fit cleanly into 1 Hex digit (`0100 0001` -> `0x41`).\n\nText Characters map integers to glyphs: ASCII assigns 65 (`0x41`) -> `'A'`, while UTF-8 expands cleanly across Arabic letters (`'أ'`), CJK scripts, and emojis without breaking ASCII.\n\n### Worked Conversion & UTF-8 Precision Example\n- Convert decimal `173` to binary: `128 + 32 + 8 + 4 + 1 = 10101101` (`0xAD` in hex).\n- ASCII letter `'B'` uses 1 byte `0x42` (`66`); Arabic `'م'` (`U+0645`) spans 2 bytes in UTF-8 (`D9 85`), while emojis consume 4 UTF-8 bytes.",
+              "ar": "تعتمد المعالجات على حالتين للتيار الكهربائي (0 و 1) تُعرفان بالبت (Bit). كل 8 بتات تشكل بايت (Byte) يتسع لـ 256 قيمة.\n\nلتسهيل القراءة نستخدم النظام الست عشري (Hexadecimal) لأن كل خانة فيه (من 0 إلى F) تعادل 4 بتات بالضبط، فيُمثَّل البايت بخانتين مثل `0x41`.\n\nلتمثيل النصوص: يخصص معيار ASCII الرقم 65 لحرف `'A'`، بينما يدعم معيار UTF-8/Unicode جميع اللغات العالمية بما فيها العربية والإيموجي.\n\n### مثال تحويل رقمي وتمثيل UTF-8\n- تحويل العدد العشري `173` للثنائي: `128 + 32 + 8 + 4 + 1 = 10101101` أي `0xAD` بالست عشري.\n- الحرف `'B'` يأخذ بايتاً واحداً `0x42` (`66`) في ASCII، بينما يأخذ الحرف العربي في UTF-8 بايتين، وتأخذ الرموز التعبيرية 4 بايتات."
             },
             "questions": [
               {
@@ -579,7 +614,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "تحويل العشري إلى ثنائي وفحص رموز ASCII"
             },
             "isRequired": true,
-            "content": "#include <iostream>\n#include <bitset>\n\nint main() {\n    char ch = 'A';                     // ASCII 65\n    std::cout << \"Dec: \" << (int)ch\n              << \" Hex: 0x\" << std::hex << (int)ch\n              << \" Bin: \" << std::bitset<8>(ch) << std::endl;\n}",
+            "content": {
+              "en": "### Code Inspection & Sandbox Experiment\n- Review how modular division (`% 2`) extracts bits from least significant up to most significant bit.\n- Test `(0.1 + 0.2) === 0.3` in **Live JS Sandbox** and verify why financial systems store cents as integers (`10 + 20 === 30`) instead of binary floats.",
+              "ar": "### تتبع الكود وتجربة مختبر JavaScript\n- تتبّع كيف يستخرج باقي القسمة `% 2` الخانات الثنائية من اليمين لليسار.\n- اختبر `(0.1 + 0.2) === 0.3` في **Live JS Sandbox** لفهم سبب استخدام الأعداد الصحيحة للحسابات المالية."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Inspecting `'A'` reveals how a single memory byte simultaneously reads as character `'A'`, decimal `65`, hex `0x41`, and binary `01000001`.",
@@ -632,7 +670,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "مختبر التحويل التفاعلي للبتات والأنظمة العددية"
             },
             "isRequired": true,
-            "content": "binary-converter-visualizer",
+            "content": {
+              "en": "### Guided Lab: 8-Bit Binary, Hex & ASCII Encoding\nExperiment directly with bit toggles to master base-2 positional weights (`128, 64, 32, 16, 8, 4, 2, 1`), nibble-to-hex grouping, and ASCII byte encoding.\n\n**Experiments to Run:**\n1. Toggle bits `6` and `0` (`64 + 1 = 65`) and verify uppercase `'A'` in ASCII (`0x41`).\n2. Turn on bit `5` (`+32 -> 97`) to witness how lowercase `'a'` (`0x61`) relates directly to `'A'`.\n3. Observe integer overflow wrap when passing `255` (`11111111`).",
+              "ar": "### المعمل التفاعلي: التحويل الثنائي والست عشري و ASCII\nجرّب تشغيل وإطفاء البتات لفهم أوزان النظام الثنائي وتجميع كل 4 بتات إلى Hex وترجمة ASCII.\n\n**تجارب مقترحة:**\n1. فعّل البت `6` والبت `0` (`64 + 1 = 65`) لمشاهدة الحرف `'A'` (`0x41`).\n2. أضف البت `5` (`+32`) لتلاحظ تحول `'A'` إلى `'a'` (`0x61`).\n3. اختبر أقصى قيمة لبايت واحد عند `255` (`11111111`)."
+            },
             "interactiveModuleId": "binary-converter-visualizer"
           },
           {
@@ -644,8 +685,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Watch for these binary traps:\n- Signed Overflow: Adding 1 to maximum 32-bit `int` (`2,147,483,647`) wraps into `-2,147,483,648` in two's complement (Undefined Behavior in C/C++!).\n- Mojibake: Decoding UTF-8 Arabic text as Latin-1 scrambles characters into unreadable symbols.\n- Mixing Bits vs Bytes: 100 Mbps network speed equals 12.5 MB/s, not 100 MB/s.",
-              "ar": "انتبه لهذه الأخطاء الشائعة:\n- Overflow: إضافة 1 لأكبر قيمة صحيحة 32-بت يلتف إلى رقم سالب أو سلوك غير معرّف في C++.\n- تشوّه النصوص: فك تشفير UTF-8 كأنه ASCII/Latin-1 يفسد الحروف العربية.\n- الخلط بين Bit وByte: سرعة 100 Mbps تساوي 12.5 ميجابايت في الثانية."
+              "en": "Watch for these binary traps:\n- Signed Overflow: Adding 1 to maximum 32-bit `int` (`2,147,483,647`) wraps into `-2,147,483,648` in two's complement (Undefined Behavior in C/C++!).\n- Mojibake: Decoding UTF-8 Arabic text as Latin-1 scrambles characters into unreadable symbols.\n- Mixing Bits vs Bytes: 100 Mbps network speed equals 12.5 MB/s, not 100 MB/s.\n\n### Defensive Encoding & Overflow Guard\n- Always track byte length vs character count (`string.length` in UTF-16 vs UTF-8 `Buffer.byteLength`).\n- Guard fixed-width integer arithmetic against wraparound overflow (`int32` max `2,147,483,647`).",
+              "ar": "انتبه لهذه الأخطاء الشائعة:\n- Overflow: إضافة 1 لأكبر قيمة صحيحة 32-بت يلتف إلى رقم سالب أو سلوك غير معرّف في C++.\n- تشوّه النصوص: فك تشفير UTF-8 كأنه ASCII/Latin-1 يفسد الحروف العربية.\n- الخلط بين Bit وByte: سرعة 100 Mbps تساوي 12.5 ميجابايت في الثانية.\n\n### أخطاء شائعة في الترميز والفيضان\n- فرّق بين عدد الأحرف وعدد البايتات الفعلية عند التعامل مع نصوص UTF-8 متعددة اللغات.\n- انتبه لحدود الأعداد الصحيحة ذات 32 بت (`2,147,483,647`) عند ضرب أو جمع أرقام كبيرة."
             },
             "questions": [
               {
@@ -694,8 +735,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Key Takeaways:\n- Base-2 fits hardware switches; Base-16 (Hex) groups 4 bits per digit cleanly for memory addresses and colors.\n- Two's complement unifies signed subtraction/addition; IEEE 754 handles wide real numbers with small decimal rounding limits.\n- Always standardize on UTF-8 for Unicode text across APIs and databases.",
-              "ar": "الخلاصة:\n- النظام الثنائي لغة الدوائر المنطقية، والسداسي عشري يختصر كل 4 بتات في رمز واحد.\n- المتمم الثنائي يوحّد تمثيل الأعداد السالبة، وUTF-8 يحفظ النصوص العالمية واللغة العربية بدقة."
+              "en": "Key Takeaways:\n- Base-2 fits hardware switches; Base-16 (Hex) groups 4 bits per digit cleanly for memory addresses and colors.\n- Two's complement unifies signed subtraction/addition; IEEE 754 handles wide real numbers with small decimal rounding limits.\n- Always standardize on UTF-8 for Unicode text across APIs and databases.\n\n### Applied Drill\nConvert hexadecimal `0xF4` back into both unsigned decimal and signed 8-bit Two's Complement integers manually, then double-check in the Binary Converter lab.",
+              "ar": "الخلاصة:\n- النظام الثنائي لغة الدوائر المنطقية، والسداسي عشري يختصر كل 4 بتات في رمز واحد.\n- المتمم الثنائي يوحّد تمثيل الأعداد السالبة، وUTF-8 يحفظ النصوص العالمية واللغة العربية بدقة.\n\n### تدريب عملي سريع\nحوّل القيمة `0xF4` يدوياً إلى نظام عشري غير موقع وإلى عدد موقع بنظام Two's Complement ثم تحقق من المحول التفاعلي."
             }
           }
         ],
@@ -709,7 +750,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "PRE-REP-M-003",
           "PRE-REP-M-004",
           "PRE-REP-E-005",
-          "PRE-REP-H-006"
+          "PRE-REP-H-006",
+          "EXP-REP-101",
+          "EXP-REP-102",
+          "EXP-REP-103",
+          "EXP-REP-104",
+          "EXP-REP-105"
         ]
       },
       {
@@ -775,6 +821,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Bitwise AND, OR, XOR, NOT, and shift mechanics.",
               "ar": "دليل المعاملات الثنائية والمنطقية."
             }
+          },
+          {
+            "title": "cppreference: Fundamental Types & Bit Representation",
+            "url": "https://en.cppreference.com/w/cpp/language/types",
+            "type": "documentation",
+            "source": "cppreference",
+            "category": "Integers",
+            "language": "en",
+            "description": {
+              "en": "Signed Two's Complement width guarantees in C++.",
+              "ar": "مرجع تمثيل الأعداد الموقعة في C++."
+            }
+          },
+          {
+            "title": "roadmap.sh: Computer Science Binary & Architecture",
+            "url": "https://roadmap.sh/computer-science",
+            "type": "roadmap",
+            "source": "roadmap.sh",
+            "category": "CS Foundations",
+            "language": "en",
+            "description": {
+              "en": "How binary arithmetic connects to ALU hardware and CS core.",
+              "ar": "خارطة ربط المنطق الثنائي بمعمارية المعالج."
+            }
           }
         ],
         "sections": [
@@ -787,8 +857,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "How do CPUs subtract without a separate subtraction circuit? Through Two's Complement! Negating an integer `-x` flips all bits and adds 1 (`~x + 1`), allowing `5 + (-3)` to use the exact same binary adder circuitry.\n\nAt the silicon level, every CPU calculation reduces to Logic Gates:\n• AND (`∧`): 1 only when BOTH inputs are 1\n• OR (`∨`): 1 when AT LEAST ONE input is 1\n• XOR (`⊕`): 1 when inputs DIFFER (addition mod 2 without carry)\n• NOT (`¬`): flips 0 <-> 1.",
-              "ar": "تمثل المعالجات الأعداد السالبة عبر المتمم الثنائي (Two's Complement) بعكس البتات وإضافة 1 (`~x + 1`)، لتتم عمليات الجمع والطرح بنفس الدائرة.\n\nوتُبنى هذه الدوائر من بوابات المنطق:\n• بوابة AND: ناتجها 1 فقط إذا كان المدخلان 1.\n• بوابة OR: ناتجها 1 إذا كان أحد المدخلين 1 على الأقل.\n• بوابة XOR: ناتجها 1 عند اختلاف المدخلين.\n• بوابة NOT: تعكس القيمة."
+              "en": "How do CPUs subtract without a separate subtraction circuit? Through Two's Complement! Negating an integer `-x` flips all bits and adds 1 (`~x + 1`), allowing `5 + (-3)` to use the exact same binary adder circuitry.\n\nAt the silicon level, every CPU calculation reduces to Logic Gates:\n• AND (`∧`): 1 only when BOTH inputs are 1\n• OR (`∨`): 1 when AT LEAST ONE input is 1\n• XOR (`⊕`): 1 when inputs DIFFER (addition mod 2 without carry)\n• NOT (`¬`): flips 0 <-> 1.\n\n### Worked Two's Complement & Bitmask Example\n- Representing `-5` in 8 bits: start with `5 = 00000101`, flip every bit `11111010`, add `+1` -> `11111011` (`0xFB`). Notice `00000101 + 11111011 = 00000000` (carry discarded).\n- Bitmask permissions (`READ=1`, `WRITE=2`, `EXEC=4`): `READ | WRITE = 3` checks write access instantly via `(flags & WRITE) != 0`.",
+              "ar": "تمثل المعالجات الأعداد السالبة عبر المتمم الثنائي (Two's Complement) بعكس البتات وإضافة 1 (`~x + 1`)، لتتم عمليات الجمع والطرح بنفس الدائرة.\n\nوتُبنى هذه الدوائر من بوابات المنطق:\n• بوابة AND: ناتجها 1 فقط إذا كان المدخلان 1.\n• بوابة OR: ناتجها 1 إذا كان أحد المدخلين 1 على الأقل.\n• بوابة XOR: ناتجها 1 عند اختلاف المدخلين.\n• بوابة NOT: تعكس القيمة.\n\n### مثال عملي على Two's Complement وأقنعة البتات\n- لتمثيل `-5` في 8 بت: ابدأ بـ `00000101` ثم اعكس الخانات `11111010` وأضف `1` لنحصل على `11111011` (`0xFB`).\n- لصلاحيات الملفات (`READ=1`, `WRITE=2`, `EXEC=4`): الجمع البتي `READ | WRITE = 3` يُختبر فوراً عبر `(flags & WRITE) != 0`."
             },
             "questions": [
               {
@@ -837,8 +907,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Logical gates combine directly inside software via bitwise instructions executed in 1 CPU cycle:\n\n1. Bitmask Check (`n & (1 << k)`): Isolates bit k cleanly to inspect flags or subsets.\n2. Left / Right Shift (`x << 1`, `x >> 1`): Multiplies or divides non-negative integers by powers of 2.\n3. XOR Swap & Parity (`a ^ a === 0`, `a ^ 0 === a`): Cancels identical pairs cleanly in bit manipulation algorithms and error-detection checksums.\n4. Binary Carry Addition: `0 + 0 = 0`, `1 + 0 = 1`, `1 + 1 = 0` with carry `1` to the next higher bit.",
-              "ar": "تُترجم البوابات المنطقية برمجياً إلى عمليات Bitwise تنفذ في دورة معالج واحدة:\n\n1. فحص بت معين `n & (1 << k)`: لاختبار الصلاحيات أو المجموعات الجزئية.\n2. الإزاحة `<<` و `>>`: تكافئ الضرب أو القسمة الصحيحة على قوى العدد 2 للأعداد غير السالبة.\n3. خاصية XOR: كل قيمة تلغي نفسها (`x ^ x = 0`)، وهي أساسية في كشف العنصر الفريد وبروتوكولات التحقق من الأخطاء.\n4. الجمع الثنائي: ناتج `1 + 1` هو `0` مع حمل `1` للخانة الأعلى."
+              "en": "Logical gates combine directly inside software via bitwise instructions executed in 1 CPU cycle:\n\n1. Bitmask Check (`n & (1 << k)`): Isolates bit k cleanly to inspect flags or subsets.\n2. Left / Right Shift (`x << 1`, `x >> 1`): Multiplies or divides non-negative integers by powers of 2.\n3. XOR Swap & Parity (`a ^ a === 0`, `a ^ 0 === a`): Cancels identical pairs cleanly in bit manipulation algorithms and error-detection checksums.\n4. Binary Carry Addition: `0 + 0 = 0`, `1 + 0 = 1`, `1 + 1 = 0` with carry `1` to the next higher bit.\n\n### Worked Two's Complement & Bitmask Example\n- Representing `-5` in 8 bits: start with `5 = 00000101`, flip every bit `11111010`, add `+1` -> `11111011` (`0xFB`). Notice `00000101 + 11111011 = 00000000` (carry discarded).\n- Bitmask permissions (`READ=1`, `WRITE=2`, `EXEC=4`): `READ | WRITE = 3` checks write access instantly via `(flags & WRITE) != 0`.",
+              "ar": "تُترجم البوابات المنطقية برمجياً إلى عمليات Bitwise تنفذ في دورة معالج واحدة:\n\n1. فحص بت معين `n & (1 << k)`: لاختبار الصلاحيات أو المجموعات الجزئية.\n2. الإزاحة `<<` و `>>`: تكافئ الضرب أو القسمة الصحيحة على قوى العدد 2 للأعداد غير السالبة.\n3. خاصية XOR: كل قيمة تلغي نفسها (`x ^ x = 0`)، وهي أساسية في كشف العنصر الفريد وبروتوكولات التحقق من الأخطاء.\n4. الجمع الثنائي: ناتج `1 + 1` هو `0` مع حمل `1` للخانة الأعلى.\n\n### مثال عملي على Two's Complement وأقنعة البتات\n- لتمثيل `-5` في 8 بت: ابدأ بـ `00000101` ثم اعكس الخانات `11111010` وأضف `1` لنحصل على `11111011` (`0xFB`).\n- لصلاحيات الملفات (`READ=1`, `WRITE=2`, `EXEC=4`): الجمع البتي `READ | WRITE = 3` يُختبر فوراً عبر `(flags & WRITE) != 0`."
             },
             "questions": [
               {
@@ -886,7 +956,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "تطبيق عملي: الأذونات الثنائية وحساب الترتيب الثنائي"
             },
             "isRequired": true,
-            "content": "const int READ = 1 << 0;    // 001 (1)\nconst int WRITE = 1 << 1;   // 010 (2)\nconst int EXEC = 1 << 2;    // 100 (4)\n\nint perms = READ | WRITE;   // Combine flags: 011 (3)\nbool canWrite = (perms & WRITE) != 0; // Test flag cleanly\nint shifted = 5 << 2;       // 5 * 4 = 20",
+            "content": {
+              "en": "### Interactive Verification Tips\n- Notice bitmask flags pack 32 boolean settings inside a single 4-byte integer.\n- Experiment in **Live JS Sandbox** with bitwise `&`, `|`, `^`, and shifts (`1 << k`) to toggle permissions dynamically.",
+              "ar": "### إرشادات تجربة الأكواد البتية\n- تتيح أقنعة البتات ضغط 32 خياراً منطقياً داخل متغير واحد بحجم 4 بايت.\n- استخدم **Live JS Sandbox** لاختبار العمليات `&` و `|` و `^` وإزاحة البتات `1 << k` عملياً."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Systems languages and Linux permissions pack boolean flags into single integers using OR (`|`) to combine bits and AND (`&`) to check them without branching overhead.",
@@ -939,7 +1012,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "مختبر البوابات المنطقية وجداول الصدق"
             },
             "isRequired": true,
-            "content": "truth-table-visualizer",
+            "content": {
+              "en": "### Guided Lab: Boolean Gates & Logical Predicates\nTest combinations of `P` and `Q` inputs across `AND`, `OR`, `XOR`, `NAND`, and `Implication (P -> Q)` truth rows.\n\n**Experiments to Run:**\n1. Verify that `P -> Q` is FALSE strictly when `P = true` and `Q = false`.\n2. Compare `!(P && Q)` vs `!P || !Q` (De Morgan's Law) across all 4 truth combinations.\n3. Note that `P XOR Q` outputs TRUE exclusively when inputs differ.",
+              "ar": "### المعمل التفاعلي: البوابات المنطقية وجداول الصواب\nاختبر مدخلات `P` و `Q` مع عمليات `AND` و `OR` و `XOR` و `Implication`.\n\n**تجارب مقترحة:**\n1. تحقق من أن العبارة الشرطية `P -> Q` تخطئ فقط عندما `P = true` و `Q = false`.\n2. قارن `!(P && Q)` مع `!P || !Q` لتأكيد قانون دي مورغان.\n3. لاحظ أن `XOR` تكون صائبة فقط عند اختلاف الطرفين."
+            },
             "interactiveModuleId": "truth-table-visualizer"
           },
           {
@@ -951,8 +1027,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Bitwise operators `&`, `^`, and `|` have lower precedence than `==` and `!=` in C, C++, Java, and JavaScript! Writing `if (flags & MASK == MASK)` evaluates `(MASK == MASK)` first! Always wrap bitwise checks in parentheses: `if ((flags & MASK) == MASK)`.",
-              "ar": "أولوية `&` و`|` في لغات مثل C++ وJavaScript أقل من أولوية المقارنة `==`! لذا فإن كتابة `flags & MASK == MASK` تقارن أولاً ثم تجري `&`، والحل الصحيح هو استخدام الأقواس: `(flags & MASK) == MASK`."
+              "en": "Bitwise operators `&`, `^`, and `|` have lower precedence than `==` and `!=` in C, C++, Java, and JavaScript! Writing `if (flags & MASK == MASK)` evaluates `(MASK == MASK)` first! Always wrap bitwise checks in parentheses: `if ((flags & MASK) == MASK)`.\n\n### Operator Precedence Trap\n- In C/C++/JS/C#, comparison `==` binds tighter than bitwise `&`! Always parenthesize `(mask & FLAG) != 0`, never `mask & FLAG != 0`.\n- Never shift by a negative count or greater than bit width (`1 << 32` is Undefined Behavior on 32-bit `int`).",
+              "ar": "أولوية `&` و`|` في لغات مثل C++ وJavaScript أقل من أولوية المقارنة `==`! لذا فإن كتابة `flags & MASK == MASK` تقارن أولاً ثم تجري `&`، والحل الصحيح هو استخدام الأقواس: `(flags & MASK) == MASK`.\n\n### فخ أسبقية المعاملات\n- أولوية المقارنة `==` أعلى من `&`! اكتب دائماً `(mask & FLAG) != 0` مع وضع الأقواس بوضوح.\n- تجنب إزاحة البتات بمقدار سالب أو أكبر من عرض النوع (`1 << 32` على 32 بت)."
             },
             "questions": [
               {
@@ -1001,8 +1077,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "All computer arithmetic builds out of binary logic gates combined into half-adders, full-adders, and Two's Complement signed representation.",
-              "ar": "تُبنى كل الحسابات الحاسوبية فوق بوابات منطقية بسيطة مجمعة مع تمثيل الأعداد السالبة بنظام المتمم الثنائي."
+              "en": "All computer arithmetic builds out of binary logic gates combined into half-adders, full-adders, and Two's Complement signed representation.\n\n### Practice Drill\nWrite a function returning `true` if positive integer `n` is a power of two using a single bitwise expression `(n & (n - 1)) === 0`.",
+              "ar": "تُبنى كل الحسابات الحاسوبية فوق بوابات منطقية بسيطة مجمعة مع تمثيل الأعداد السالبة بنظام المتمم الثنائي.\n\n### تحدٍ برمجي\nتحقق في سطر واحد باستخدام العمليات البتية `(n & (n - 1)) === 0` مما إذا كان العدد الموجب `n` من قوى العدد 2."
             }
           }
         ],
@@ -1016,7 +1092,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "PRE-BIT-M-003",
           "PRE-BIT-M-004",
           "PRE-BIT-E-005",
-          "PRE-BIT-H-006"
+          "PRE-BIT-H-006",
+          "EXP-BIT-101",
+          "EXP-BIT-102",
+          "EXP-BIT-103",
+          "EXP-BIT-104",
+          "EXP-BIT-105"
         ]
       }
     ]
@@ -1107,6 +1188,18 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Core networking mental model for web engineers.",
               "ar": "مفاهيم الإنترنت الأساسية للمطورين."
             }
+          },
+          {
+            "title": "MDN: Overview of HTTP Messages & Headers",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview",
+            "type": "documentation",
+            "source": "MDN",
+            "category": "HTTP",
+            "language": "en",
+            "description": {
+              "en": "HTTP client-server communication architecture and stateless requests.",
+              "ar": "مرجع بنية بروتوكول HTTP والطلبات."
+            }
           }
         ],
         "sections": [
@@ -1119,8 +1212,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "When you visit `https://learncs.dev/roadmap`:\n1. Client & Server: Your browser is a Client; LearnCS's remote machine is a Server waiting on HTTP port 443.\n2. URL Anatomy: `https://` (encrypted scheme) + `learncs.dev` (domain) + `/roadmap` (resource path).\n3. DNS Lookup: Resolves domain `learncs.dev` into its numeric IP address.\n4. HTTP Exchange: Browser sends `GET /roadmap`; Server responds with status `200 OK` plus HTML/JSON payload.",
-              "ar": "عند فتح رابط مثل `https://learncs.dev/roadmap`:\n1. العميل والخادم: المتصفح هو العميل (Client) والجهاز البعيد المستضيف للموقع هو الخادم (Server).\n2. مكونات الرابط URL: البروتوكول (`https://`) + اسم النطاق (`learncs.dev`) + المسار (`/roadmap`).\n3. نظام DNS: يترجم اسم النطاق البشري إلى عنوان IP رقمي.\n4. دورة HTTP: يرسل العميل طلب GET ويرد الخادم برمز حالة مثل 200 OK ومحتوى الصفحة."
+              "en": "When you visit `https://learncs.dev/roadmap`:\n1. Client & Server: Your browser is a Client; LearnCS's remote machine is a Server waiting on HTTP port 443.\n2. URL Anatomy: `https://` (encrypted scheme) + `learncs.dev` (domain) + `/roadmap` (resource path).\n3. DNS Lookup: Resolves domain `learncs.dev` into its numeric IP address.\n4. HTTP Exchange: Browser sends `GET /roadmap`; Server responds with status `200 OK` plus HTML/JSON payload.\n\n### End-to-End Page Load Trace (`https://learncs.dev/roadmap`)\n1. Browser checks DNS cache and resolves hostname to server IP (e.g., `203.0.113.10`).\n2. OS completes TCP 3-way handshake and TLS certificate verification on port `443`.\n3. Client transmits HTTP `GET /roadmap`; server responds `200 OK` with HTML/JSON + headers.\n4. Browser parses DOM + CSSOM -> Render Tree -> Layout & Paint.",
+              "ar": "عند فتح رابط مثل `https://learncs.dev/roadmap`:\n1. العميل والخادم: المتصفح هو العميل (Client) والجهاز البعيد المستضيف للموقع هو الخادم (Server).\n2. مكونات الرابط URL: البروتوكول (`https://`) + اسم النطاق (`learncs.dev`) + المسار (`/roadmap`).\n3. نظام DNS: يترجم اسم النطاق البشري إلى عنوان IP رقمي.\n4. دورة HTTP: يرسل العميل طلب GET ويرد الخادم برمز حالة مثل 200 OK ومحتوى الصفحة.\n\n### تتبع كامل لتحميل صفحة ويب (`https://learncs.dev/roadmap`)\n1. يبحث المتصفح في DNS للحصول على عنوان IP الخاص بالخادم.\n2. يتم إنشاء اتصال TCP ثلاثي ثم التحقق من شهادة التشفير TLS على المنفذ `443`.\n3. يرسل المتصفح طلب `GET /roadmap` ويرد الخادم بالرمز `200 OK` والبيانات.\n4. يبني المتصفح شجرة DOM و CSSOM ثم يرسم الواجهة للمستخدم."
             },
             "questions": [
               {
@@ -1169,8 +1262,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Loading any URL triggers a clean layered sequence across the Internet:\n\n1. DNS Lookup: Browser resolves `learncs.dev` to an IP address (`93.184.x.x`) via cached recursive resolvers.\n2. TCP + TLS Handshake: Client and server open a reliable stream (3-way TCP handshake) and negotiate encryption keys (TLS).\n3. HTTP Request & Response: Browser sends `GET /roadmap HTTP/2` and receives status code (`200 OK`, `404 Not Found`, `401 Unauthorized`), headers, and HTML/JSON.\n4. DOM & Rendering: Browser parses HTML, executes JavaScript, fetches API data, and paints pixels to screen.",
-              "ar": "عند فتح أي رابط في المتصفح تتم سلسلة خطوات متكاملة:\n\n1. استعلام DNS: ترجمة اسم النطاق إلى عنوان IP الرقمي.\n2. مصافحة TCP ثم TLS: تأسيس اتصال موثوق وتشفير القناة بـ HTTPS.\n3. طلب واستجابة HTTP: إرسال طلب `GET` أو `POST` واستلام رمز الحالة (`200 OK` أو `404`) والبيانات.\n4. بناء الصفحة (DOM Rendering): تحليل HTML وتنفيذ JavaScript وعرض الواجهة."
+              "en": "Loading any URL triggers a clean layered sequence across the Internet:\n\n1. DNS Lookup: Browser resolves `learncs.dev` to an IP address (`93.184.x.x`) via cached recursive resolvers.\n2. TCP + TLS Handshake: Client and server open a reliable stream (3-way TCP handshake) and negotiate encryption keys (TLS).\n3. HTTP Request & Response: Browser sends `GET /roadmap HTTP/2` and receives status code (`200 OK`, `404 Not Found`, `401 Unauthorized`), headers, and HTML/JSON.\n4. DOM & Rendering: Browser parses HTML, executes JavaScript, fetches API data, and paints pixels to screen.\n\n### End-to-End Page Load Trace (`https://learncs.dev/roadmap`)\n1. Browser checks DNS cache and resolves hostname to server IP (e.g., `203.0.113.10`).\n2. OS completes TCP 3-way handshake and TLS certificate verification on port `443`.\n3. Client transmits HTTP `GET /roadmap`; server responds `200 OK` with HTML/JSON + headers.\n4. Browser parses DOM + CSSOM -> Render Tree -> Layout & Paint.",
+              "ar": "عند فتح أي رابط في المتصفح تتم سلسلة خطوات متكاملة:\n\n1. استعلام DNS: ترجمة اسم النطاق إلى عنوان IP الرقمي.\n2. مصافحة TCP ثم TLS: تأسيس اتصال موثوق وتشفير القناة بـ HTTPS.\n3. طلب واستجابة HTTP: إرسال طلب `GET` أو `POST` واستلام رمز الحالة (`200 OK` أو `404`) والبيانات.\n4. بناء الصفحة (DOM Rendering): تحليل HTML وتنفيذ JavaScript وعرض الواجهة.\n\n### تتبع كامل لتحميل صفحة ويب (`https://learncs.dev/roadmap`)\n1. يبحث المتصفح في DNS للحصول على عنوان IP الخاص بالخادم.\n2. يتم إنشاء اتصال TCP ثلاثي ثم التحقق من شهادة التشفير TLS على المنفذ `443`.\n3. يرسل المتصفح طلب `GET /roadmap` ويرد الخادم بالرمز `200 OK` والبيانات.\n4. يبني المتصفح شجرة DOM و CSSOM ثم يرسم الواجهة للمستخدم."
             },
             "questions": [
               {
@@ -1218,7 +1311,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "فحص طلب واستجابة HTTP عملياً"
             },
             "isRequired": true,
-            "content": "# Inspect HTTP headers and JSON response using curl\ncurl -i https://api.learncs.local/api/curriculum/paths \\\n  -H \"Accept: application/json\"\n\n# Typical HTTP Response Envelope:\n# HTTP/1.1 200 OK\n# Content-Type: application/json; charset=utf-8\n# {\"pathsCount\": 9, \"status\": \"published\"}",
+            "content": {
+              "en": "### Experimenting with HTTP Request/Response Contracts\n- Inspect the headers (`Authorization: Bearer <jwt>`, `Content-Type: application/json`) and status semantics (`200`, `401`, `403`, `404`).\n- Test parsing JSON HTTP payloads inside **Live JS Sandbox**.",
+              "ar": "### استكشاف عقود طلبات HTTP واستجاباتها\n- راقب ترويسات `Authorization` و `Content-Type` ودلالة رموز الحالة (`200`, `401`, `403`, `404`).\n- جرّب تحليل استجابات JSON عملياً عبر **Live JS Sandbox**."
+            },
             "codeLanguage": "bash",
             "codeExplanation": {
               "en": "Every web API interaction boils down to HTTP verbs (`GET`, `POST`, `PUT`, `DELETE`), headers (`Accept`, `Authorization`, `Content-Type`), status codes, and body payloads (JSON/HTML).",
@@ -1271,7 +1367,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "محاكي رحلة الحزمة الشبكية من DNS إلى HTTP"
             },
             "isRequired": true,
-            "content": "network-packet-visualizer",
+            "content": {
+              "en": "### Guided Lab: Packet Lifecycle (DNS -> TCP/TLS -> HTTP)\nFollow how application payloads wrap in TCP headers, IP headers, and link frames before routing across hops.\n\n**Experiments to Run:**\n1. Trigger a packet hop and inspect DNS resolution before the TCP 3-way handshake (`SYN`, `SYN-ACK`, `ACK`).\n2. Compare Connection Setup latency vs HTTP payload transfer.\n3. Observe encapsulation layers adding/stripping headers at sender and receiver.",
+              "ar": "### المعمل التفاعلي: رحلة الحزمة (DNS -> TCP -> HTTP)\nراقب كيف تغلّف بيانات الطلب بطبقات TCP و IP وتنتقل بين المضيف والخادم.\n\n**تجارب مقترحة:**\n1. راقب استعلام DNS قبل بدء مصافحة TCP الثلاثية (`SYN`, `SYN-ACK`, `ACK`).\n2. قارن تأخير تأسيس الاتصال بزمن نقل البيانات الفعلية.\n3. تتبّع إضافة وإزالة الرؤوس عند المرسل والمستقبل."
+            },
             "interactiveModuleId": "network-packet-visualizer"
           },
           {
@@ -1283,8 +1382,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• The Internet vs Web: The Internet is the global physical/IP infrastructure; the World Wide Web (HTTP websites) is one service running on top of it (alongside email, gaming, SSH).\n• Always prefer HTTPS over HTTP so passwords and tokens travel encrypted.",
-              "ar": "• الإنترنت مقابل الويب: الإنترنت هو البنية الشبكية العالمية، أما الويب (المواقع و HTTP) فهو خدمة واحدة تعمل فوق الإنترنت.\n• استخدم HTTPS دائماً لتشفير كلمات المرور وبيانات المستخدم أثناء النقل."
+              "en": "• The Internet vs Web: The Internet is the global physical/IP infrastructure; the World Wide Web (HTTP websites) is one service running on top of it (alongside email, gaming, SSH).\n• Always prefer HTTPS over HTTP so passwords and tokens travel encrypted.\n\n### Security & Status-Code Precision\n- **401 vs 403:** Missing/expired tokens return `401 Unauthorized`; valid users lacking role privileges return `403 Forbidden`.\n- Never ship secrets or private API keys into client-side frontend bundles.",
+              "ar": "• الإنترنت مقابل الويب: الإنترنت هو البنية الشبكية العالمية، أما الويب (المواقع و HTTP) فهو خدمة واحدة تعمل فوق الإنترنت.\n• استخدم HTTPS دائماً لتشفير كلمات المرور وبيانات المستخدم أثناء النقل.\n\n### الدقة في رموز الحالة والأمان\n- **الفرق بين 401 و 403:** غياب أو انتهاء التوكن يعيد `401`، بينما نقص صلاحية الدور لمستخدم مسجل يعيد `403`.\n- لا تضع أي مفاتيح سرية داخل كود الواجهة الأمامية للمتصفح."
             }
           },
           {
@@ -1296,8 +1395,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Key Takeaways:\n- DNS translates readable domains to IP addresses.\n- Browsers act as HTTP clients parsing HTML/CSS/JS while backend APIs validate, persist, and enforce authorization.\n- Client UI checks are convenience only; real security lives in backend authentication and HTTP status enforcement.",
-              "ar": "الخلاصة:\n- نظام DNS يترجم النطاقات لعناوين IP.\n- المتصفح يعرض الواجهة بينما يتحقق الخادم من الصلاحيات ويحفظ البيانات في قاعدة البيانات."
+              "en": "Key Takeaways:\n- DNS translates readable domains to IP addresses.\n- Browsers act as HTTP clients parsing HTML/CSS/JS while backend APIs validate, persist, and enforce authorization.\n- Client UI checks are convenience only; real security lives in backend authentication and HTTP status enforcement.\n\n### Applied Check\nOpen your browser DevTools Network tab on any learn page and inspect the DNS/TLS timing, Request Method, and HTTP Status Code.",
+              "ar": "الخلاصة:\n- نظام DNS يترجم النطاقات لعناوين IP.\n- المتصفح يعرض الواجهة بينما يتحقق الخادم من الصلاحيات ويحفظ البيانات في قاعدة البيانات.\n\n### تمرين عملي\nافتح تبويب Network في أدوات المطور بالمتصفح وراقب زمن DNS/TLS وطريقة الطلب ورمز الاستجابة."
             }
           }
         ],
@@ -1311,7 +1410,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "PRE-WEB-M-003",
           "PRE-WEB-M-004",
           "PRE-WEB-E-005",
-          "PRE-WEB-H-006"
+          "PRE-WEB-H-006",
+          "EXP-WEB-101",
+          "EXP-WEB-102",
+          "EXP-WEB-103",
+          "EXP-WEB-104",
+          "EXP-WEB-105"
         ]
       }
     ]
@@ -1397,6 +1501,18 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Big-picture roadmap connecting compilers, OS, and algorithms.",
               "ar": "خارطة طريق علوم الحاسوب الكاملة."
             }
+          },
+          {
+            "title": "Harvard CS50: Introduction to Computer Science",
+            "url": "https://cs50.harvard.edu/x/",
+            "type": "article",
+            "source": "Harvard CS50",
+            "category": "Foundations",
+            "language": "en",
+            "description": {
+              "en": "World-class programming and compilation foundations.",
+              "ar": "مقدمة هارفارد الشاملة لعلوم الحاسوب."
+            }
           }
         ],
         "sections": [
@@ -1409,8 +1525,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "CPUs only execute numeric binary opcodes (Machine Code). Writing large apps directly in 0s and 1s is error-prone and tied to one CPU family.\n\nHigh-level languages let humans write expressive instructions translated down to machine execution in two classic ways:\n• Compiler (e.g., C++, Rust): Translates the entire source file upfront into a native machine executable (ultra-fast execution).\n• Interpreter (e.g., Python, basic JS): Reads and executes statements line-by-line at runtime (fast iteration).\n• Hybrid JIT (Java, C# .NET): Compiles to portable bytecode first, then JIT-compiles hot paths to native machine code at runtime.",
-              "ar": "لا ينفذ المعالج إلا أصفاراً وآحاداً (كود الآلة). لذلك ابتُكرت اللغات عالية المستوى لتُترجم إلى لغة الآلة عبر:\n• المترجم (Compiler مثل C++): يترجم الكود كاملاً مسبقاً إلى ملف تنفيذي سريع جداً.\n• المفسّر (Interpreter مثل Python): يقرأ الكود وينفذه سطراً بسطر وقت التشغيل.\n• الهجين (JIT مثل C# .NET و Java): يترجم إلى بايت-كود وسيط ثم يحوّله لشفرة آلة وقت التشغيل."
+              "en": "CPUs only execute numeric binary opcodes (Machine Code). Writing large apps directly in 0s and 1s is error-prone and tied to one CPU family.\n\nHigh-level languages let humans write expressive instructions translated down to machine execution in two classic ways:\n• Compiler (e.g., C++, Rust): Translates the entire source file upfront into a native machine executable (ultra-fast execution).\n• Interpreter (e.g., Python, basic JS): Reads and executes statements line-by-line at runtime (fast iteration).\n• Hybrid JIT (Java, C# .NET): Compiles to portable bytecode first, then JIT-compiles hot paths to native machine code at runtime.\n\n### From Source File to Running Process\n1. You write clean human-readable source (`main.cpp` or `app.ts`).\n2. Frontend parser checks syntax grammar (`Syntax Errors` fail here!).\n3. Compilers (`g++`, `clang`, `rustc`) lower to optimized machine instructions linked with OS runtime startup (`main()`).",
+              "ar": "لا ينفذ المعالج إلا أصفاراً وآحاداً (كود الآلة). لذلك ابتُكرت اللغات عالية المستوى لتُترجم إلى لغة الآلة عبر:\n• المترجم (Compiler مثل C++): يترجم الكود كاملاً مسبقاً إلى ملف تنفيذي سريع جداً.\n• المفسّر (Interpreter مثل Python): يقرأ الكود وينفذه سطراً بسطر وقت التشغيل.\n• الهجين (JIT مثل C# .NET و Java): يترجم إلى بايت-كود وسيط ثم يحوّله لشفرة آلة وقت التشغيل.\n\n### من الكود المصدري إلى عملية تعمل بالذاكرة\n1. يكتب المبرمج كوداً مقروءاً (`main.cpp` أو `app.ts`).\n2. يتحقق المحلل اللغوي من قواعد الكتابة (أخطاء `Syntax` تظهر هنا قبل التشغيل).\n3. يترجم المترجم الكود إلى تعليمات آلة ويربطه بالمكتبات ليبدأ من `main()`."
             },
             "questions": [
               {
@@ -1508,7 +1624,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "تشريح أول برنامج بلغة C++"
             },
             "isRequired": true,
-            "content": "#include <iostream> // Import standard I/O library\n\nint main() {        // Entry point called by OS loader\n    std::cout << \"Hello, Computer Science!\" << std::endl;\n    return 0;       // Exit status 0 signals clean success\n}",
+            "content": {
+              "en": "### Code Structure & Live JS Exploration\n- Review every piece of a minimal valid entry function: header imports, entry symbol, computation, and clean exit status `0`.\n- Switch to **Live JS Sandbox** to experiment with inputs, `console.log`, and logic edge cases.",
+              "ar": "### بنية البرنامج وتجربة التعديل المباشر\n- تأمل أجزاء أي برنامج: استيراد المكتبات، نقطة البداية، الحساب، وحالة الخروج السليمة `0`.\n- افتح **Live JS Sandbox** لتجربة تعديل المدخلات وملاحظة المخرجات لحظياً."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Every compiled program defines an entry point (`main`). `return 0` informs the Operating System the program succeeded cleanly.",
@@ -1562,8 +1681,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Two habits separate reliable engineers from frustrated beginners:\n- Enable strict compiler warnings (`-Wall -Wextra`) and type checking (`tsc --noEmit`): uninitialized variables and type mismatches surface immediately.\n- Dry-run algorithms with empty, zero, and boundary inputs before assuming your first working test covers all cases.",
-              "ar": "عادتان ترفعان جودة الكود فوراً:\n- فعّل تحذيرات المترجم وفحص الأنواع الدقيق لاكتشاف المتغيرات غير المهيأة مبكراً.\n- اختبر حالات الحدود (الصفر، المصفوفة الفارغة، أكبر قيمة) قبل اعتماد الحل."
+              "en": "Two habits separate reliable engineers from frustrated beginners:\n- Enable strict compiler warnings (`-Wall -Wextra`) and type checking (`tsc --noEmit`): uninitialized variables and type mismatches surface immediately.\n- Dry-run algorithms with empty, zero, and boundary inputs before assuming your first working test covers all cases.\n\n### Beginner Habits That Separate Pros\n- Read compiler/runtime error lines from TOP to BOTTOM; fixing line 12 often resolves 5 downstream cascade errors.\n- Enable strict warnings (`-Wall -Wextra` or TS `strict: true`) instead of silencing broken assumptions.",
+              "ar": "عادتان ترفعان جودة الكود فوراً:\n- فعّل تحذيرات المترجم وفحص الأنواع الدقيق لاكتشاف المتغيرات غير المهيأة مبكراً.\n- اختبر حالات الحدود (الصفر، المصفوفة الفارغة، أكبر قيمة) قبل اعتماد الحل.\n\n### عادات هندسية تميز المبرمج المحترف\n- اقرأ أخطاء المترجم من الأعلى للأسفل؛ تصحيح أول خطأ يزيل أحياناً عدة أخطاء تابعة.\n- فعّل التحذيرات الصارمة دوماً بدلاً من تجاهلها."
             },
             "questions": [
               {
@@ -1612,8 +1731,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Source Code -> Compiler/Interpreter -> Machine Instructions -> OS Process Loader -> CPU Fetch-Decode-Execute in RAM.",
-              "ar": "كود مصدري -> مترجم/مفسر -> تعليمات آلة -> نظام التشغيل -> تنفيذ المعالج من RAM."
+              "en": "Source Code -> Compiler/Interpreter -> Machine Instructions -> OS Process Loader -> CPU Fetch-Decode-Execute in RAM.\n\n### Hands-On Challenge\nIn the Live JS Sandbox, intentionally introduce a syntax error (missing bracket) and a logic error (multiplying instead of adding) to compare both error signals.",
+              "ar": "كود مصدري -> مترجم/مفسر -> تعليمات آلة -> نظام التشغيل -> تنفيذ المعالج من RAM.\n\n### تحدٍ عملي\nاختبر الفرق في **Live JS Sandbox** عبر إحداث خطأ نحوي مرة وخطأ منطقي مرة أخرى وقارن رسالة الخطأ في الحالتين."
             }
           }
         ],
@@ -1627,7 +1746,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "PRE-PRG-M-003",
           "PRE-PRG-E-004",
           "PRE-PRG-M-005",
-          "PRE-PRG-H-006"
+          "PRE-PRG-H-006",
+          "EXP-PRG-101",
+          "EXP-PRG-102",
+          "EXP-PRG-103",
+          "EXP-PRG-104",
+          "EXP-PRG-105"
         ]
       }
     ]
@@ -1701,6 +1825,18 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Typed declarations, const correctness, and storage duration.",
               "ar": "تفاصيل تعريف المتغيرات والثوابت في C++."
             }
+          },
+          {
+            "title": "MDN: Storing Information with Variables",
+            "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Variables",
+            "type": "documentation",
+            "source": "MDN",
+            "category": "Programming",
+            "language": "en",
+            "description": {
+              "en": "Variable naming, types, const correctness, and expressions.",
+              "ar": "أساسيات المتغيرات والأنواع والثوابت."
+            }
           }
         ],
         "sections": [
@@ -1713,8 +1849,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "A variable binds a human name to a typed block in RAM:\n• `int`: 32-bit signed integer (4 bytes)\n• `double`: 64-bit IEEE-754 floating point decimal (8 bytes)\n• `bool`: true/false flag (1 byte)\n• `char`: single byte ASCII character\n\nMarking values `const` prevents accidental reassignment. Watch out for integer division (`5 / 2 == 2`): cast at least one operand (`(double)5 / 2 == 2.5`) whenever fractional output is desired!",
-              "ar": "يربط المتغير اسماً برمجياً بخانة في RAM ذات حجم محدد حسب النوع (4 بايت لـ int، و 8 بايت لـ double، و 1 بايت لـ bool و char).\n\nاستخدم `const` للثوابت لحمايتها من التعديل، وانتبه عند قسمة عددين صحيحين (`5 / 2 = 2` بدون كسر ما لم تحول أحدهما إلى double)."
+              "en": "A variable binds a human name to a typed block in RAM:\n• `int`: 32-bit signed integer (4 bytes)\n• `double`: 64-bit IEEE-754 floating point decimal (8 bytes)\n• `bool`: true/false flag (1 byte)\n• `char`: single byte ASCII character\n\nMarking values `const` prevents accidental reassignment. Watch out for integer division (`5 / 2 == 2`): cast at least one operand (`(double)5 / 2 == 2.5`) whenever fractional output is desired!\n\n### Type Representation & Precision Walkthrough\n- `int count = 42;` occupies 4 bytes with signed range `-2,147,483,648 .. 2,147,483,647`.\n- `17 / 5` truncates to `3` in integer division; promote one operand `(double)17 / 5` to preserve `3.5`.\n- Prefer `const` for immutable domain constants (`TAX_RATE`, `MAX_RETRIES`) so accidental writes fail compilation.",
+              "ar": "يربط المتغير اسماً برمجياً بخانة في RAM ذات حجم محدد حسب النوع (4 بايت لـ int، و 8 بايت لـ double، و 1 بايت لـ bool و char).\n\nاستخدم `const` للثوابت لحمايتها من التعديل، وانتبه عند قسمة عددين صحيحين (`5 / 2 = 2` بدون كسر ما لم تحول أحدهما إلى double).\n\n### شرح عملي للأنواع ودقة الحسابات\n- المتغير `int` يحجز 4 بايت بمدى حتى `2.14e9` تقريباً.\n- القسمة الصحيحة `17 / 5` تعطي `3` فقط؛ لتحويلها لعشرية حوّل أحد الطرفين `(double)17 / 5 = 3.5`.\n- اعتمد `const` للثوابت حتى يمنع المترجم التعديل غير المقصود."
             },
             "questions": [
               {
@@ -1763,8 +1899,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Every variable pairs a name, a memory location, and a type that dictates allowed operations:\n\n1. Static Typing (C++, TypeScript, C#, Java): Checks variable types before running (`int age = 20`), preventing silent string-vs-number mistakes.\n2. Dynamic Typing (Python, JavaScript): Attaches type metadata to runtime values rather than variable declarations.\n3. Immutability (`const`, `readonly`): Signals intent that a binding never changes after initialization, making code easier to reason about and safer across functions.\n4. Explicit Casting vs Silent Truncation: `static_cast<double>(5) / 2` yields `2.5`, while plain `5 / 2` truncates silently to `2` in typed integer math.",
-              "ar": "يرتبط كل متغير باسم وموقع في الذاكرة ونوع يحدد العمليات الممكنة عليه:\n\n1. التحقق الساكن للأنواع (C++, C#, TypeScript): يمنع تمرير نص مكان رقم قبل بدء التشغيل.\n2. التحقق الديناميكي (Python, JavaScript): يحمل الكائن نوعه أثناء التشغيل.\n3. الثوابت (`const`): تمنع التعديل العرضي للقيم الأساسية وتوضح نية المبرمج.\n4. التحويل الصريح: قسمة `5 / 2` تعطي `2` في الأعداد الصحيحة بينما تحويل أحدهما إلى `double` يعطي `2.5`."
+              "en": "Every variable pairs a name, a memory location, and a type that dictates allowed operations:\n\n1. Static Typing (C++, TypeScript, C#, Java): Checks variable types before running (`int age = 20`), preventing silent string-vs-number mistakes.\n2. Dynamic Typing (Python, JavaScript): Attaches type metadata to runtime values rather than variable declarations.\n3. Immutability (`const`, `readonly`): Signals intent that a binding never changes after initialization, making code easier to reason about and safer across functions.\n4. Explicit Casting vs Silent Truncation: `static_cast<double>(5) / 2` yields `2.5`, while plain `5 / 2` truncates silently to `2` in typed integer math.\n\n### Type Representation & Precision Walkthrough\n- `int count = 42;` occupies 4 bytes with signed range `-2,147,483,648 .. 2,147,483,647`.\n- `17 / 5` truncates to `3` in integer division; promote one operand `(double)17 / 5` to preserve `3.5`.\n- Prefer `const` for immutable domain constants (`TAX_RATE`, `MAX_RETRIES`) so accidental writes fail compilation.",
+              "ar": "يرتبط كل متغير باسم وموقع في الذاكرة ونوع يحدد العمليات الممكنة عليه:\n\n1. التحقق الساكن للأنواع (C++, C#, TypeScript): يمنع تمرير نص مكان رقم قبل بدء التشغيل.\n2. التحقق الديناميكي (Python, JavaScript): يحمل الكائن نوعه أثناء التشغيل.\n3. الثوابت (`const`): تمنع التعديل العرضي للقيم الأساسية وتوضح نية المبرمج.\n4. التحويل الصريح: قسمة `5 / 2` تعطي `2` في الأعداد الصحيحة بينما تحويل أحدهما إلى `double` يعطي `2.5`.\n\n### شرح عملي للأنواع ودقة الحسابات\n- المتغير `int` يحجز 4 بايت بمدى حتى `2.14e9` تقريباً.\n- القسمة الصحيحة `17 / 5` تعطي `3` فقط؛ لتحويلها لعشرية حوّل أحد الطرفين `(double)17 / 5 = 3.5`.\n- اعتمد `const` للثوابت حتى يمنع المترجم التعديل غير المقصود."
             },
             "questions": [
               {
@@ -1812,7 +1948,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "تطبيق الأنواع والثوابت وباقي القسمة"
             },
             "isRequired": true,
-            "content": "const double PI = 3.14159;\nint a = 7, b = 2;\nint intDiv = a / b;             // 3 (fraction truncated)\ndouble realDiv = (double)a / b; // 3.5 (explicit float cast)\nbool isOdd = (a % 2 == 1);      // true (remainder 1)",
+            "content": {
+              "en": "### Tracing Variables & Arithmetic\n- Pay attention to exact operator types (`int * int` runs in 32-bit even when saved into a 64-bit destination unless cast upfront).\n- Use **Live JS Sandbox** to test `parseInt`, division, modulo `%`, and overflow boundaries.",
+              "ar": "### تتبع المتغيرات والعمليات الحسابية\n- انتبه أن ضرب `int * int` يحدث في 32 بت قبل الإسناد ما لم نحوله مسبقاً لـ 64 بت.\n- جرّب القسمة وباقي القسمة `%` عملياً داخل **Live JS Sandbox**."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Using `const` locks `PI`, casting `(double)a` prevents truncation, and `%` extracts the division remainder cleanly.",
@@ -1865,7 +2004,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "مختبر الذاكرة وتغير قيم المتغيرات التفاعلي"
             },
             "isRequired": true,
-            "content": "variables-visualizer",
+            "content": {
+              "en": "### Guided Lab: Memory Slots, Primitive Types & Reassignment\nInspect how variable declarations reserve typed RAM cells and update values cleanly.\n\n**Experiments to Run:**\n1. Step through integer, boolean, and string declarations and watch type labels and addresses.\n2. Compare mutating a regular `let`/mutable variable against locking a `const` invariant.\n3. Watch division vs modulo update variable state step by step.",
+              "ar": "### المعمل التفاعلي: المتغيرات وأنواع البيانات في الذاكرة\nاستكشف حجز المتغيرات لخانات الذاكرة وتحديث قيمها وتتبع أنواعها.\n\n**تجارب مقترحة:**\n1. تتبّع تعريف الأعداد الصحيحة والقيم المنطقية والنصوص مع عناوينها.\n2. قارن تعديل متغير مرن مع ثبات `const`.\n3. راقب فرق القسمة الصحيحة عن باقي القسمة."
+            },
             "interactiveModuleId": "variables-visualizer"
           },
           {
@@ -1877,8 +2019,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• Always initialize variables before reading them.\n• Use 64-bit `long long` (up to ~9×10¹⁸) when multiplying large integers like 10⁵ × 10⁵ (> 2×10⁹ 32-bit int max).",
-              "ar": "• احرص دائماً على إعطاء المتغير قيمة أولية قبل قراءته.\n• استخدم `long long` (64 بت) عند ضرب أرقام كبيرة حتى لا يحدث Integer Overflow."
+              "en": "• Always initialize variables before reading them.\n• Use 64-bit `long long` (up to ~9×10¹⁸) when multiplying large integers like 10⁵ × 10⁵ (> 2×10⁹ 32-bit int max).\n\n### Watch Out For\n- Reading uninitialized C++ stack variables leaves garbage memory bytes.\n- Mixing signed/unsigned integers or overflowing `10^5 * 10^5` inside 32-bit `int` corrupts products quietly.",
+              "ar": "• احرص دائماً على إعطاء المتغير قيمة أولية قبل قراءته.\n• استخدم `long long` (64 بت) عند ضرب أرقام كبيرة حتى لا يحدث Integer Overflow.\n\n### أخطاء شائعة في المتغيرات\n- قراءة متغير محلي غير مهيأ يعطي قيماً عشوائية خطيرة.\n- ضرب أرقام تتخطى سعة 32 بت يسبب التفافاً سالباً (Overflow) صامتاً."
             }
           },
           {
@@ -1890,8 +2032,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Key Takeaways:\n- Prefer `const` / immutable bindings unless mutation is genuinely needed.\n- Use 64-bit integers (`long long` / `long`) whenever products or sums can exceed `2 * 10^9`.\n- Watch integer truncation vs floating-point division and convert operands explicitly.",
-              "ar": "الخلاصة:\n- استخدم الثوابت `const` متى أمكن لحماية القيم.\n- استخدم الأعداد 64-بت عندما تتجاوز النتائج حدود `2e9`.\n- انتبه لقسمة الأعداد الصحيحة وحوّل الأنواع بوضوح."
+              "en": "Key Takeaways:\n- Prefer `const` / immutable bindings unless mutation is genuinely needed.\n- Use 64-bit integers (`long long` / `long`) whenever products or sums can exceed `2 * 10^9`.\n- Watch integer truncation vs floating-point division and convert operands explicitly.\n\n### Practice Drill\nGiven `totalSeconds = 3665`, compute `hours`, `minutes`, and `seconds` cleanly using integer division and modulo (`%`) in Live JS Sandbox.",
+              "ar": "الخلاصة:\n- استخدم الثوابت `const` متى أمكن لحماية القيم.\n- استخدم الأعداد 64-بت عندما تتجاوز النتائج حدود `2e9`.\n- انتبه لقسمة الأعداد الصحيحة وحوّل الأنواع بوضوح.\n\n### تمرين تطبيقي\nباستخدام القسمة الصحيحة و `%` في المختبر، حوّل `3665` ثانية إلى ساعات ودقائق وثوانٍ."
             }
           }
         ],
@@ -1905,7 +2047,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "PF-VAR-E-003",
           "PF-VAR-M-004",
           "PF-VAR-E-005",
-          "PF-VAR-H-006"
+          "PF-VAR-H-006",
+          "EXP-VAR-101",
+          "EXP-VAR-102",
+          "EXP-VAR-103",
+          "EXP-VAR-104",
+          "EXP-VAR-105"
         ]
       }
     ]
@@ -1983,6 +2130,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Practical conditionals, truthy/falsy rules, and switch usage.",
               "ar": "دليل عملي لاستخدام الشروط المنطقية وswitch."
             }
+          },
+          {
+            "title": "Python Docs: Control Flow (`if/elif/else`)",
+            "url": "https://docs.python.org/3/tutorial/controlflow.html",
+            "type": "documentation",
+            "source": "Python Docs",
+            "category": "Control Flow",
+            "language": "en",
+            "description": {
+              "en": "Conditional branching and clean boolean predicate style.",
+              "ar": "مرجع التفرع الشرطي والمنطق."
+            }
+          },
+          {
+            "title": "LearnCpp: Operators & Precedence",
+            "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-fundamental-data-types/",
+            "type": "documentation",
+            "source": "LearnCpp",
+            "category": "Language Core",
+            "language": "en",
+            "description": {
+              "en": "Precision rules and boolean conversion behaviors.",
+              "ar": "دليل قواعد التحويل والعمليات الشرطية."
+            }
           }
         ],
         "sections": [
@@ -1995,8 +2166,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Conditional statements pick which block runs based on a Boolean truth value. With `A && B`, if `A` is false, `B` is skipped (Short-Circuiting). With `A || B`, if `A` is true, `B` is skipped.\n\nIn C/C++/Java/JS `switch` blocks, always terminate non-empty cases with `break` or `return` to stop accidental fallthrough into subsequent cases.",
-              "ar": "تنفذ الجمل الشرطية مساراً دون آخر بناءً على قيمة منطقية. يمتاز عاملا `&&` و `||` بالتقييم المختصر: إذا كانت `false && ...` تتوقف فوراً، وإذا كانت `true || ...` تتوقف فوراً.\n\nفي جمل `switch`، يجب وضع `break` بعد كل حالة لمنع السقوط إلى الحالة التالية."
+              "en": "Conditional statements pick which block runs based on a Boolean truth value. With `A && B`, if `A` is false, `B` is skipped (Short-Circuiting). With `A || B`, if `A` is true, `B` is skipped.\n\nIn C/C++/Java/JS `switch` blocks, always terminate non-empty cases with `break` or `return` to stop accidental fallthrough into subsequent cases.\n\n### Boolean Guards & Short-Circuit Mechanics\n- When validating `index < arr.length && arr[index] > 0`, evaluation stops immediately at the LHS if `index >= arr.length`, protecting memory bounds safely.\n- Structuring early guard clauses (`if (!user) return null;`) keeps main logic readable without nested stair-step indentation.",
+              "ar": "تنفذ الجمل الشرطية مساراً دون آخر بناءً على قيمة منطقية. يمتاز عاملا `&&` و `||` بالتقييم المختصر: إذا كانت `false && ...` تتوقف فوراً، وإذا كانت `true || ...` تتوقف فوراً.\n\nفي جمل `switch`، يجب وضع `break` بعد كل حالة لمنع السقوط إلى الحالة التالية.\n\n### آلية الحماية المختصرة والتفرع الشرطي\n- في `index < arr.length && arr[index] > 0` يتوقف الفحص فوراً إذا فشل الطرف الأيسر لحماية الحدود.\n- أسلوب الحراس المبكرة (`Early Return`) يقلل التداخل العميق ويسهّل قراءة المنطق."
             },
             "questions": [
               {
@@ -2094,7 +2265,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "نمط الحراسة والتفرع الآمن"
             },
             "isRequired": true,
-            "content": "int score = 88;\nif (score < 0 || score > 100) {\n    std::cout << \"Invalid score\";\n} else if (score >= 90) {\n    std::cout << \"Grade A\";\n} else if (score >= 80) {\n    std::cout << \"Grade B\";\n} else {\n    std::cout << \"Grade C or lower\";\n}",
+            "content": {
+              "en": "### Trace & Experiment Guide\n- Notice every `switch` case needs `break` or `return` unless intentional fall-through is desired.\n- Try modifying threshold conditions (`>= 90` before `>= 50`) in **Live JS Sandbox** to verify ordering logic.",
+              "ar": "### تتبع الشروط واختبار الترتيب\n- تأكد من وضع `break` داخل كل حالة `switch` لتجنب السقوط للحالة التالية.\n- بدّل ترتيب شروط الدرجات في **Live JS Sandbox** لتشهد أثر ترتيب الفروع."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Validating invalid boundaries first and ordering thresholds descending ensures every score enters at most one clear branch.",
@@ -2147,7 +2321,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "مختبر المنطق الشرطي التفاعلي"
             },
             "isRequired": true,
-            "content": "truth-table-visualizer",
+            "content": {
+              "en": "### Guided Lab: Boolean Gates & Logical Predicates\nTest combinations of `P` and `Q` inputs across `AND`, `OR`, `XOR`, `NAND`, and `Implication (P -> Q)` truth rows.\n\n**Experiments to Run:**\n1. Verify that `P -> Q` is FALSE strictly when `P = true` and `Q = false`.\n2. Compare `!(P && Q)` vs `!P || !Q` (De Morgan's Law) across all 4 truth combinations.\n3. Note that `P XOR Q` outputs TRUE exclusively when inputs differ.",
+              "ar": "### المعمل التفاعلي: البوابات المنطقية وجداول الصواب\nاختبر مدخلات `P` و `Q` مع عمليات `AND` و `OR` و `XOR` و `Implication`.\n\n**تجارب مقترحة:**\n1. تحقق من أن العبارة الشرطية `P -> Q` تخطئ فقط عندما `P = true` و `Q = false`.\n2. قارن `!(P && Q)` مع `!P || !Q` لتأكيد قانون دي مورغان.\n3. لاحظ أن `XOR` تكون صائبة فقط عند اختلاف الطرفين."
+            },
             "interactiveModuleId": "truth-table-visualizer"
           },
           {
@@ -2159,8 +2336,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Avoid these classic branching traps:\n- Writing `if (x = 5)` instead of `if (x == 5)` mutates `x` silently in C/C++/JS.\n- Checking `total == 0.3` on floats often fails (`0.30000000000000004`); compare `abs(a - b) < 1e-9` instead.\n- Missing `break;` in C-style `switch` falls through into the next `case`.",
-              "ar": "تجنب هذه الأخطاء الشائعة:\n- كتابة `=` بدل `==` يغير قيمة المتغير بدلاً من مقارنته.\n- مقارنة الأعداد العشرية مباشرة بـ `==` غير موثوقة بسبب التقريب الثنائي.\n- نسيان `break;` داخل `switch` يسبب تنفيذ الحالة التالية تلقائياً."
+              "en": "Avoid these classic branching traps:\n- Writing `if (x = 5)` instead of `if (x == 5)` mutates `x` silently in C/C++/JS.\n- Checking `total == 0.3` on floats often fails (`0.30000000000000004`); compare `abs(a - b) < 1e-9` instead.\n- Missing `break;` in C-style `switch` falls through into the next `case`.\n\n### Debugging Branching Bugs\n- Using single `=` inside `if (x = 5)` mutates `x` instead of checking `==`/`===`.\n- Overlapping `else if` branches must order most-specific condition first (`>= 90` ahead of `>= 50`).",
+              "ar": "تجنب هذه الأخطاء الشائعة:\n- كتابة `=` بدل `==` يغير قيمة المتغير بدلاً من مقارنته.\n- مقارنة الأعداد العشرية مباشرة بـ `==` غير موثوقة بسبب التقريب الثنائي.\n- نسيان `break;` داخل `switch` يسبب تنفيذ الحالة التالية تلقائياً.\n\n### أخطاء فحص الشروط\n- الخلط بين الإسناد `=` والمساواة `==`/`===` داخل الشرط خطأ صامت خطير.\n- ضع الشرط الأضيق والأدق أولاً قبل الشروط الأوسع في سلسلة `else if`."
             },
             "questions": [
               {
@@ -2209,8 +2386,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Key Takeaways:\n- Order `else if` thresholds strictly from most specific to broadest.\n- Rely on left-to-right short-circuiting for bounds/null guards.\n- Prefer shallow guard returns to deep nested `if` blocks.",
-              "ar": "الخلاصة:\n- رتب شروط `else if` بدقة ولا تنسَ فائدة التقييم المختصر.\n- تجنب التداخل العميق واستخدم Guard Clauses."
+              "en": "Key Takeaways:\n- Order `else if` thresholds strictly from most specific to broadest.\n- Rely on left-to-right short-circuiting for bounds/null guards.\n- Prefer shallow guard returns to deep nested `if` blocks.\n\n### Hands-On Task\nWrite a clean leap-year predicate using short-circuit logic (`year % 400 === 0 || (year % 4 === 0 && year % 100 !== 0)`) and test `1900`, `2000`, and `2024`.",
+              "ar": "الخلاصة:\n- رتب شروط `else if` بدقة ولا تنسَ فائدة التقييم المختصر.\n- تجنب التداخل العميق واستخدم Guard Clauses.\n\n### تمرين عملي\nاكتب دالة تفحص السنة الكبيسة بالمنطق المختصر واختبر السنوات `1900` و `2000` و `2024`."
             }
           }
         ],
@@ -2224,7 +2401,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "PF-CND-M-003",
           "PF-CND-M-004",
           "PF-CND-E-005",
-          "PF-CND-H-006"
+          "PF-CND-H-006",
+          "EXP-CND-101",
+          "EXP-CND-102",
+          "EXP-CND-103",
+          "EXP-CND-104",
+          "EXP-CND-105"
         ]
       }
     ]
@@ -2291,10 +2473,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
         ],
         "externalReferences": [
           {
-            "title": "LeetCode 412: Fizz Buzz",
-            "url": "https://leetcode.com/problems/fizz-buzz/",
+            "title": "CSES: Weird Algorithm (Loop Tracing Practice)",
+            "url": "https://cses.fi/problemset/task/1068/",
             "type": "practice_problem",
-            "source": "LeetCode"
+            "source": "CSES"
           },
           {
             "title": "MDN: Loops and Iteration Guide",
@@ -2306,6 +2488,18 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             "description": {
               "en": "Examples of for, while, do-while, break, and continue.",
               "ar": "أمثلة متكاملة على الحلقات والتكرار."
+            }
+          },
+          {
+            "title": "Python Docs: Loop Control & Iteration Tools",
+            "url": "https://docs.python.org/3/tutorial/controlflow.html",
+            "type": "documentation",
+            "source": "Python Docs",
+            "category": "Loops",
+            "language": "en",
+            "description": {
+              "en": "Range iteration, break, continue, and loop clauses.",
+              "ar": "توثيق حلقات التكرار والتحكم بها."
             }
           }
         ],
@@ -2319,8 +2513,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• `for` loop: compact initialization, continuation test, and step update: best when range bounds are clear.\n• `while` loop: checks condition BEFORE each pass (may run 0 times).\n• `do-while` loop: executes body ONCE first, then evaluates condition (guaranteed >= 1 run).\n• `break` exits the innermost loop immediately; `continue` skips to the next iteration test.",
-              "ar": "• حلقة `for`: مثالية عند معرفة نطاق التكرار مسبقاً.\n• حلقة `while`: تفحص الشرط قبل الدخول (قد تعمل 0 مرة).\n• حلقة `do-while`: تنفذ الجسم أولاً ثم تفحص الشرط (تضمن تنفيذ مرة على الأقل).\n• تعليمة `break` تخرج من الحلقة فوراً، بينما `continue` تتخطى باقي الدورة الحالية فقط."
+              "en": "• `for` loop: compact initialization, continuation test, and step update: best when range bounds are clear.\n• `while` loop: checks condition BEFORE each pass (may run 0 times).\n• `do-while` loop: executes body ONCE first, then evaluates condition (guaranteed >= 1 run).\n• `break` exits the innermost loop immediately; `continue` skips to the next iteration test.\n\n### Loop Invariants & Iteration Bounds Walkthrough\n- For array size `n = 5`, valid slots span `0, 1, 2, 3, 4` (`i < n`, NOT `i <= n`).\n- `for` fits known bounds (`0..n-1`), `while` fits open stopping states (`left <= right`), and `do-while` runs body at least once before testing.",
+              "ar": "• حلقة `for`: مثالية عند معرفة نطاق التكرار مسبقاً.\n• حلقة `while`: تفحص الشرط قبل الدخول (قد تعمل 0 مرة).\n• حلقة `do-while`: تنفذ الجسم أولاً ثم تفحص الشرط (تضمن تنفيذ مرة على الأقل).\n• تعليمة `break` تخرج من الحلقة فوراً، بينما `continue` تتخطى باقي الدورة الحالية فقط.\n\n### ثوابت الحلقات وحدود الفهارس\n- لمصفوفة بطول `n = 5`، الفهارس الصحيحة من `0` إلى `4` (`i < n` وليس `i <= n`).\n- تناسب `for` الحدود المعلومة، بينما تناسب `while` الشروط المتغيرة، وتنفذ `do-while` دورة واحدة على الأقل."
             },
             "questions": [
               {
@@ -2418,7 +2612,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "التكرار مع التصفية والتوقف المبكر"
             },
             "isRequired": true,
-            "content": "int sumEven = 0;\nfor (int i = 1; i <= 10; i++) {\n    if (i % 2 != 0) continue; // Skip odd numbers\n    sumEven += i;\n}\nstd::cout << sumEven; // 2+4+6+8+10 = 30",
+            "content": {
+              "en": "### Live Tracing Tips\n- Trace the difference between `continue` (skips remaining body of CURRENT pass) and `break` (exits the ENTIRE loop).\n- Run loop variants in **Live JS Sandbox** checking step counts and off-by-one boundary sums.",
+              "ar": "### إرشادات تتبع الكود التكراري\n- فرّق بين `continue` (تخطي باقي الدورة الحالية فقط) و `break` (إنهاء الحلقة بالكامل).\n- جرّب الحلقات المتداخلة داخل **Live JS Sandbox** واحسب عدد التكرارات الفعلي."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "`continue` bypasses addition whenever `i` is odd, keeping loop body shallow and clear.",
@@ -2471,7 +2668,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "محاكاة الحلقات التكرارية خطوة بخطوة"
             },
             "isRequired": true,
-            "content": "loops-visualizer",
+            "content": {
+              "en": "### Guided Lab: Loop Counter, Break & Continue Execution\nTrace loop initialization, condition check, body step, and post-increment updates line by line.\n\n**Experiments to Run:**\n1. Step through `for` iterations checking when `i < n` stops (`off-by-one` guard).\n2. Compare skipping one pass with `continue` vs exiting early with `break`.\n3. Track accumulator invariants across every iteration.",
+              "ar": "### المعمل التفاعلي: تتبع الحلقات و break / continue\nتتبّع تهيئة العداد وفحص الشرط وتحديث القيمة خطوة بخطوة.\n\n**تجارب مقترحة:**\n1. راقب لحظة توقف الشرط `i < n` لتجنب أخطاء الحدود.\n2. قارن تخطي دورة واحدة عبر `continue` مع الإيقاف الفوري عبر `break`.\n3. تحقق من صحة المجمع في كل خطوة."
+            },
             "interactiveModuleId": "loops-visualizer"
           },
           {
@@ -2483,8 +2683,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Common iteration bugs:\n- Forgetting `i++` inside a `while` loop causes an infinite hang.\n- Writing `i <= arr.size()` on 0-indexed arrays reads 1 element past the end.\n- Modifying a list size while iterating with an index skips elements unless you adjust indices carefully.",
-              "ar": "أكثر أخطاء الحلقات شيوعاً:\n- نسيان تحديث العداد داخل `while` يعلق البرنامج في حلقة لا نهائية.\n- استخدام `<=` بدلاً من `<` مع طول المصفوفة يقرأ خارج الحدود.\n- حذف عناصر من قائمة أثناء التكرار قد يتسبب في تخطي عناصر مجاورة."
+              "en": "Common iteration bugs:\n- Forgetting `i++` inside a `while` loop causes an infinite hang.\n- Writing `i <= arr.size()` on 0-indexed arrays reads 1 element past the end.\n- Modifying a list size while iterating with an index skips elements unless you adjust indices carefully.\n\n### Stopping Infinite & Off-by-One Loops\n- Never loop floating-point counters (`for (double x = 0; x != 1.0; x += 0.1)`) due to base-2 rounding error.\n- Ensure every `while` loop makes provable progress toward terminating its guard condition.",
+              "ar": "أكثر أخطاء الحلقات شيوعاً:\n- نسيان تحديث العداد داخل `while` يعلق البرنامج في حلقة لا نهائية.\n- استخدام `<=` بدلاً من `<` مع طول المصفوفة يقرأ خارج الحدود.\n- حذف عناصر من قائمة أثناء التكرار قد يتسبب في تخطي عناصر مجاورة.\n\n### تفادي الحلقات اللانهائية وأخطاء الحدود\n- لا تستخدم أعداداً عشرية كعدادات حلقات مع `!=` بسبب تقريب الفواصل العشرية.\n- تحقق دوماً أن كل مسار داخل `while` يقترب من شرط التوقف."
             },
             "questions": [
               {
@@ -2533,8 +2733,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Key Takeaways:\n- Choose `for` for index/collection bounds, `while` for open-ended sentinel termination.\n- Always verify initial value, step update, and stopping edge (`<` vs `<=`).\n- Account for nested loop multiplication when estimating performance.",
-              "ar": "الخلاصة:\n- تأكد دائماً من القيمة الابتدائية وخطوة التحديث وحد التوقف، وانتبه لتكلفة الحلقات المتداخلة."
+              "en": "Key Takeaways:\n- Choose `for` for index/collection bounds, `while` for open-ended sentinel termination.\n- Always verify initial value, step update, and stopping edge (`<` vs `<=`).\n- Account for nested loop multiplication when estimating performance.\n\n### Practice Drill\nImplement FizzBuzz for integers `1..20` in Live JS Sandbox checking divisibility by `15` BEFORE `3` or `5`.",
+              "ar": "الخلاصة:\n- تأكد دائماً من القيمة الابتدائية وخطوة التحديث وحد التوقف، وانتبه لتكلفة الحلقات المتداخلة.\n\n### تدريب برمجي\nطبّق مسألة FizzBuzz للأعداد من `1` إلى `20` في المختبر مع الانتباه لفحص القسمة على `15` أولاً."
             }
           }
         ],
@@ -2548,7 +2748,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "PF-LOP-M-003",
           "PF-LOP-M-004",
           "PF-LOP-E-005",
-          "PF-LOP-H-006"
+          "PF-LOP-H-006",
+          "EXP-LOP-101",
+          "EXP-LOP-102",
+          "EXP-LOP-103",
+          "EXP-LOP-104",
+          "EXP-LOP-105"
         ]
       }
     ]
@@ -2625,6 +2830,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Parameters, default arguments, return values, and local namespaces.",
               "ar": "تعريف الدوال والمعاملات ونطاق المتغيرات."
             }
+          },
+          {
+            "title": "MDN: Functions Reusable Code Blocks Guide",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions",
+            "type": "documentation",
+            "source": "MDN",
+            "category": "Functions",
+            "language": "en",
+            "description": {
+              "en": "Lexical scope, closures, parameters, and call stack.",
+              "ar": "مرجع الدوال والنطاق وتمرير المعاملات."
+            }
+          },
+          {
+            "title": "cppreference: Functions & Parameter Passing",
+            "url": "https://en.cppreference.com/w/cpp/language/functions",
+            "type": "documentation",
+            "source": "cppreference",
+            "category": "Functions",
+            "language": "en",
+            "description": {
+              "en": "Value vs reference parameters, signatures, and return semantics.",
+              "ar": "مرجع التمرير بالقيمة والمرجع في C++."
+            }
           }
         ],
         "sections": [
@@ -2637,8 +2866,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Calling a function allocates a Stack Frame holding arguments, local variables, and the return address. Once `return` executes, the frame pops off automatically.\n\n• Pass-by-Value copies data (caller's original variable stays safe).\n• Pass-by-Reference (`int&` in C++, objects/arrays in JS/Java/Python) shares access without copying huge structures.",
-              "ar": "كل استدعاء لدالة يحجز إطاراً (Stack Frame) في المكدس يضم متغيراتها المحلية التي تُزال فور انتهاء الدالة بـ `return`.\n\nالتمرير بالقيمة ينسخ القيمة دون المساس بالأصل، أما التمرير بالمرجع فيتشارك نفس البيانات لتجنب النسخ المكلف أو لتعديل الأصل."
+              "en": "Calling a function allocates a Stack Frame holding arguments, local variables, and the return address. Once `return` executes, the frame pops off automatically.\n\n• Pass-by-Value copies data (caller's original variable stays safe).\n• Pass-by-Reference (`int&` in C++, objects/arrays in JS/Java/Python) shares access without copying huge structures.\n\n### Call Stack Frames & Parameter Semantics\n1. Calling `compute(a, b)` pushes a brand-new stack frame storing parameter copies and local variables.\n2. Returning pops that frame immediately cleanly.\n3. Passing primitives copies value (`int x`), whereas references (`int& x` or JS/C# object refs) allow aliasing caller state.",
+              "ar": "كل استدعاء لدالة يحجز إطاراً (Stack Frame) في المكدس يضم متغيراتها المحلية التي تُزال فور انتهاء الدالة بـ `return`.\n\nالتمرير بالقيمة ينسخ القيمة دون المساس بالأصل، أما التمرير بالمرجع فيتشارك نفس البيانات لتجنب النسخ المكلف أو لتعديل الأصل.\n\n### إطارات المكدس وتمرير المعاملات\n1. عند استدعاء الدالة يُنشأ إطار خاص في Call Stack يحمل متغيراتها المحلية.\n2. عند الوصول لـ `return` يُحذف الإطار وتُستأنف دالة الاستدعاء.\n3. التمرير بالقيمة ينسخ القيمة دون تعديل الأصل، أما التمرير بالمرجع فيربط نفس الكائن أو العنوان."
             },
             "questions": [
               {
@@ -2736,7 +2965,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "الدوال النقية مقابل التعديل بالمرجع"
             },
             "isRequired": true,
-            "content": "int square(int x) { return x * x; }     // Pure pass-by-value\nvoid increment(int& x) { x++; }          // Modifies caller variable by reference\n\nint main() {\n    int n = 5;\n    int sq = square(n); // sq = 25, n is still 5\n    increment(n);       // n becomes 6\n}",
+            "content": {
+              "en": "### Experimenting with Scope & Pure Functions\n- Observe how pure functions (`add(2, 3) === 5`) never modify external globals, eliminating hard-to-trace side effects.\n- Edit helper functions inside **Live JS Sandbox** to observe lexical closures vs shadowed names.",
+              "ar": "### استكشاف النطاق والدوال النقية\n- لاحظ كيف تضمن الدوال النقية نفس النتيجة دون تعديل متغيرات عامة خارجية.\n- اختبر حجب الأسماء (Shadowing) داخل **Live JS Sandbox**."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "`square(n)` copies `n`, preserving caller immutability, while `increment(int& x)` binds directly to `n`'s memory address.",
@@ -2790,8 +3022,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Avoid naming local variables identically to outer/global variables (Variable Shadowing), which silently hides updates. Also prefer returning computed outputs rather than quietly mutating global variables.",
-              "ar": "تجنب تسمية متغير محلي بنفس اسم متغير خارجي (Variable Shadowing)، وفضّل إرجاع النتائج عبر `return` بدلاً من تعديل متغيرات عامة خفية."
+              "en": "Avoid naming local variables identically to outer/global variables (Variable Shadowing), which silently hides updates. Also prefer returning computed outputs rather than quietly mutating global variables.\n\n### Common Function Traps\n- Accidental parameter/variable shadowing creates two different variables sharing one name.\n- Unintended shared-state mutation breaks reusability across parallel tests and callers.",
+              "ar": "تجنب تسمية متغير محلي بنفس اسم متغير خارجي (Variable Shadowing)، وفضّل إرجاع النتائج عبر `return` بدلاً من تعديل متغيرات عامة خفية.\n\n### أخطاء شائعة في الدوال\n- تكرار اسم متغير محلي بنفس اسم متغير خارجي يسبب لبساً (Shadowing).\n- تعديل حالة عامة داخل دالة مساعدة يجعل اختبارها وإعادة استخدامها صعباً."
             },
             "questions": [
               {
@@ -2840,8 +3072,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Keep functions small, favor clear inputs & explicit return values over hidden global mutations, and use early returns to flatten deep `if` nesting.",
-              "ar": "اجعل دوالك قصيرة وواضحة الوظيفة وتجنب الاعتماد على المتغيرات العامة قدر الإمكان."
+              "en": "Keep functions small, favor clear inputs & explicit return values over hidden global mutations, and use early returns to flatten deep `if` nesting.\n\n### Practice Exercise\nRefactor a 15-line nested loop inside Live JS Sandbox into two small, pure, well-named helper functions.",
+              "ar": "اجعل دوالك قصيرة وواضحة الوظيفة وتجنب الاعتماد على المتغيرات العامة قدر الإمكان.\n\n### تمرين عملي\nأعد هيكلة حلقة متداخلة في المختبر عبر تقسيمها إلى دالتين نقيتين بأسماء واضحة."
             }
           }
         ],
@@ -2855,7 +3087,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "PF-FNC-M-003",
           "PF-FNC-E-004",
           "PF-FNC-M-005",
-          "PF-FNC-H-006"
+          "PF-FNC-H-006",
+          "EXP-FNC-101",
+          "EXP-FNC-102",
+          "EXP-FNC-103",
+          "EXP-FNC-104",
+          "EXP-FNC-105"
         ]
       }
     ]
@@ -2919,7 +3156,9 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "passPercentage": 60,
           "questionCount": 5
         },
-        "interactiveModuleIds": [],
+        "interactiveModuleIds": [
+          "memory-heap-visualizer"
+        ],
         "externalReferences": [
           {
             "title": "cppreference: Dynamic Memory & Smart Pointers",
@@ -2931,6 +3170,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             "description": {
               "en": "Ownership primitives (`unique_ptr`, `shared_ptr`) and allocators.",
               "ar": "مرجع المؤشرات الذكية وإدارة الذاكرة."
+            }
+          },
+          {
+            "title": "OSTEP: Address Spaces & Memory API",
+            "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/",
+            "type": "documentation",
+            "source": "OSTEP",
+            "category": "Memory",
+            "language": "en",
+            "description": {
+              "en": "Stack vs Heap segments, malloc/free, and address isolation.",
+              "ar": "فصول إدارة الذاكرة وتخصيص Heap و Stack."
+            }
+          },
+          {
+            "title": "LearnCpp: Dynamic Memory & Pointers",
+            "url": "https://www.learncpp.com/cpp-tutorial/introduction-to-fundamental-data-types/",
+            "type": "documentation",
+            "source": "LearnCpp",
+            "category": "Systems",
+            "language": "en",
+            "description": {
+              "en": "Hands-on fundamentals avoiding dangling pointers and leaks.",
+              "ar": "مبادئ تجنب أخطاء المؤشرات والتسرب."
             }
           }
         ],
@@ -2944,8 +3207,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "An OS process lays out four classic virtual memory zones:\n1. Text (Code): Read-only machine instructions.\n2. Static/Data: Global & static variables.\n3. Stack: Grows/shrinks strictly LIFO as functions call/return: fast, size-limited.\n4. Heap: Dynamic variable-size objects allocated explicitly (`new`/`malloc`) or managed by Garbage Collectors (.NET, Java, Python, JS).",
-              "ar": "تُقسم ذاكرة البرنامج إلى 4 مناطق:\n1. Text: الكود التنفيذي للقراءة فقط.\n2. Data: المتغيرات العامة والثابتة.\n3. Stack: لحجز متغيرات الدوال تلقائياً وفق LIFO (سريع جداً ومحدود الحجم).\n4. Heap: للكائنات الديناميكية الكبيرة أو ذات العمر المرن."
+              "en": "An OS process lays out four classic virtual memory zones:\n1. Text (Code): Read-only machine instructions.\n2. Static/Data: Global & static variables.\n3. Stack: Grows/shrinks strictly LIFO as functions call/return: fast, size-limited.\n4. Heap: Dynamic variable-size objects allocated explicitly (`new`/`malloc`) or managed by Garbage Collectors (.NET, Java, Python, JS).\n\n### Stack vs Heap Anatomy Example\n- **Stack:** Fast LIFO allocation (`int x = 10` = single pointer subtract). Automatically freed on function return, typically ~1-8 MB limit per thread.\n- **Heap:** Flexible dynamic memory supporting arbitrary lifetimes and large buffers (`new int[n]`), requiring RAII (`unique_ptr`), garbage collection, or explicit `free()`.",
+              "ar": "تُقسم ذاكرة البرنامج إلى 4 مناطق:\n1. Text: الكود التنفيذي للقراءة فقط.\n2. Data: المتغيرات العامة والثابتة.\n3. Stack: لحجز متغيرات الدوال تلقائياً وفق LIFO (سريع جداً ومحدود الحجم).\n4. Heap: للكائنات الديناميكية الكبيرة أو ذات العمر المرن.\n\n### مقارنة تفصيلية بين Stack و Heap\n- **Stack:** تخصيص فوري بترتيب LIFO يُحرر تلقائياً عند خروج الدالة بحجم محدود نسبياً.\n- **Heap:** مساحة ديناميكية كبيرة للكائنات طويلة العمر والمصفوفات الضخمة تتطلب تحريراً آمناً أو RAII أو جامع القمامة."
             },
             "questions": [
               {
@@ -3043,7 +3306,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "الإدارة الآمنة للذاكرة (RAII مقابل التخصيص اليدوي)"
             },
             "isRequired": true,
-            "content": "void safeMemory() {\n    int stackVal = 42;                         // Freed automatically on return\n    auto smartPtr = std::make_unique<int>(99); // Heap allocated, auto-freed by RAII!\n} // smartPtr calls delete cleanly even if exceptions throw",
+            "content": {
+              "en": "### Tracing Ownership & Smart Pointers\n- Contrast raw `new/delete` (prone to early-return leaks) against `std::unique_ptr` deterministic destruction.\n- Run the interactive **Memory & Heap Visualizer** below to witness Stack pointers referencing live vs freed Heap blocks!",
+              "ar": "### تتبع الملكية والمؤشرات الذكية\n- قارن الحجز اليدوي المعرض للتسريب مع الأمان التلقائي عبر `unique_ptr` و RAII.\n- استخدم المحاكي المرئي بالأسفل لمراقبة المؤشر المعلق بعد تحرير كتلة Heap."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Modern C++ RAII (`unique_ptr`, `vector`) binds Heap lifetime to a Stack owner so leaks and dangling pointers disappear.",
@@ -3089,6 +3355,20 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             ]
           },
           {
+            "id": "sec-mem-interactive",
+            "type": "interactive",
+            "title": {
+              "en": "Interactive Stack vs Heap & Pointers Lab",
+              "ar": "محاكي الذاكرة التفاعلي: Stack و Heap والمؤشرات"
+            },
+            "isRequired": true,
+            "interactiveModuleId": "memory-heap-visualizer",
+            "content": {
+              "en": "### Guided Lab: Stack Frames, Heap Blocks & Dangling Pointers\nAllocate objects dynamically on the Heap, dereference `*ptr` mutations directly, and witness dangling pointers after premature free.\n\n**Experiments to Run:**\n1. Click **Allocate Heap** to store a dynamic block address in a Stack pointer.\n2. Click **Mutate *ptr** to see indirect in-place Heap modification without copying.\n3. Click **Free Heap** and notice the warning when Stack pointers remain dangling.",
+              "ar": "### المعمل التفاعلي: مقارنة Stack و Heap والمؤشرات\nاحجز كتلاً ديناميكية في الـ Heap وعدّلها عبر المؤشر `*ptr` واكتشف خطر المؤشر المعلق.\n\n**تجارب مقترحة:**\n1. اضغط حجز Heap لملاحظة العنوان الجديد وتخزينه في Stack.\n2. عدّل القيمة عبر المؤشر لتشاهد التعديل المباشر في نفس العنوان.\n3. حرّر الكتلة ولاحظ تحذير Dangling Pointer."
+            }
+          },
+          {
             "id": "sec-mem-pitfalls",
             "type": "pitfalls",
             "title": {
@@ -3097,8 +3377,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Always check pointers against `nullptr`/`null` before dereferencing, prefer modern RAII (`std::vector`, `std::unique_ptr`) over raw `new/delete`, and reproduce crashes systematically using debugger breakpoints + AddressSanitizer (`-fsanitize=address`).",
-              "ar": "افحص المؤشرات قبل الاستخدام وتفضّل هياكل RAII الآمنة مثل `vector` و`unique_ptr` على الحجز اليدوي المباشر، واستعن بـ Breakpoints وأدوات كشف الذاكرة."
+              "en": "Always check pointers against `nullptr`/`null` before dereferencing, prefer modern RAII (`std::vector`, `std::unique_ptr`) over raw `new/delete`, and reproduce crashes systematically using debugger breakpoints + AddressSanitizer (`-fsanitize=address`).\n\n### Top 3 Memory Hazards\n1. **Memory Leak:** Losing pointer references without freeing Heap allocation.\n2. **Dangling Pointer / Use-After-Free:** Dereferencing freed Heap blocks or popped Stack locals.\n3. **Double Free:** Deleting the same allocation twice (always set freed raw pointers or rely on RAII).",
+              "ar": "افحص المؤشرات قبل الاستخدام وتفضّل هياكل RAII الآمنة مثل `vector` و`unique_ptr` على الحجز اليدوي المباشر، واستعن بـ Breakpoints وأدوات كشف الذاكرة.\n\n### أخطر 3 مشكلات في الذاكرة\n1. **التسرب (Leak):** ضياع المؤشر قبل تحرير الكتلة.\n2. **المؤشر المعلق:** استخدام عنوان لمتغير محلي محذوف أو كتلة Heap محررة.\n3. **التحرير المزدوج:** استدعاء `free`/`delete` مرتين لنفس العنوان."
             },
             "questions": [
               {
@@ -3147,8 +3427,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Key Takeaways:\n- Stack: fast, scoped, automatic cleanup.\n- Heap: dynamic lifetime, requires ownership discipline (RAII / GC).\n- Reproduce bugs methodically with watch expressions, call stack traces, and null checks.",
-              "ar": "الخلاصة:\n- Stack تلقائي وسريع ومرتبط بنطاق الدالة، وHeap مرن وطويل الأمد ويجب تتبع تحريره."
+              "en": "Key Takeaways:\n- Stack: fast, scoped, automatic cleanup.\n- Heap: dynamic lifetime, requires ownership discipline (RAII / GC).\n- Reproduce bugs methodically with watch expressions, call stack traces, and null checks.\n\n### Hands-On Lab Task\nIn the interactive Memory Visualizer, allocate two Heap blocks, mutate one through `*ptr`, then free it and verify the Stack reference warns **Dangling!**.",
+              "ar": "الخلاصة:\n- Stack تلقائي وسريع ومرتبط بنطاق الدالة، وHeap مرن وطويل الأمد ويجب تتبع تحريره.\n\n### تمرين المعمل التفاعلي\nفي محاكي الذاكرة، احجز كتلتين في Heap وعدّل إحداهما عبر المؤشر ثم حرّرها لتلاحظ تحذير الدليل المعلق."
             }
           }
         ],
@@ -3162,7 +3442,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "PF-MEM-M-003",
           "PF-MEM-M-004",
           "PF-MEM-H-005",
-          "PF-MEM-E-006"
+          "PF-MEM-E-006",
+          "EXP-MEM-101",
+          "EXP-MEM-102",
+          "EXP-MEM-103",
+          "EXP-MEM-104",
+          "EXP-MEM-105"
         ]
       }
     ]
@@ -3226,14 +3511,14 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "questionCount": 5
         },
         "interactiveModuleIds": [
-          "two-pointers-visualizer"
+          "array-visualizer"
         ],
         "externalReferences": [
           {
-            "title": "LeetCode 1: Two Sum",
-            "url": "https://leetcode.com/problems/two-sum/",
+            "title": "CSES: Sum of Two Values (Array Practice)",
+            "url": "https://cses.fi/problemset/task/1640/",
             "type": "practice_problem",
-            "source": "LeetCode"
+            "source": "CSES"
           },
           {
             "title": "roadmap.sh: Arrays & Data Structures",
@@ -3258,6 +3543,18 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Dynamic contiguous array guarantees and iterator rules.",
               "ar": "مرجع المصفوفة الديناميكية vector."
             }
+          },
+          {
+            "title": "Python Docs: Lists & Sequence Data Structures",
+            "url": "https://docs.python.org/3/tutorial/datastructures.html",
+            "type": "documentation",
+            "source": "Python Docs",
+            "category": "Data Structures",
+            "language": "en",
+            "description": {
+              "en": "List slicing, contiguous semantics, and mutation costs.",
+              "ar": "توثيق القوائم والمصفوفات وتكلفة العمليات."
+            }
           }
         ],
         "sections": [
@@ -3270,8 +3567,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "An array reserves N consecutive memory slots of identical byte width `W`. Computing `base + i * W` jumps straight to element `i` in O(1)!\n\nHowever, inserting or deleting at index 0 shifts all remaining elements -> O(N). Dynamic arrays (`std::vector`, `List<T>`, JS arrays) double capacity upon filling so appending stays O(1) amortized.\n\nA String acts like an array of characters supporting indexing, slicing, and length checks.",
-              "ar": "تحجز المصفوفة مساحة متصلة واحدة في RAM، مما يتيح الوصول لأي فهرس i فورياً في O(1) عبر حساب العنوان المباشر.\n\nلكن الإدراج أو الحذف في البداية يتطلب إزاحة كل العناصر O(N). وتضاعف المصفوفات الديناميكية (مثل vector و List) سعتها عند الامتلاء ليظل الإلحاق بالنهاية O(1) مستهلكاً."
+              "en": "An array reserves N consecutive memory slots of identical byte width `W`. Computing `base + i * W` jumps straight to element `i` in O(1)!\n\nHowever, inserting or deleting at index 0 shifts all remaining elements -> O(N). Dynamic arrays (`std::vector`, `List<T>`, JS arrays) double capacity upon filling so appending stays O(1) amortized.\n\nA String acts like an array of characters supporting indexing, slicing, and length checks.\n\n### Contiguous Layout & Amortized Vector Resizing\n- Every array slot lies contiguously at `base_address + index * element_bytes`, making `arr[999]` identical speed to `arr[0]` (`O(1)`).\n- Dynamic arrays (`vector` / `ArrayList`) double capacity when full: copying `1 + 2 + 4 + ... + n = 2n - 1` keeps `append` strictly `O(1)` amortized while front insert remains `O(n)`.",
+              "ar": "تحجز المصفوفة مساحة متصلة واحدة في RAM، مما يتيح الوصول لأي فهرس i فورياً في O(1) عبر حساب العنوان المباشر.\n\nلكن الإدراج أو الحذف في البداية يتطلب إزاحة كل العناصر O(N). وتضاعف المصفوفات الديناميكية (مثل vector و List) سعتها عند الامتلاء ليظل الإلحاق بالنهاية O(1) مستهلكاً.\n\n### التخزين المتجاور ومضاعفة السعة\n- تقع جميع العناصر متلاصقة عند `base + index * bytes`، لذا قراءة العنصر رقم 1000 بنفس سرعة قراءة العنصر 0 (`O(1)`).\n- عند امتلاء المصفوفة الديناميكية تُضاعَف سعتها فيظل الإلحاق بالنهاية `O(1)` متوسطاً، بينما الإدراج بالبداية يظل `O(n)`."
             },
             "questions": [
               {
@@ -3369,7 +3666,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "عبور المصفوفة الأحادية والمصفوفة الثنائية"
             },
             "isRequired": true,
-            "content": "int grid[2][3] = { {1, 2, 3}, {4, 5, 6} };\nint total = 0;\nfor (int r = 0; r < 2; r++) {         // Row-major outer loop\n    for (int c = 0; c < 3; c++) {     // Inner loop walks contiguous RAM!\n        total += grid[r][c];\n    }\n}",
+            "content": {
+              "en": "### Exploring 1D & Row-Major 2D Arrays\n- Notice row-major outer `row` -> inner `col` reads stay cache-warm (`matrix[r][c]` occupies consecutive bytes).\n- Use **Live JS Sandbox** to experiment with `slice`, `push`, `unshift` cost comparison, and string builder `.join()`.",
+              "ar": "### تتبع المصفوفات 1D و 2D\n- القراءة صفاً تلو صف `matrix[r][c]` تتوافق مع التخزين المتجاور وتستفيد من الـ Cache.\n- جرّب فرق السرعة بين الإضافة للنهاية والبداية وتجميع النصوص في **Live JS Sandbox**."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Iterating row-by-row matches how C++/C#/Python store 2D arrays linearly in memory, maximizing cache line hits.",
@@ -3418,12 +3718,15 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             "id": "sec-arr-interactive",
             "type": "interactive",
             "title": {
-              "en": "Interactive Array Traversal & Dual-Index Lab",
-              "ar": "مختبر عبور المصفوفات والمؤشرات"
+              "en": "Interactive Array Contiguous Memory & Shift Lab",
+              "ar": "محاكي المصفوفات المتجاورة وعنونة الذاكرة"
             },
             "isRequired": true,
-            "content": "two-pointers-visualizer",
-            "interactiveModuleId": "two-pointers-visualizer"
+            "content": {
+              "en": "### Guided Lab: Contiguous Array Memory & O(n) Shifting\nLoad your own comma-separated numbers to test O(1) indexed address lookups vs O(n) middle insertions and deletions.\n\n**Experiments to Run:**\n1. Access any index `i` and confirm instant `base + i * 4` O(1) byte arithmetic.\n2. Insert a value at index `0` and watch all trailing elements shift right (`O(n)`).\n3. Run Linear Search on a missing target to observe full array traversal cost.",
+              "ar": "### المعمل التفاعلي: المصفوفات المتجاورة والإزاحة O(n)\nأدخل أرقامك لاختبار الوصول الفوري O(1) مقابل كلفة الإدراج والحذف O(n).\n\n**تجارب مقترحة:**\n1. اطلب فهرساً عشوائياً لمشاهدة حساب العنوان `base + i * 4` فوراً.\n2. أدرج عنصراً في الفهرس `0` لتلاحظ إزاحة العناصر اللاحقة.\n3. ابحث عن قيمة غير موجودة لملاحظة كلفة المسح الكامل."
+            },
+            "interactiveModuleId": "array-visualizer"
           },
           {
             "id": "sec-arr-pitfalls",
@@ -3434,8 +3737,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Two silent performance killers:\n- In Python/Java/C#, writing `res += ch` inside an N-step loop reallocates strings repeatedly -> O(N^2)! Use `StringBuilder` or `\"\".join(parts)` for O(N).\n- Iterating a 2D array column-first breaks spatial cache locality on large matrices; scan outer-row, inner-column (`mat[row][col]`).",
-              "ar": "خطآن يبطئان البرامج بصمت:\n- تجميع نص غير قابل للتعديل بـ `res += ch` داخل حلقة ينشئ نسخاً متكررة بكلفة `O(N^2)`؛ البديل الصحيح هو `StringBuilder` أو `join`.\n- المرور عمودياً في مصفوفة ضخمة يضيع ميزة الـ Cache مقارنة بالمرور أفقياً صفاً بصف."
+              "en": "Two silent performance killers:\n- In Python/Java/C#, writing `res += ch` inside an N-step loop reallocates strings repeatedly -> O(N^2)! Use `StringBuilder` or `\"\".join(parts)` for O(N).\n- Iterating a 2D array column-first breaks spatial cache locality on large matrices; scan outer-row, inner-column (`mat[row][col]`).\n\n### Common Array Traps\n- Concatenating immutable strings (`s += ch`) inside an O(n) loop builds `O(n^2)` temporary copies.\n- Modifying an array's length while iterating indices forward without adjusting index skips adjacent elements.",
+              "ar": "خطآن يبطئان البرامج بصمت:\n- تجميع نص غير قابل للتعديل بـ `res += ch` داخل حلقة ينشئ نسخاً متكررة بكلفة `O(N^2)`؛ البديل الصحيح هو `StringBuilder` أو `join`.\n- المرور عمودياً في مصفوفة ضخمة يضيع ميزة الـ Cache مقارنة بالمرور أفقياً صفاً بصف.\n\n### أخطاء شائعة مع المصفوفات والنصوص\n- دمج النصوص غير القابلة للتعديل بعلامة `+=` داخل حلقة قد يصل إلى تعقيد `O(n^2)`.\n- الحذف من مصفوفة أثناء التكرار عليها يزيح الفهارس ويسبب قفز عناصر دون فحصها."
             },
             "questions": [
               {
@@ -3484,8 +3787,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Key Takeaways:\n- O(1) random indexing via contiguous offsets.\n- O(N) arbitrary middle insertion/deletion.\n- Dynamic arrays provide O(1) amortized end append and top-tier cache performance.",
-              "ar": "الخلاصة:\n- قراءة فورية O(1) بفضل التجاور، إدراج وسطي O(N)، وإضافة نهاية O(1) متوسطاً."
+              "en": "Key Takeaways:\n- O(1) random indexing via contiguous offsets.\n- O(N) arbitrary middle insertion/deletion.\n- Dynamic arrays provide O(1) amortized end append and top-tier cache performance.\n\n### Interactive Lab Assignment\nUse the **Array Memory & Shift Visualizer** below to load `[10, 25, 40, 55, 70]`, verify O(1) lookup at `idx=3`, and count exact element shifts when inserting at `idx=0`.",
+              "ar": "الخلاصة:\n- قراءة فورية O(1) بفضل التجاور، إدراج وسطي O(N)، وإضافة نهاية O(1) متوسطاً.\n\n### مهمة المختبر التفاعلي\nفي محاكي المصفوفات بالأسفل، حمّل `[10, 25, 40, 55, 70]` وراقب الوصول الفوري وعدد الإزاحات عند الإدراج في الفهرس 0."
             }
           }
         ],
@@ -3499,7 +3802,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "DS-ARR-M-003",
           "DS-ARR-E-004",
           "DS-ARR-M-005",
-          "DS-ARR-H-006"
+          "DS-ARR-H-006",
+          "EXP-ARR-101",
+          "EXP-ARR-102",
+          "EXP-ARR-103",
+          "EXP-ARR-104",
+          "EXP-ARR-105"
         ]
       },
       {
@@ -3560,7 +3868,9 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "passPercentage": 60,
           "questionCount": 5
         },
-        "interactiveModuleIds": [],
+        "interactiveModuleIds": [
+          "array-visualizer"
+        ],
         "externalReferences": [
           {
             "title": "CP-Algorithms: Prefix Sums & Subarrays",
@@ -3572,6 +3882,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             "description": {
               "en": "Authoritative algorithmic tricks including prefix/difference arrays.",
               "ar": "مرجع خوارزميات المسابقات البرمجية."
+            }
+          },
+          {
+            "title": "USACO Guide: Prefix Sums & Range Queries",
+            "url": "https://usaco.guide/silver/prefix-sums",
+            "type": "article",
+            "source": "USACO Guide",
+            "category": "CP Patterns",
+            "language": "en",
+            "description": {
+              "en": "1D and 2D prefix sum templates and worked contest problems.",
+              "ar": "دليل USACO للمجاميع التراكمية والتمارين."
+            }
+          },
+          {
+            "title": "CSES Problem Set: Range & Subarray Benchmarks",
+            "url": "https://cses.fi/problemset/",
+            "type": "cp_platform",
+            "source": "CSES",
+            "category": "Practice",
+            "language": "en",
+            "description": {
+              "en": "Curated classic benchmark problems for prefix and difference arrays.",
+              "ar": "مجموعة مسائل CSES القياسية للتدريب."
             }
           }
         ],
@@ -3585,8 +3919,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "1. Prefix Sums: Precompute `pref[i] = pref[i-1] + a[i]`. Any range sum `[L..R]` then takes O(1): `pref[R] - pref[L-1]` instead of looping O(N) per query.\n2. Difference Arrays: When applying `+val` across `[L..R]` repeatedly before final readout, only modify `diff[L] += val` and `diff[R+1] -= val`, then take one prefix pass!",
-              "ar": "1. مجاميع السوابق (Prefix Sums): حساب المجموع التراكمي مسبقاً يسمح بحساب مجموع أي فترة `[L..R]` بعملية طرح واحدة في O(1): `pref[R] - pref[L-1]`.\n2. مصفوفات الفروق: لإضافة قيمة لكل عناصر نطاق `[L..R]` نُعدل البداية والنهاية+1 فقط ثم نجمع تراكمياً في النهاية."
+              "en": "1. Prefix Sums: Precompute `pref[i] = pref[i-1] + a[i]`. Any range sum `[L..R]` then takes O(1): `pref[R] - pref[L-1]` instead of looping O(N) per query.\n2. Difference Arrays: When applying `+val` across `[L..R]` repeatedly before final readout, only modify `diff[L] += val` and `diff[R+1] -= val`, then take one prefix pass!\n\n### Prefix Sum & Difference Array Formulas\n- Given `a = [3, 1, 4, 1, 5]`, 1-based prefix sums `P = [0, 3, 4, 8, 9, 14]` answer ANY range `[l..r]` sum via `P[r + 1] - P[l]` in **O(1)**.\n- Batching 100,000 range additions `[l..r] += v` uses `diff[l] += v; diff[r + 1] -= v` in **O(1)** each before one final prefix sweep (`O(n + q)` total!).",
+              "ar": "1. مجاميع السوابق (Prefix Sums): حساب المجموع التراكمي مسبقاً يسمح بحساب مجموع أي فترة `[L..R]` بعملية طرح واحدة في O(1): `pref[R] - pref[L-1]`.\n2. مصفوفات الفروق: لإضافة قيمة لكل عناصر نطاق `[L..R]` نُعدل البداية والنهاية+1 فقط ثم نجمع تراكمياً في النهاية.\n\n### معادلات المجاميع التراكمية ومصفوفة الفروقات\n- لمصفوفة `[3, 1, 4, 1, 5]` تعطينا `P = [0, 3, 4, 8, 9, 14]` مجموع أي نطاق `[l..r]` فوراً عبر `P[r + 1] - P[l]` بزمن **O(1)**.\n- لتنفيذ مئات آلاف الإضافات على نطاقات `[l..r] += v` نحدث نقطتين فقط `diff[l] += v; diff[r + 1] -= v` ثم نمر مرة واحدة بالنهاية."
             },
             "questions": [
               {
@@ -3684,7 +4018,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "قالب استعلامات النطاق والتحديثات في O(1)"
             },
             "isRequired": true,
-            "content": "vector<long long> pref(n + 1, 0), diff(n + 2, 0);\nfor (int i = 1; i <= n; i++) pref[i] = pref[i - 1] + a[i];\nauto rangeSum = [&](int l, int r) { return pref[r] - pref[l - 1]; };\n\n// Batch update: add val to [l, r]\nauto addRange = [&](int l, int r, long long val) {\n    diff[l] += val; diff[r + 1] -= val;\n};",
+            "content": {
+              "en": "### Tracing Precomputation Templates\n- Always guard `diff` buffer size with `n + 2` slots so `r + 1` never writes past array end when `r == n - 1`.\n- Test implementing a 1-based prefix table inside **Live JS Sandbox**.",
+              "ar": "### تتبع قوالب الحساب المسبق\n- احجز لمصفوفة الفروقات حجماً إضافياً `n + 2` حتى لا يتجاوز `r + 1` الحدود عند آخر فهرس.\n- طبّق مصفوفة prefix sums في **Live JS Sandbox** وتحقق من استعلامات النطاق."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Turning O(Q·N) naive nested loops into O(Q + N) passes 10⁵-constraint contest problems effortlessly.",
@@ -3730,6 +4067,20 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             ]
           },
           {
+            "id": "sec-arr-pref-interactive",
+            "type": "interactive",
+            "title": {
+              "en": "Interactive Array Contiguous Memory & Indexing Lab",
+              "ar": "المختبر التفاعلي للمصفوفات وعنونة الذاكرة"
+            },
+            "isRequired": true,
+            "interactiveModuleId": "array-visualizer",
+            "content": {
+              "en": "### Guided Lab: Contiguous Array Memory & O(n) Shifting\nLoad your own comma-separated numbers to test O(1) indexed address lookups vs O(n) middle insertions and deletions.\n\n**Experiments to Run:**\n1. Access any index `i` and confirm instant `base + i * 4` O(1) byte arithmetic.\n2. Insert a value at index `0` and watch all trailing elements shift right (`O(n)`).\n3. Run Linear Search on a missing target to observe full array traversal cost.",
+              "ar": "### المعمل التفاعلي: المصفوفات المتجاورة والإزاحة O(n)\nأدخل أرقامك لاختبار الوصول الفوري O(1) مقابل كلفة الإدراج والحذف O(n).\n\n**تجارب مقترحة:**\n1. اطلب فهرساً عشوائياً لمشاهدة حساب العنوان `base + i * 4` فوراً.\n2. أدرج عنصراً في الفهرس `0` لتلاحظ إزاحة العناصر اللاحقة.\n3. ابحث عن قيمة غير موجودة لملاحظة كلفة المسح الكامل."
+            }
+          },
+          {
             "id": "sec-arr-pref-pitfalls",
             "type": "pitfalls",
             "title": {
@@ -3738,8 +4089,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Summing `10^5` numbers around `10^9` hits `10^14` instantly! Always store prefix sums in 64-bit `long long` (`BigInt`/64-bit). Also remember: static Prefix Sums break down if range queries interleave with live point edits; switch to Fenwick Tree (BIT) or Segment Tree for dynamic updates.",
-              "ar": "انتبه: جمع `10^5` عنصر بقيم كبيرة يتجاوز حد 32-bit `int` بسرعة! استخدم `long long` دائماً. وتذكر أن Prefix Sum مناسب للبيانات الثابتة؛ أما التحديثات المتداخلة مع الاستعلامات فتحتاج Fenwick Tree أو Segment Tree."
+              "en": "Summing `10^5` numbers around `10^9` hits `10^14` instantly! Always store prefix sums in 64-bit `long long` (`BigInt`/64-bit). Also remember: static Prefix Sums break down if range queries interleave with live point edits; switch to Fenwick Tree (BIT) or Segment Tree for dynamic updates.\n\n### Contest Overflow & Mutation Limits\n- Prefix sums easily exceed signed 32-bit limits (`10^5 * 10^9 = 10^14`); always store sums in 64-bit integers (`long long`).\n- Static prefix arrays break on online interleaved updates; upgrade to Fenwick BIT or Segment Trees when updates interleave with queries.",
+              "ar": "انتبه: جمع `10^5` عنصر بقيم كبيرة يتجاوز حد 32-bit `int` بسرعة! استخدم `long long` دائماً. وتذكر أن Prefix Sum مناسب للبيانات الثابتة؛ أما التحديثات المتداخلة مع الاستعلامات فتحتاج Fenwick Tree أو Segment Tree.\n\n### أخطاء الفيضان والتحديثات المتداخلة\n- تتجاوز المجاميع التراكمية غالباً سعة `int` فتستلزم `long long` (64 بت).\n- المجاميع الثابتة تفشل إن تخللت التعديلات وسط الاستعلامات؛ استخدم Fenwick Tree حينها."
             },
             "questions": [
               {
@@ -3788,8 +4139,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Key Takeaways:\n- O(N) build -> O(1) any static range sum query.\n- Difference Arrays batch interval increments in O(1) each.\n- Move to Fenwick/Segment Trees when queries alternate with point updates.",
-              "ar": "الخلاصة:\n- بناء O(N) يعطي استعلام نطاق ثابت O(1)، ومصفوفة الفروق تجمع تحديثات الفترات في O(1)."
+              "en": "Key Takeaways:\n- O(N) build -> O(1) any static range sum query.\n- Difference Arrays batch interval increments in O(1) each.\n- Move to Fenwick/Segment Trees when queries alternate with point updates.\n\n### Practice Drill\nSimulate `[1, 4]` (+5) and `[2, 5]` (+3) on an empty 6-element zero array using Difference Array updates before computing prefix sums in your head.",
+              "ar": "الخلاصة:\n- بناء O(N) يعطي استعلام نطاق ثابت O(1)، ومصفوفة الفروق تجمع تحديثات الفترات في O(1).\n\n### تمرين تطبيقي\nطبّق تحديثَي `+5` على `[1, 4]` و `+3` على `[2, 5]` على مصفوفة أصفار باستخدام مصفوفة الفروقات ثم استنتج النتيجة."
             }
           }
         ],
@@ -3803,7 +4154,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "CP-ARR-M-003",
           "CP-ARR-M-004",
           "CP-ARR-H-005",
-          "CP-ARR-M-006"
+          "CP-ARR-M-006",
+          "EXP-CPARR-101",
+          "EXP-CPARR-102",
+          "EXP-CPARR-103",
+          "EXP-CPARR-104",
+          "EXP-CPARR-105"
         ]
       }
     ]
@@ -3866,7 +4222,9 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "passPercentage": 60,
           "questionCount": 5
         },
-        "interactiveModuleIds": [],
+        "interactiveModuleIds": [
+          "recursion-visualizer"
+        ],
         "externalReferences": [
           {
             "title": "CS50 Recursion & Call Stack Notes",
@@ -3878,6 +4236,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             "description": {
               "en": "Clear visual explanations of call stack frames and recursion.",
               "ar": "شروحات واضحة لإطارات المكدس والعودية."
+            }
+          },
+          {
+            "title": "USACO Guide: Complete Search & Backtracking",
+            "url": "https://usaco.guide/bronze/intro-greedy",
+            "type": "article",
+            "source": "USACO Guide",
+            "category": "Algorithms",
+            "language": "en",
+            "description": {
+              "en": "State exploration, base cases, and pruning strategies.",
+              "ar": "أساسيات البحث الكامل والتراجع."
+            }
+          },
+          {
+            "title": "CP-Algorithms: Backtracking & Combinatorial Generation",
+            "url": "https://cp-algorithms.com/",
+            "type": "cp_platform",
+            "source": "CP-Algorithms",
+            "category": "Algorithms",
+            "language": "en",
+            "description": {
+              "en": "Mathematical recursion trees and state generation techniques.",
+              "ar": "تقنيات العودية وبناء الحالات."
             }
           }
         ],
@@ -3891,8 +4273,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Every sound recursive algorithm rests on two pillars:\n1. Base Case: Directly solvable tiny instance preventing infinite Stack Overflow.\n2. Recursive Step: Breaks input into strictly smaller subproblems converging toward the Base Case.\n\nIn Backtracking (N-Queens, permutations), we mutate a candidate path, recurse, and UNDO our choice right after returning so sibling branches start cleanly.",
-              "ar": "تقوم الخوارزمية العودية الصحيحة على ركنين:\n1. حالة الأساس: نقطة التوقف التي تحل الحالة البسيطة مباشرة وتمنع Stack Overflow.\n2. الخطوة العودية: تقليص المشكلة نحو حالة الأساس.\n\nوفي Backtracking نتبع خطة: اختر -> استكشف عودياً -> تراجع عن الاختيار."
+              "en": "Every sound recursive algorithm rests on two pillars:\n1. Base Case: Directly solvable tiny instance preventing infinite Stack Overflow.\n2. Recursive Step: Breaks input into strictly smaller subproblems converging toward the Base Case.\n\nIn Backtracking (N-Queens, permutations), we mutate a candidate path, recurse, and UNDO our choice right after returning so sibling branches start cleanly.\n\n### Base Case, Hypothesis & Recursion Tree Trace\n- Every sound recursive function has two strict parts: (1) Base Case returning immediately cleanly, and (2) Recursive Step strictly shrinking input state toward that Base Case.\n- Backtracking DFS explores subsets/permutations (`O(n * 2^n)` or `O(n!)`) by picking an element -> recursing -> explicitly undoing (`pop`) cleanly on return.",
+              "ar": "تقوم الخوارزمية العودية الصحيحة على ركنين:\n1. حالة الأساس: نقطة التوقف التي تحل الحالة البسيطة مباشرة وتمنع Stack Overflow.\n2. الخطوة العودية: تقليص المشكلة نحو حالة الأساس.\n\nوفي Backtracking نتبع خطة: اختر -> استكشف عودياً -> تراجع عن الاختيار.\n\n### حالة الأساس والافتراض العودي وشجرة الاستدعاء\n- كل دالة عودية سليمة تعتمد على ركنين: حالة أساس (`Base Case`) توقف السلسلة، وخطوة تصغّر المدخل نحوها دوماً.\n- البحث بالتراجع (Backtracking) يجرب الاختيار ثم يستدعي ثم يتراجع (`pop`) قبل الانتقال للتفرع الموازي."
             },
             "questions": [
               {
@@ -3990,7 +4372,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "توليد المجموعات الجزئية باستخدام Backtracking"
             },
             "isRequired": true,
-            "content": "void backtrack(int i, const vector<int>& nums, vector<int>& cur) {\n    if (i == nums.size()) { print(cur); return; } // Base Case\n    // Branch 1: Include nums[i]\n    cur.push_back(nums[i]);     // Choose\n    backtrack(i + 1, nums, cur);// Explore\n    cur.pop_back();             // Unchoose (backtrack!)\n    // Branch 2: Exclude nums[i]\n    backtrack(i + 1, nums, cur);\n}",
+            "content": {
+              "en": "### Tracing Subsets Generation & Live Execution\n- Watch the two branches (`take a[i]` vs `skip a[i]`) form a binary decision tree of height `n`.\n- Run recursive subset/factorial generation directly inside **Live JS Sandbox** and open the **Call Stack Visualizer** below!",
+              "ar": "### تتبع توليد المجموعات والتنفيذ التفاعلي\n- لاحظ كيف يشكل خيارا الأخذ والترك شجرة قرار ثنائية بارتفاع `n`.\n- شغّل توليد المجموعات في **Live JS Sandbox** وجرب محاكي **Call Stack** بالأسفل."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Each level `i` decides include vs exclude, generating all 2^N subsets cleanly while reusing one `cur` vector.",
@@ -4036,6 +4421,20 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             ]
           },
           {
+            "id": "sec-rec-interactive",
+            "type": "interactive",
+            "title": {
+              "en": "Interactive Recursion & Call Stack Visualizer",
+              "ar": "محاكي التتبع العودي ومكدس الاستدعاءات"
+            },
+            "isRequired": true,
+            "interactiveModuleId": "recursion-visualizer",
+            "content": {
+              "en": "### Guided Lab: Recursion Tree & Call Stack Frames\nStep forward through recursive invocations down to the Base Case, then watch stack frames unwind back to the caller.\n\n**Experiments to Run:**\n1. Set `n = 4` or `n = 5` and count active frames stacked before hitting `fact(1)`.\n2. Inspect how each popped frame resumes multiplying its return value.\n3. Connect stack depth to auxiliary space `O(n)`.",
+              "ar": "### المعمل التفاعلي: العودية ومكدس الاستدعاءات Call Stack\nتتبّع دفع إطارات الاستدعاء للأسفل حتى Base Case ثم تفريغ القيم صعوداً.\n\n**تجارب مقترحة:**\n1. جرّب `n = 4` أو `5` وأحصِ الإطارات النشطة عند الوصول لحالة الأساس.\n2. راقب كيف يستكمل كل إطار حسابه فور عودة الابن.\n3. اربط عمق المكدس بتعقيد الذاكرة المساعدة `O(n)`."
+            }
+          },
+          {
             "id": "sec-rec-pitfalls",
             "type": "pitfalls",
             "title": {
@@ -4044,8 +4443,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "If recursive depth exceeds `10^5` (like straight chain DFS on 100k nodes), deep recursion can exhaust thread stack memory -> convert to an explicit iterative stack! Also ensure every step moves strictly closer to the base case (`n - 1` or `n / 2`).",
-              "ar": "عندما يتجاوز عمق العودية مئات الآلاف (مثل سلسلة رسم بياني طويلة) قد يمتلئ الـ Stack؛ عندها نحول الحل لحلقة بمكدس صريح."
+              "en": "If recursive depth exceeds `10^5` (like straight chain DFS on 100k nodes), deep recursion can exhaust thread stack memory -> convert to an explicit iterative stack! Also ensure every step moves strictly closer to the base case (`n - 1` or `n / 2`).\n\n### Stack Depth & Exponential Re-computation Traps\n- Exceeding ~10^4-10^5 nested stack frames crashes with Stack Overflow; switch deep linear chains to iteration.\n- Re-solving identical recursive subproblems (`fib(n-1) + fib(n-2)`) wastes `O(2^n)` CPU unless cached with Memoization DP.",
+              "ar": "عندما يتجاوز عمق العودية مئات الآلاف (مثل سلسلة رسم بياني طويلة) قد يمتلئ الـ Stack؛ عندها نحول الحل لحلقة بمكدس صريح.\n\n### أخطاء العمق وتكرار الحساب\n- تجاوز عشرات آلاف الاستدعاءات المتداخلة يفجر مكدس النداء (Stack Overflow).\n- إعادة حساب نفس الحالات في مثل فيبوناتشي يرفع التعقيد لـ `O(2^n)` ما لم نضف Memoization."
             },
             "questions": [
               {
@@ -4094,8 +4493,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Key Takeaways:\n- Always guarantee base case reachability.\n- Track Call Stack depth when sizing space complexity.\n- Use Choose -> Explore -> Un-choose consistently in Backtracking.",
-              "ar": "الخلاصة:\n- تأكد من وصول كل مسار إلى Base Case واحسب مساحة المكدس ضمن التعقيد المكاني."
+              "en": "Key Takeaways:\n- Always guarantee base case reachability.\n- Track Call Stack depth when sizing space complexity.\n- Use Choose -> Explore -> Un-choose consistently in Backtracking.\n\n### Interactive Call Stack Lab Drill\nStep through `fact(5)` in the **Recursion Visualizer** below and trace each stacked frame waiting for `fact(n - 1)` before multiplying upward.",
+              "ar": "الخلاصة:\n- تأكد من وصول كل مسار إلى Base Case واحسب مساحة المكدس ضمن التعقيد المكاني.\n\n### مهمة مختبر العودية\nتتبّع `fact(5)` داخل **محاكي العودية** بالأسفل وراقب تراكم الإطارات حتى `fact(1)` ثم ضرب القيم العائدة."
             }
           }
         ],
@@ -4110,7 +4509,11 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "AL-REC-M-003",
           "AL-REC-M-004",
           "AL-REC-E-005",
-          "AL-REC-H-006"
+          "AL-REC-H-006",
+          "EXP-REC-101",
+          "EXP-REC-102",
+          "EXP-REC-103",
+          "EXP-REC-104"
         ]
       }
     ]
@@ -4187,6 +4590,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Core object-oriented design concepts in modern typed OOP.",
               "ar": "مبادئ البرمجة كائنية التوجه وتصميم الفئات."
             }
+          },
+          {
+            "title": "Refactoring Guru: Encapsulation & Clean Classes",
+            "url": "https://refactoring.guru/design-patterns",
+            "type": "article",
+            "source": "Refactoring Guru",
+            "category": "Architecture",
+            "language": "en",
+            "description": {
+              "en": "Modeling real invariants inside cohesive objects.",
+              "ar": "مبادئ التغليف وتصميم الفئات المتماسكة."
+            }
+          },
+          {
+            "title": "roadmap.sh: Software Architecture & Design",
+            "url": "https://roadmap.sh/software-architect",
+            "type": "roadmap",
+            "source": "roadmap.sh",
+            "category": "OOP & Design",
+            "language": "en",
+            "description": {
+              "en": "From class design up through domain-driven software layers.",
+              "ar": "خارطة المعمارية وتصميم البرمجيات."
+            }
           }
         ],
         "sections": [
@@ -4199,8 +4626,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Encapsulation prevents callers from corrupting object state directly (like setting `bankAccount.balance = -9999`). Instead, fields stay `private`, initialized via a Constructor, and modified solely through domain methods like `withdraw(amount)` enforcing business rules.",
-              "ar": "يمنع التغليف أي كود خارجي من تشويه بيانات الكائن عشوائياً (مثل جعل رصيد الحساب سالباً). تبقى البيانات `private` وتُهيّأ في دالة البناء ولا تتعدل إلا عبر دوال تحقق الشروط."
+              "en": "Encapsulation prevents callers from corrupting object state directly (like setting `bankAccount.balance = -9999`). Instead, fields stay `private`, initialized via a Constructor, and modified solely through domain methods like `withdraw(amount)` enforcing business rules.\n\n### Protecting Domain Invariants with Encapsulation\n- Instead of public fields (`account.balance = -999`), mark data fields `private` and expose intentional behavior (`account.withdraw(amount)` throwing an explicit error if `amount <= 0 || amount > balance`).\n- Constructors initialize valid starting invariants immediately upon creation.",
+              "ar": "يمنع التغليف أي كود خارجي من تشويه بيانات الكائن عشوائياً (مثل جعل رصيد الحساب سالباً). تبقى البيانات `private` وتُهيّأ في دالة البناء ولا تتعدل إلا عبر دوال تحقق الشروط.\n\n### حماية قواعد الكيان عبر التغليف\n- بدلاً من حقول مكشوفة (`balance = -999`)، اجعل الحقول `private` واعرض سلوكاً منضبطاً عبر دوال متحققَة (`withdraw(amount)`).\n- يضمن الباني (Constructor) ولادة كل كائن في حالة منطقية صالحة تماماً."
             },
             "questions": [
               {
@@ -4298,7 +4725,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "مثال عملي للتغليف في كلاس BankAccount"
             },
             "isRequired": true,
-            "content": "public class BankAccount {\n    private decimal _balance; // Protected internal state\n    public decimal Balance => _balance;\n\n    public BankAccount(decimal initialDeposit) {\n        if (initialDeposit < 0) throw new ArgumentException(\"Negative deposit\");\n        _balance = initialDeposit;\n    }\n\n    public bool Withdraw(decimal amount) {\n        if (amount <= 0 || amount > _balance) return false;\n        _balance -= amount;\n        return true;\n    }\n}",
+            "content": {
+              "en": "### Inspecting Encapsulated Classes\n- Note how throwing clear domain exceptions inside methods centralizes business validation rules cleanly.\n- Build and test an encapsulated `Wallet` class inside **Live JS Sandbox** verifying invalid withdrawals fail safely.",
+              "ar": "### تتبع تصميم الفئات المحمية\n- توحيد قواعد التحقق داخل دوال الكائن يمنع تكرار شروط الصلاحية في كل مكان بالبرنامج.\n- اختبر كتابة فئة محفظة مالية في **Live JS Sandbox** تمنع السحب السالب."
+            },
             "codeLanguage": "csharp",
             "codeExplanation": {
               "en": "Nobody can corrupt `_balance`; constructor & `Withdraw` guarantee invariants hold 100% of the time.",
@@ -4352,8 +4782,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Adding blind `setBalance(x)` for every private field breaks encapsulation! Also returning a mutable internal list directly (`getItems()`) lets callers call `.clear()` from outside cleanly -> return read-only views (`IReadOnlyList` / copies).",
-              "ar": "وضع Setter عشوائي لكل حقل يعيد نفس خطورة المتغيرات العامة! كذلك إرجاع قائمة داخلية قابلة للتعديل مباشرة يسمح للمستدعي بتفريغها، لذا أرجع نسخة أو واجهة للقراءة فقط."
+              "en": "Adding blind `setBalance(x)` for every private field breaks encapsulation! Also returning a mutable internal list directly (`getItems()`) lets callers call `.clear()` from outside cleanly -> return read-only views (`IReadOnlyList` / copies).\n\n### Anemic Models & Exposed Collections\n- Turning every private field into blind `{ get; set; }` pairs defeats encapsulation completely.\n- Returning internal mutable arrays/lists allows outside callers to break invariants behind the class's back; return readonly wrappers or copies.",
+              "ar": "وضع Setter عشوائي لكل حقل يعيد نفس خطورة المتغيرات العامة! كذلك إرجاع قائمة داخلية قابلة للتعديل مباشرة يسمح للمستدعي بتفريغها، لذا أرجع نسخة أو واجهة للقراءة فقط.\n\n### نماذج ضعيفة وتسريب المراجع\n- وضع `get` و `set` مفتوحين لكل حقل يلغي فائدة التغليف تماماً.\n- إرجاع قائمة قابلة للتعديل من الداخل يسمح بتخريب حالة الكائن؛ أعد قائمة للقراءة فقط."
             },
             "questions": [
               {
@@ -4402,8 +4832,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Differentiate a Class definition from an Object instance.\n- Enforce valid initial state inside Constructors.\n- Protect internal invariants with `private` fields and validated public methods.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- التمييز بين تعريف الفئة (Class) والكائن الفعلي (Object).\n- فرض صحة الحالة الابتدائية داخل دوال البناء (Constructors).\n- حماية بيانات الكائن عبر التغليف ومحددات الوصول."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Differentiate a Class definition from an Object instance.\n- Enforce valid initial state inside Constructors.\n- Protect internal invariants with `private` fields and validated public methods.\n\n### Hands-On Refactor\nDesign a `CourseProgress` class preserving `0 <= completedSections <= totalSections` invariants cleanly regardless of caller actions.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- التمييز بين تعريف الفئة (Class) والكائن الفعلي (Object).\n- فرض صحة الحالة الابتدائية داخل دوال البناء (Constructors).\n- حماية بيانات الكائن عبر التغليف ومحددات الوصول.\n\n### تمرين تصميم كائني\nصمّم فئة `CourseProgress` تضمن بقاء `0 <= completedSections <= totalSections` دوماً."
             }
           }
         ],
@@ -4417,7 +4847,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "OOP-ENC-M-003",
           "OOP-ENC-M-004",
           "OOP-ENC-E-005",
-          "OOP-ENC-H-006"
+          "OOP-ENC-H-006",
+          "EXP-OOP-101",
+          "EXP-OOP-102",
+          "EXP-OOP-103",
+          "EXP-OOP-104",
+          "EXP-OOP-105"
         ]
       },
       {
@@ -4484,6 +4919,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Virtual methods, overrides, and interface polymorphism.",
               "ar": "مبادئ تعدد الأشكال والواجهات البرمجية."
             }
+          },
+          {
+            "title": "Refactoring Guru: Strategy & Factory Patterns",
+            "url": "https://refactoring.guru/design-patterns/factory-method",
+            "type": "article",
+            "source": "Refactoring Guru",
+            "category": "Design Patterns",
+            "language": "en",
+            "description": {
+              "en": "Applying runtime polymorphism safely without inheritance bloat.",
+              "ar": "تطبيق تعدد الأشكال وأنماط المصنع بأمان."
+            }
+          },
+          {
+            "title": "Microsoft Learn: Object-Oriented Fundamentals",
+            "url": "https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/object-oriented/",
+            "type": "documentation",
+            "source": "Microsoft Learn",
+            "category": "OOP",
+            "language": "en",
+            "description": {
+              "en": "Interfaces, inheritance hierarchies, and composition tradeoffs.",
+              "ar": "الواجهات والوراثة والتركيب في OOP."
+            }
           }
         ],
         "sections": [
@@ -4496,8 +4955,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• Abstraction hides implementation complexity behind contracts.\n• Interfaces define capability contracts (`IShape`, `IPayable`) permitting multiple implementation.\n• Polymorphism: Holding a `List<Shape>` and calling `shape.area()` resolves dynamically via the runtime virtual method table (vtable) to `Circle::area()` or `Rectangle::area()`.\n• Prefer Composition ('has-a') over deep Inheritance hierarchies when assembling behaviors.",
-              "ar": "• التجريد يخفي التفاصيل خلف واجهات واضحة.\n• تعدد الأشكال (Polymorphism): استدعاء `shape.area()` على متغير من النوع الأب يختار تلقائياً تنفيذ الابن الفعلي وقت التشغيل عبر جدول الدوال الافتراضية (vtable).\n• نفضل التركيب على الوراثة لتفادي الهياكل الجامدة."
+              "en": "• Abstraction hides implementation complexity behind contracts.\n• Interfaces define capability contracts (`IShape`, `IPayable`) permitting multiple implementation.\n• Polymorphism: Holding a `List<Shape>` and calling `shape.area()` resolves dynamically via the runtime virtual method table (vtable) to `Circle::area()` or `Rectangle::area()`.\n• Prefer Composition ('has-a') over deep Inheritance hierarchies when assembling behaviors.\n\n### Interfaces, VTable Runtime Dispatch & Composition\n- An interface defines a clean capability contract (`PaymentProcessor.charge(amount)`), while classes like `CardProcessor` and `WalletProcessor` supply concrete implementations.\n- Calling `processor.charge()` resolves via the runtime virtual table (`vtable`) cleanly without fragile `if/switch` cascades (`OCP` Open-Closed Principle!).",
+              "ar": "• التجريد يخفي التفاصيل خلف واجهات واضحة.\n• تعدد الأشكال (Polymorphism): استدعاء `shape.area()` على متغير من النوع الأب يختار تلقائياً تنفيذ الابن الفعلي وقت التشغيل عبر جدول الدوال الافتراضية (vtable).\n• نفضل التركيب على الوراثة لتفادي الهياكل الجامدة.\n\n### الواجهات، الربط عبر VTable، والتفويض بالتركيب\n- الواجهة تحدد العقد المشترك، وكل فئة تطبق سلوكها المستقل دون تعديل الكود المستدعي.\n- يتم اختيار الدالة المناسبة وقت التشغيل عبر `vtable` بعيداً عن شروط `if/switch` المتضخمة."
             },
             "questions": [
               {
@@ -4595,7 +5054,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "تعدد الأشكال عبر واجهة موحدة"
             },
             "isRequired": true,
-            "content": "struct Shape {\n    virtual double area() const = 0; // Pure virtual interface contract\n    virtual ~Shape() = default;\n};\nstruct Circle : Shape {\n    double r; explicit Circle(double r) : r(r) {}\n    double area() const override { return 3.14159 * r * r; }\n};",
+            "content": {
+              "en": "### Polymorphism & Strategy Comparison\n- Compare C++ pure virtual interfaces (`virtual ... = 0` + `override`) with TypeScript interfaces implemented cleanly in **Live JS Sandbox**.\n- Open the **OOP VTable Dispatch Visualizer** below to trace dynamic calls visually.",
+              "ar": "### استكشاف تعدد الأشكال والتنفيذ\n- قارن الدوال الافتراضية الخالصة مع الواجهات التعاقدية واختبرها عبر **Live JS Sandbox**.\n- استخدم **محاكي VTable** بالأسفل لتتبع التوجيه الديناميكي وقت التشغيل."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Marking `virtual` and `override` routes `Shape* ptr` calls cleanly through the runtime vtable to `Circle::area()`.",
@@ -4648,7 +5110,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "مختبر محاكاة تعدد الأشكال وجدول الدوال (VTable)"
             },
             "isRequired": true,
-            "content": "oop-dispatch-visualizer",
+            "content": {
+              "en": "### Guided Lab: Runtime Polymorphism & VTable Lookup\nInspect how base interfaces route virtual calls dynamically to the concrete subclass override via its virtual method table.\n\n**Experiments to Run:**\n1. Select different concrete subclass instances stored behind the base contract.\n2. Trace how calling `.render()` resolves through `vptr -> vtable` at runtime.\n3. Compare non-virtual static binding vs overridden dynamic binding.",
+              "ar": "### المعمل التفاعلي: تعدد الأشكال وجدول VTable\nاستكشف كيف يوجه البرنامج الاستدعاءات الافتراضية وقت التشغيل نحو الفئة الفعلية.\n\n**تجارب مقترحة:**\n1. اختر كائنات مشتقة مختلفة خلف واجهة الأساس.\n2. تتبّع مسار التنفيذ عبر مؤشر `vptr` نحو `vtable`.\n3. قارن الربط الثابت بالديناميكي."
+            },
             "interactiveModuleId": "oop-dispatch-visualizer"
           },
           {
@@ -4660,8 +5125,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "In C++, always declare `virtual ~Base() = default;` on polymorphic base classes; otherwise `delete basePtr;` skips the derived class destructor and leaks resources! Also never break Liskov Substitution by throwing unexpected exceptions in subclass overrides.",
-              "ar": "في C++ احرص على جعل مدمّر الفئة الأب `virtual` وإلا فلن يستدعى مدمّر الابن عند الحذف عبر مؤشر الأب! ولا تجعل الفئة الابنة تكسر وعود الفئة الأب (LSP)."
+              "en": "In C++, always declare `virtual ~Base() = default;` on polymorphic base classes; otherwise `delete basePtr;` skips the derived class destructor and leaks resources! Also never break Liskov Substitution by throwing unexpected exceptions in subclass overrides.\n\n### Inheritance Misuse & Destruction Traps\n- Avoid inheriting just to borrow helper code when no true 'is-a' behavioral substitutability (`Liskov Substitution`) exists.\n- In C++, base classes deleted polymorphically MUST declare `virtual ~Base() = default;` to prevent subclass resource leaks.",
+              "ar": "في C++ احرص على جعل مدمّر الفئة الأب `virtual` وإلا فلن يستدعى مدمّر الابن عند الحذف عبر مؤشر الأب! ولا تجعل الفئة الابنة تكسر وعود الفئة الأب (LSP).\n\n### مزالق الوراثة والهدم غير الافتراضي\n- لا تستخدم الوراثة لمجرد نسخ دوال مساعدة بل فقط عند تحقق علاقة الاستبدال السلوكي (`Liskov`).\n- في C++، أي فئة أساسية تُحذف عبر مؤشرها يجب أن تمتلك هادماً افتراضياً `virtual`."
             },
             "questions": [
               {
@@ -4710,8 +5175,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Key Takeaways:\n- Code against abstractions/interfaces rather than hard-coding type switch statements.\n- Use `override` keywords to let compilers verify exact method signatures.\n- Favor shallow inheritance + clean interface composition.",
-              "ar": "الخلاصة:\n- اعتمد على الواجهات والتجريد بدلاً من تفرعات `if` لكل نوع، واستخدم `override` و`virtual` بدقة."
+              "en": "Key Takeaways:\n- Code against abstractions/interfaces rather than hard-coding type switch statements.\n- Use `override` keywords to let compilers verify exact method signatures.\n- Favor shallow inheritance + clean interface composition.\n\n### Applied Exercise\nAdd a new `NotificationChannel` implementation (`PushNotifier`) into an existing list of `INotifier` handlers without changing dispatch logic.",
+              "ar": "الخلاصة:\n- اعتمد على الواجهات والتجريد بدلاً من تفرعات `if` لكل نوع، واستخدم `override` و`virtual` بدقة.\n\n### تمرين تطبيقي\nأضف قناة إشعار جديدة تنفذ واجهة `INotifier` وشغّل مصفوفة مرسلين دون تعديل حلقة الإرسال."
             }
           }
         ],
@@ -4726,7 +5191,11 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "OOP-PLY-M-003",
           "OOP-PLY-M-004",
           "OOP-PLY-E-005",
-          "OOP-PLY-H-006"
+          "OOP-PLY-H-006",
+          "EXP-OOP-106",
+          "EXP-OOP-107",
+          "EXP-OOP-108",
+          "EXP-OOP-109"
         ]
       }
     ]
@@ -4795,6 +5264,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Propositional logic foundations inside CS curricula.",
               "ar": "موقع المنطق الرياضي في مسار علوم الحاسوب."
             }
+          },
+          {
+            "title": "MIT OCW: Logic & Proof Fundamentals",
+            "url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/",
+            "type": "documentation",
+            "source": "MIT OCW",
+            "category": "Discrete Math",
+            "language": "en",
+            "description": {
+              "en": "Complete MIT notes on propositions, quantifiers, and equivalence.",
+              "ar": "ملاحظات MIT حول المنطق والمكممات والبراهين."
+            }
+          },
+          {
+            "title": "MDN: Logical Operators & Truth Evaluation",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_operators",
+            "type": "documentation",
+            "source": "MDN",
+            "category": "Logic",
+            "language": "en",
+            "description": {
+              "en": "De Morgan simplification and short-circuit boolean truth rules.",
+              "ar": "تبسيط العبارات المنطقية والتقييم المختصر."
+            }
           }
         ],
         "sections": [
@@ -4807,8 +5300,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Logic formalizes software correctness:\n• `p -> q` is False ONLY when `p=T` and `q=F`, logically equivalent to its contrapositive `¬q -> ¬p`.\n• Quantifiers: `∀x P(x)` ('for every x') negates to `∃x ¬P(x)` ('there exists a counterexample where P fails').\n• Boolean Absorption & De Morgan laws simplify bloated hardware circuits and nested `if` conditions cleanly.",
-              "ar": "المنطق هو لغة إثبات صحة الخوارزميات:\n• العبارة `p -> q` تخطئ فقط عند `p=True, q=False` وتكافئ `¬q -> ¬p`.\n• نفي التعميم الكلي `∀x P(x)` هو وجود مثال واحد ينقضه `∃x ¬P(x)`.\n• تساعد قوانين دي مورغان والامتصاص في تبسيط الشروط والدوائر المنطقية."
+              "en": "Logic formalizes software correctness:\n• `p -> q` is False ONLY when `p=T` and `q=F`, logically equivalent to its contrapositive `¬q -> ¬p`.\n• Quantifiers: `∀x P(x)` ('for every x') negates to `∃x ¬P(x)` ('there exists a counterexample where P fails').\n• Boolean Absorption & De Morgan laws simplify bloated hardware circuits and nested `if` conditions cleanly.\n\n### Truth Tables, Implications & De Morgan Equivalence\n- Implication `p -> q` is FALSE strictly when premise `p` is TRUE and conclusion `q` is FALSE (`!(p && !q)`).\n- Contrapositive `!q -> !p` is ALWAYS truth-equivalent to `p -> q`, making proofs easier when negations simplify expressions cleanly.",
+              "ar": "المنطق هو لغة إثبات صحة الخوارزميات:\n• العبارة `p -> q` تخطئ فقط عند `p=True, q=False` وتكافئ `¬q -> ¬p`.\n• نفي التعميم الكلي `∀x P(x)` هو وجود مثال واحد ينقضه `∃x ¬P(x)`.\n• تساعد قوانين دي مورغان والامتصاص في تبسيط الشروط والدوائر المنطقية.\n\n### جداول الصواب، الشرط المنطقي، وقانون دي مورغان\n- العبارة `p -> q` خاطئة فقط عندما يصدق الفرض `p` وتكذب النتيجة `q`.\n- المعكوس الإيجابي `!q -> !p` يكافئ دائماً العبارة الأصلية ويفيد في البراهين وتبسيط الشروط."
             },
             "questions": [
               {
@@ -4906,7 +5399,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "تبسيط الشروط البرمجية بقوانين دي مورغان"
             },
             "isRequired": true,
-            "content": "// Hard to read double negation:\nconst blockedNaive = !(isVerified && !isSuspended);\n// Simplified cleanly via De Morgan: !(A && B) === (!A || !B)\nconst isBlocked = !isVerified || isSuspended;",
+            "content": {
+              "en": "### De Morgan Refactoring in Production Conditions\n- Simplifying `!(age >= 18 && hasTicket)` -> `age < 18 || !hasTicket` removes confusing outer negation.\n- Test equivalence across all `(p, q)` combinations directly in **Live JS Sandbox**.",
+              "ar": "### تبسيط الشروط البرمجية بقوانين المنطق\n- تحويل `!(age >= 18 && hasTicket)` إلى `age < 18 || !hasTicket` يزيل النفي المربك.\n- اختبر تطابق الجداول في **Live JS Sandbox** عبر 4 حالات."
+            },
             "codeLanguage": "ts",
             "codeExplanation": {
               "en": "De Morgan transforms negated conjunctions directly into readable guard conditions.",
@@ -4959,7 +5455,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "مختبر جداول الصدق والبوابات المنطقية"
             },
             "isRequired": true,
-            "content": "truth-table-visualizer",
+            "content": {
+              "en": "### Guided Lab: Boolean Gates & Logical Predicates\nTest combinations of `P` and `Q` inputs across `AND`, `OR`, `XOR`, `NAND`, and `Implication (P -> Q)` truth rows.\n\n**Experiments to Run:**\n1. Verify that `P -> Q` is FALSE strictly when `P = true` and `Q = false`.\n2. Compare `!(P && Q)` vs `!P || !Q` (De Morgan's Law) across all 4 truth combinations.\n3. Note that `P XOR Q` outputs TRUE exclusively when inputs differ.",
+              "ar": "### المعمل التفاعلي: البوابات المنطقية وجداول الصواب\nاختبر مدخلات `P` و `Q` مع عمليات `AND` و `OR` و `XOR` و `Implication`.\n\n**تجارب مقترحة:**\n1. تحقق من أن العبارة الشرطية `P -> Q` تخطئ فقط عندما `P = true` و `Q = false`.\n2. قارن `!(P && Q)` مع `!P || !Q` لتأكيد قانون دي مورغان.\n3. لاحظ أن `XOR` تكون صائبة فقط عند اختلاف الطرفين."
+            },
             "interactiveModuleId": "truth-table-visualizer"
           },
           {
@@ -4971,8 +5470,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Note two surprises in formal logic: First, `False -> Anything` evaluates to `True` (vacuously true)! Second, `P -> Q` never guarantees `Q -> P`: every square is a rectangle, yet not every rectangle is a square.",
-              "ar": "انتبه لقاعدتين دقيقتين: العبارة `False -> True/False` تكون صادقة منطقياً (Vacuously True)، كما أن صحة `P -> Q` لا تعني أبداً صحة العكس `Q -> P`."
+              "en": "Note two surprises in formal logic: First, `False -> Anything` evaluates to `True` (vacuously true)! Second, `P -> Q` never guarantees `Q -> P`: every square is a rectangle, yet not every rectangle is a square.\n\n### Reasoning & Quantifier Mistakes\n- Never confuse an implication `p -> q` with its converse `q -> p` (if it rains, ground is wet != if ground is wet, it rained).\n- Negating `Exists x P(x)` becomes `For all x !P(x)`, NOT `Exists x !P(x)`.",
+              "ar": "انتبه لقاعدتين دقيقتين: العبارة `False -> True/False` تكون صادقة منطقياً (Vacuously True)، كما أن صحة `P -> Q` لا تعني أبداً صحة العكس `Q -> P`.\n\n### مغالطات المنطق والمكممات\n- لا تخلط بين العبارة الشرطية وعكسها (`q -> p` لا يكافئ `p -> q`).\n- نفي عبارة الوجود (`يوجد x`) هو نفي كلي (`لكل x لا يتحقق الشرط`)."
             },
             "questions": [
               {
@@ -5021,8 +5520,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Construct truth tables for compound expressions (`∧`, `∨`, `->`, `<->`).\n- Apply De Morgan's Laws to negate compound expressions and quantifiers (`∀`, `∃`).\n- Use Modus Ponens / Modus Tollens and Contrapositive equivalences accurately.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- بناء جداول الصدق للعبارات المركبة والاقتضاء `p -> q`.\n- تطبيق قوانين دي مورغان لنفي التعبيرات والمكممات `∀` و `∃`.\n- استخدام قواعد الاستدلال مثل Modus Tollens والمكافئات المنطقية."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Construct truth tables for compound expressions (`∧`, `∨`, `->`, `<->`).\n- Apply De Morgan's Laws to negate compound expressions and quantifiers (`∀`, `∃`).\n- Use Modus Ponens / Modus Tollens and Contrapositive equivalences accurately.\n\n### Interactive Logic Lab Check\nOpen the **Boolean Truth Table Visualizer** below and verify equivalence between `P -> Q`, `!P || Q`, and `!Q -> !P` row by row.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- بناء جداول الصدق للعبارات المركبة والاقتضاء `p -> q`.\n- تطبيق قوانين دي مورغان لنفي التعبيرات والمكممات `∀` و `∃`.\n- استخدام قواعد الاستدلال مثل Modus Tollens والمكافئات المنطقية.\n\n### تمرين جدول الصواب التفاعلي\nافتح **محاكي جداول الصواب** بالأسفل وتحقق سطراً بسطر من تطابق `P -> Q` مع `!Q -> !P`."
             }
           }
         ],
@@ -5039,7 +5538,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "DM-LOG-M-003",
           "DM-LOG-M-004",
           "DM-LOG-H-005",
-          "DM-LOG-E-006"
+          "DM-LOG-E-006",
+          "EXP-DML-101",
+          "EXP-DML-102",
+          "EXP-DML-103"
         ]
       }
     ]
@@ -5117,6 +5619,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Classic proofs, sets, induction, and graph theory textbook.",
               "ar": "مرجع MIT الشامل في الرياضيات لعلوم الحاسوب."
             }
+          },
+          {
+            "title": "roadmap.sh: Discrete Mathematics Core",
+            "url": "https://roadmap.sh/computer-science",
+            "type": "roadmap",
+            "source": "roadmap.sh",
+            "category": "Discrete Math",
+            "language": "en",
+            "description": {
+              "en": "Sets, relations, graphs, and inductive proofs in CS.",
+              "ar": "المجموعات والعلاقات والاستقراء الرياضي."
+            }
+          },
+          {
+            "title": "CSES Problem Set: Proof-Driven Combinatorics",
+            "url": "https://cses.fi/problemset/",
+            "type": "cp_platform",
+            "source": "CSES",
+            "category": "Practice",
+            "language": "en",
+            "description": {
+              "en": "Algorithmic exercises built on bijections and induction.",
+              "ar": "تمارين عملية تعتمد على البراهين والعلاقات."
+            }
           }
         ],
         "sections": [
@@ -5129,8 +5655,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• Sets & Power Sets: For |A| = N elements, P(A) has 2^N subsets (exactly what bitmask subsets enumerate).\n• Relations: Reflexive + Symmetric + Transitive = Equivalence Relation (DSU components); Reflexive + Antisymmetric + Transitive = Partial Order (prerequisite graphs).\n• Functions: Bijective = Injective (no collisions) + Surjective (full codomain coverage) <=> Invertible!\n• Proofs: Contrapositive (`¬Q -> ¬P`), Contradiction, Weak Induction (`P(b)` + `P(k) -> P(k+1)`), and Strong Induction (divide-and-conquer correctness).",
-              "ar": "• المجموعات: مجموعة القوى P(A) تضم 2^N مجموعة جزئية.\n• العلاقات: علاقة التكافؤ تقسم المجموعة لأقسام منفصلة، والترتيب الجزئي يمثل التبعيات غير الدورية.\n• التقابل (Bijection): يجمع التباين والغمر معاً وهو شرط وجود الدالة العكسية.\n• البراهين: التناقض والمعاكس الإيجابي والاستقراء الضعيف والقوي لإثبات صحة الخوارزميات."
+              "en": "• Sets & Power Sets: For |A| = N elements, P(A) has 2^N subsets (exactly what bitmask subsets enumerate).\n• Relations: Reflexive + Symmetric + Transitive = Equivalence Relation (DSU components); Reflexive + Antisymmetric + Transitive = Partial Order (prerequisite graphs).\n• Functions: Bijective = Injective (no collisions) + Surjective (full codomain coverage) <=> Invertible!\n• Proofs: Contrapositive (`¬Q -> ¬P`), Contradiction, Weak Induction (`P(b)` + `P(k) -> P(k+1)`), and Strong Induction (divide-and-conquer correctness).\n\n### Sets, Equivalence Partitions & Mathematical Induction\n- Power set `P(S)` of an `n`-element set has cardinality `2^n` because each element independently has 2 choices (in or out).\n- Equivalence relations require **Reflexive**, **Symmetric**, and **Transitive** rules, partitioning a set cleanly into disjoint equivalence classes (e.g., Disjoint Set Union!).\n- Induction proves `P(n)` cleanly via Base Case `P(0)` + Inductive Step `(P(k) -> P(k+1))`.",
+              "ar": "• المجموعات: مجموعة القوى P(A) تضم 2^N مجموعة جزئية.\n• العلاقات: علاقة التكافؤ تقسم المجموعة لأقسام منفصلة، والترتيب الجزئي يمثل التبعيات غير الدورية.\n• التقابل (Bijection): يجمع التباين والغمر معاً وهو شرط وجود الدالة العكسية.\n• البراهين: التناقض والمعاكس الإيجابي والاستقراء الضعيف والقوي لإثبات صحة الخوارزميات.\n\n### المجموعات، علاقات التكافؤ، والاستقراء الرياضي\n- مجموعة القوى لمجموعة بحجم `n` تحوي `2^n` مجموعة جزئية لأن لكل عنصر خيارين (موجود أو مستبعد).\n- علاقة التكافؤ (انعكاسية، تماثلية، متعدية) تقسم المجموعة لفئات منفصلة مثل هيكل DSU.\n- البرهان بالاستقراء يثبت قاعدة البداية ثم يثبت انتقال الصدق من `k` إلى `k+1`."
             },
             "questions": [
               {
@@ -5179,8 +5705,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Discrete structures formalize relationships between collections cleanly:\n\n1. Equivalence Relations: Require Reflexivity (`a ~ a`), Symmetry (`a ~ b => b ~ a`), and Transitivity (`a ~ b && b ~ c => a ~ c`), partitioning items cleanly into disjoint sets (the core basis of DSU / Union-Find!).\n2. Injective vs Surjective vs Bijective Functions: A bijection is one-to-one AND onto, guaranteeing an exact inverse mapping.\n3. Mathematical Induction: Prove `P(base)` directly, then prove `P(k) -> P(k+1)` (or Strong Induction assuming all `<= k`), establishing truth for every `n >= base`.",
-              "ar": "الرياضيات المتقطعة تؤسس هياكل البيانات والخوارزميات:\n\n1. علاقات التكافؤ (انعكاسية، متماثلة، متعدية): تقسم المجموعات إلى فئات منفصلة وهي الأساس النظري لبنية Union-Find (DSU).\n2. الدالة المتقابلة (Bijection): تحقق التباين والشمول معاً مما يضمن وجود معكوس فريد.\n3. الاستقراء الرياضي: إثبات حالة الأساس ثم إثبات خطوة الانتقال من `k` إلى `k+1` لتعميم البرهان على ما لا نهاية."
+              "en": "Discrete structures formalize relationships between collections cleanly:\n\n1. Equivalence Relations: Require Reflexivity (`a ~ a`), Symmetry (`a ~ b => b ~ a`), and Transitivity (`a ~ b && b ~ c => a ~ c`), partitioning items cleanly into disjoint sets (the core basis of DSU / Union-Find!).\n2. Injective vs Surjective vs Bijective Functions: A bijection is one-to-one AND onto, guaranteeing an exact inverse mapping.\n3. Mathematical Induction: Prove `P(base)` directly, then prove `P(k) -> P(k+1)` (or Strong Induction assuming all `<= k`), establishing truth for every `n >= base`.\n\n### Sets, Equivalence Partitions & Mathematical Induction\n- Power set `P(S)` of an `n`-element set has cardinality `2^n` because each element independently has 2 choices (in or out).\n- Equivalence relations require **Reflexive**, **Symmetric**, and **Transitive** rules, partitioning a set cleanly into disjoint equivalence classes (e.g., Disjoint Set Union!).\n- Induction proves `P(n)` cleanly via Base Case `P(0)` + Inductive Step `(P(k) -> P(k+1))`.",
+              "ar": "الرياضيات المتقطعة تؤسس هياكل البيانات والخوارزميات:\n\n1. علاقات التكافؤ (انعكاسية، متماثلة، متعدية): تقسم المجموعات إلى فئات منفصلة وهي الأساس النظري لبنية Union-Find (DSU).\n2. الدالة المتقابلة (Bijection): تحقق التباين والشمول معاً مما يضمن وجود معكوس فريد.\n3. الاستقراء الرياضي: إثبات حالة الأساس ثم إثبات خطوة الانتقال من `k` إلى `k+1` لتعميم البرهان على ما لا نهاية.\n\n### المجموعات، علاقات التكافؤ، والاستقراء الرياضي\n- مجموعة القوى لمجموعة بحجم `n` تحوي `2^n` مجموعة جزئية لأن لكل عنصر خيارين (موجود أو مستبعد).\n- علاقة التكافؤ (انعكاسية، تماثلية، متعدية) تقسم المجموعة لفئات منفصلة مثل هيكل DSU.\n- البرهان بالاستقراء يثبت قاعدة البداية ثم يثبت انتقال الصدق من `k` إلى `k+1`."
             },
             "questions": [
               {
@@ -5228,7 +5754,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "توليد مجموعة القوى P(A) بالتمثيل الثنائي"
             },
             "isRequired": true,
-            "content": "vector<string> items = {\"A\", \"B\", \"C\"}; // |A| = 3 -> 2^3 = 8 subsets\nfor (int mask = 0; mask < (1 << items.size()); mask++) {\n    vector<string> subset;\n    for (int i = 0; i < items.size(); i++)\n        if (mask & (1 << i)) subset.push_back(items[i]);\n}",
+            "content": {
+              "en": "### Bitmask Subset Enumeration Explained\n- Iterating `mask` from `0` to `(1 << n) - 1` generates all `2^n` subsets deterministically.\n- Port the C++ subset bitmask snippet into **Live JS Sandbox** and list all subsets of `['A', 'B', 'C']`!",
+              "ar": "### تتبع توليد المجموعات بالأقنعة الثنائية\n- تكرار `mask` من `0` إلى `2^n - 1` يستخرج جميع المجموعات الفرعية بنمط منظم.\n- جرب توليد كل المجموعات الجزئية لـ `['A', 'B', 'C']` في **Live JS Sandbox**."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Each integer `mask` from `0` to `2^N - 1` maps bijectively to one unique subset in the Power Set P(A).",
@@ -5282,8 +5811,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Proving `P(k) -> P(k+1)` alone without verifying `P(base)` proves nothing! For example, `k = k + 1` satisfies `k+1 = k+2`, yet never holds for any real starting case. Also check edge cases like `k = 1 -> k = 2` where base behavior shifts.",
-              "ar": "إثبات الخطوة الاستقرائية وحدها بدون التحقق من حالة الأساس لا قيمة له وقد يؤدي لنتائج مغلوطة."
+              "en": "Proving `P(k) -> P(k+1)` alone without verifying `P(base)` proves nothing! For example, `k = k + 1` satisfies `k+1 = k+2`, yet never holds for any real starting case. Also check edge cases like `k = 1 -> k = 2` where base behavior shifts.\n\n### Classic Proof Fallacies\n- Checking inductive step `P(k) -> P(k+1)` WITHOUT verifying a concrete Base Case proves nothing (`n = n + 1` fails base!).\n- Remember a relation `<=` is anti-symmetric, NOT symmetric, so it is a partial order rather than an equivalence relation.",
+              "ar": "إثبات الخطوة الاستقرائية وحدها بدون التحقق من حالة الأساس لا قيمة له وقد يؤدي لنتائج مغلوطة.\n\n### أخطاء شائعة في البراهين والعلاقات\n- إهمال التحقق من حالة البداية في الاستقراء يجعل البرهان باطلاً ولو صح الانتقال.\n- علاقة الترتيب `<=` ليست تماثلية فلا تعد علاقة تكافؤ."
             },
             "questions": [
               {
@@ -5332,8 +5861,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Compute union, intersection, difference, Cartesian products, and 2^N power sets.\n- Classify relations as Equivalence Relations (partitions) vs Partial Orders (DAGs).\n- Identify Injective, Surjective, and Bijective mappings and write Mathematical Induction proofs.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- حساب عمليات المجموعات والجداء الديكارتي ومجموعة القوى 2^N.\n- التفريق بين علاقات التكافؤ وعلاقات الترتيب الجزئي (أساس DAG).\n- تمييز الدوال المتباينة والغامرة والتقابلية، وكتابة براهين الاستقراء الرياضي."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Compute union, intersection, difference, Cartesian products, and 2^N power sets.\n- Classify relations as Equivalence Relations (partitions) vs Partial Orders (DAGs).\n- Identify Injective, Surjective, and Bijective mappings and write Mathematical Induction proofs.\n\n### Proof & Counting Challenge\nProve by induction that `1 + 2 + 4 + ... + 2^n = 2^(n + 1) - 1`, matching power-set loop step totals.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- حساب عمليات المجموعات والجداء الديكارتي ومجموعة القوى 2^N.\n- التفريق بين علاقات التكافؤ وعلاقات الترتيب الجزئي (أساس DAG).\n- تمييز الدوال المتباينة والغامرة والتقابلية، وكتابة براهين الاستقراء الرياضي.\n\n### تحدي الاستقراء الرياضي\nأثبت بالاستقراء الرياضي أن مجموع قوى 2 من `0` حتى `n` يساوي `2^(n + 1) - 1`."
             }
           }
         ],
@@ -5438,6 +5967,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Pascal triangle, multiplicative nCr, and modular inverses.",
               "ar": "حساب التوافيق بكفاءة وبدون أخطاء فيضان."
             }
+          },
+          {
+            "title": "USACO Guide: Combinatorics & Modular Math",
+            "url": "https://usaco.guide/gold/divisibility",
+            "type": "article",
+            "source": "USACO Guide",
+            "category": "Combinatorics",
+            "language": "en",
+            "description": {
+              "en": "Counting combinations mod prime and solving recurrences cleanly.",
+              "ar": "تطبيقات التوافيق والعلاقات التكرارية."
+            }
+          },
+          {
+            "title": "MIT OCW: Counting Rules & Recurrences",
+            "url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/",
+            "type": "documentation",
+            "source": "MIT OCW",
+            "category": "Math",
+            "language": "en",
+            "description": {
+              "en": "Permutations, generating recurrences, and Master Theorem.",
+              "ar": "التباديل والتوافيق ونظرية ماستر."
+            }
           }
         ],
         "sections": [
@@ -5450,8 +6003,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• Permutations `P(n, r) = n! / (n-r)!` count ORDERED selections; Combinations `C(n, r) = n! / (r!(n-r)!)` count UNORDERED subsets.\n• Pigeonhole Principle guarantees if >K items enter K buckets, >=1 bucket holds >=2 items (why lossless compression cannot shrink EVERY file!).\n• Recurrences: `T(n) = T(n/2) + 1 -> Θ(log n)`, while `T(n) = 2T(n/2) + n -> Θ(n log n)` by Master Theorem.",
-              "ar": "• التباديل للترتيب المهم والتوافيق للمجموعات دون ترتيب.\n• مبدأ برج الحمام يفسر حتمية التصادمات في جداول التجزئة واستحالة ضغط جميع الملفات بلا فقدان.\n• تحليل التكرار يعطينا تعقيد خوارزميات البحث والفرز."
+              "en": "• Permutations `P(n, r) = n! / (n-r)!` count ORDERED selections; Combinations `C(n, r) = n! / (r!(n-r)!)` count UNORDERED subsets.\n• Pigeonhole Principle guarantees if >K items enter K buckets, >=1 bucket holds >=2 items (why lossless compression cannot shrink EVERY file!).\n• Recurrences: `T(n) = T(n/2) + 1 -> Θ(log n)`, while `T(n) = 2T(n/2) + n -> Θ(n log n)` by Master Theorem.\n\n### Combinatorics & Master Theorem Recurrences\n- Order matters (Permutations): `P(n, k) = n! / (n - k)!`. Order ignored (Combinations): `C(n, k) = n! / (k!(n - k)!)`.\n- Master Theorem on Divide & Conquer `T(n) = a T(n/b) + O(n^d)`: Binary Search (`a=1, b=2, d=0 -> O(log n)`), Merge Sort (`a=2, b=2, d=1 -> O(n log n)`).",
+              "ar": "• التباديل للترتيب المهم والتوافيق للمجموعات دون ترتيب.\n• مبدأ برج الحمام يفسر حتمية التصادمات في جداول التجزئة واستحالة ضغط جميع الملفات بلا فقدان.\n• تحليل التكرار يعطينا تعقيد خوارزميات البحث والفرز.\n\n### قواعد العد والعلاقات التكرارية\n- عندما يهم الترتيب نستخدم التباديل `P(n, k)`، وعندما لا يهم نستخدم التوافيق `C(n, k)`.\n- باستخدام مبرهنة ماستر لعلاقات التقسيم: البحث الثنائي يعطي `O(log n)` بينما Merge Sort يعطي `O(n log n)`."
             },
             "questions": [
               {
@@ -5500,8 +6053,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Combinatorics quantifies exact state-space sizes before coding brute force:\n\n1. Permutations (`nPr = n! / (n-r)!`) vs Combinations (`nCr = n! / (r!(n-r)!)`): Order matters in rankings (permutations), while order does NOT matter in team selection (combinations).\n2. Binary Recurrences via Master Theorem: `T(n) = a * T(n/b) + f(n)` directly determines Divide & Conquer speed:\n   - Binary Search (`T(n) = T(n/2) + O(1)`) -> `O(log N)`.\n   - Merge Sort (`T(n) = 2T(n/2) + O(N)`) -> `O(N log N)`.\n   - Naive Tree Recursion (`T(n) = 2T(n-1) + O(1)`) -> `O(2^N)`.",
-              "ar": "التوافقيات تحدد حجم الفضاء الاحتمالي قبل كتابة الخوارزمية:\n\n1. التباديل (الترتيب مهم مثل السباقات) مقابل التوافيق (الترتيب غير مهم مثل اختيار فريق).\n2. علاقات التكرار تحسب تعقيد خوارزميات فرّق تسد مباشرة:\n   - `T(n) = T(n/2) + O(1)` تعطي `O(log N)` مثل البحث الثنائي.\n   - `T(n) = 2T(n/2) + O(N)` تعطي `O(N log N)` مثل Merge Sort."
+              "en": "Combinatorics quantifies exact state-space sizes before coding brute force:\n\n1. Permutations (`nPr = n! / (n-r)!`) vs Combinations (`nCr = n! / (r!(n-r)!)`): Order matters in rankings (permutations), while order does NOT matter in team selection (combinations).\n2. Binary Recurrences via Master Theorem: `T(n) = a * T(n/b) + f(n)` directly determines Divide & Conquer speed:\n   - Binary Search (`T(n) = T(n/2) + O(1)`) -> `O(log N)`.\n   - Merge Sort (`T(n) = 2T(n/2) + O(N)`) -> `O(N log N)`.\n   - Naive Tree Recursion (`T(n) = 2T(n-1) + O(1)`) -> `O(2^N)`.\n\n### Combinatorics & Master Theorem Recurrences\n- Order matters (Permutations): `P(n, k) = n! / (n - k)!`. Order ignored (Combinations): `C(n, k) = n! / (k!(n - k)!)`.\n- Master Theorem on Divide & Conquer `T(n) = a T(n/b) + O(n^d)`: Binary Search (`a=1, b=2, d=0 -> O(log n)`), Merge Sort (`a=2, b=2, d=1 -> O(n log n)`).",
+              "ar": "التوافقيات تحدد حجم الفضاء الاحتمالي قبل كتابة الخوارزمية:\n\n1. التباديل (الترتيب مهم مثل السباقات) مقابل التوافيق (الترتيب غير مهم مثل اختيار فريق).\n2. علاقات التكرار تحسب تعقيد خوارزميات فرّق تسد مباشرة:\n   - `T(n) = T(n/2) + O(1)` تعطي `O(log N)` مثل البحث الثنائي.\n   - `T(n) = 2T(n/2) + O(N)` تعطي `O(N log N)` مثل Merge Sort.\n\n### قواعد العد والعلاقات التكرارية\n- عندما يهم الترتيب نستخدم التباديل `P(n, k)`، وعندما لا يهم نستخدم التوافيق `C(n, k)`.\n- باستخدام مبرهنة ماستر لعلاقات التقسيم: البحث الثنائي يعطي `O(log n)` بينما Merge Sort يعطي `O(n log n)`."
             },
             "questions": [
               {
@@ -5549,7 +6102,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "حساب التوافيق المعيارية nCr mod M"
             },
             "isRequired": true,
-            "content": "// Pascal's Identity: C(n, r) = C(n-1, r-1) + C(n-1, r)\nlong long C[505][505];\nfor (int n = 0; n <= 500; n++) {\n    C[n][0] = C[n][n] = 1;\n    for (int r = 1; r < n; r++)\n        C[n][r] = (C[n-1][r-1] + C[n-1][r]) % 1000000007LL;\n}",
+            "content": {
+              "en": "### Avoiding Overflow in Modular Combinations\n- Never compute huge factorials raw before dividing!\n- Notice precomputing `fact[i] % MOD` and modular inverses (`invFact[i] % MOD`) answers `C(n, k) % MOD` up to `10^6` in **O(1)** per query.",
+              "ar": "### حساب التوافيق بكفاءة ومنع الفيضان\n- لا تحسب المضروب ضخماً ثم تقسم مباشرة بل احسب باقي القسمة والمعكوس الضربي مسبقاً.\n- استكشف تكرار باسكال في **Live JS Sandbox** للأحجام الصغيرة."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Pascal's triangle avoids factorials & modular inverses cleanly when N <= 2000.",
@@ -5603,8 +6159,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Computing `21!` overflows even a 64-bit unsigned integer! Always compute `nCr` via multiplicative reduction dividing factors cleanly step-by-step, Pascal's triangle DP for small N, or Modular Multiplicative Inverse under prime `10^9 + 7`.",
-              "ar": "المضروب `21!` يكسر حدود الأعداد 64-بت! لذا لا تحسب `n!/k!(n-k)!` مباشرة، بل احسبها تدريجياً أو بمثلث باسكال أو المعكوس المعياري تحت `10^9+7`."
+              "en": "Computing `21!` overflows even a 64-bit unsigned integer! Always compute `nCr` via multiplicative reduction dividing factors cleanly step-by-step, Pascal's triangle DP for small N, or Modular Multiplicative Inverse under prime `10^9 + 7`.\n\n### Integer & Counting Errors\n- Even `21!` overflows 64-bit unsigned integers cleanly!\n- Watch out for double-counting overlapping choices without Inclusion-Exclusion (`|A U B| = |A| + |B| - |A cap B|`).",
+              "ar": "المضروب `21!` يكسر حدود الأعداد 64-بت! لذا لا تحسب `n!/k!(n-k)!` مباشرة، بل احسبها تدريجياً أو بمثلث باسكال أو المعكوس المعياري تحت `10^9+7`.\n\n### أخطاء العد الحسابية\n- يتجاوز المضروب `21!` سعة الأعداد الصحيحة 64-bit بسرعة كبيرة.\n- انتبه لعدم عد التقاطعات مرتين وتطبيق مبدأ التضمين والإقصاء عند الحاجة."
             },
             "questions": [
               {
@@ -5653,8 +6209,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Decide accurately when to multiply choices (Product Rule), count ordered Permutations P(n,r), or unordered Combinations C(n,r).\n- Apply Pigeonhole Principle and Inclusion-Exclusion to algorithmic collision/counting problems.\n- Solve `T(n) = aT(n/b) + f(n)` recurrences via Master Theorem intuition.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- الاختيار الصحيح بين التباديل (الترتيب مهم) والتوافيق (الترتيب غير مهم).\n- تطبيق مبدأ برج الحمام ومبدأ التضمين والاستبعاد.\n- تحليل العلاقات التكرارية لخوارزميات فرق تسد."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Decide accurately when to multiply choices (Product Rule), count ordered Permutations P(n,r), or unordered Combinations C(n,r).\n- Apply Pigeonhole Principle and Inclusion-Exclusion to algorithmic collision/counting problems.\n- Solve `T(n) = aT(n/b) + f(n)` recurrences via Master Theorem intuition.\n\n### Applied Drill\nDetermine how many 5-member teams can be picked from 12 engineers (`C(12, 5) = 792`) and derive `T(n) = 2T(n/2) + n` recursion tree levels.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- الاختيار الصحيح بين التباديل (الترتيب مهم) والتوافيق (الترتيب غير مهم).\n- تطبيق مبدأ برج الحمام ومبدأ التضمين والاستبعاد.\n- تحليل العلاقات التكرارية لخوارزميات فرق تسد.\n\n### تمرين عد تطبيقي\nاحسب عدد طرق اختيار فريق من 5 مهندسين من أصل 12، واستنتج مستويات شجرة التكرار لـ Merge Sort."
             }
           }
         ],
@@ -5760,6 +6316,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Singly/Doubly Linked List patterns and interview comparisons.",
               "ar": "مقارنة القوائم المترابطة بالمصفوفات وأنماطها."
             }
+          },
+          {
+            "title": "VisuAlgo: Linked List Interactive Visualizer",
+            "url": "https://visualgo.net/en/list",
+            "type": "practice_problem",
+            "source": "VisuAlgo",
+            "category": "Practice",
+            "language": "en",
+            "description": {
+              "en": "Interactive linked list node insertion, deletion, and pointer reversal labs.",
+              "ar": "محاكي تفاعلي لإدراج وحذف العقد وعكس المؤشرات في القوائم المترابطة."
+            }
+          },
+          {
+            "title": "VisuAlgo: Linked List, Stack & Queue Animations",
+            "url": "https://visualgo.net/en/sorting",
+            "type": "article",
+            "source": "VisuAlgo",
+            "category": "Visualizers",
+            "language": "en",
+            "description": {
+              "en": "Interactive data structure step visualizations.",
+              "ar": "رسوم تفاعلية لهياكل البيانات."
+            }
           }
         ],
         "sections": [
@@ -5772,8 +6352,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Each Linked List node sits dynamically in Heap memory carrying payload + pointer(s). Inserting/deleting at a known pointer takes O(1) (no element shifting), whereas fetching index `k` walks `next` `k` times -> O(N). Doubly linked lists allow O(1) removal given only the target node pointer (powering O(1) LRU Caches when combined with a HashMap).",
-              "ar": "تتوزع عقد القائمة في الذاكرة ويربط كل منها مؤشر بالتالية (والسابقة في المزدوجة). يمتاز الحذف والإدراج عند مؤشر معروف بـ O(1)، لكن الوصول للفهرس k يكلف O(k)."
+              "en": "Each Linked List node sits dynamically in Heap memory carrying payload + pointer(s). Inserting/deleting at a known pointer takes O(1) (no element shifting), whereas fetching index `k` walks `next` `k` times -> O(N). Doubly linked lists allow O(1) removal given only the target node pointer (powering O(1) LRU Caches when combined with a HashMap).\n\n### Pointer Wiring & Sentinel Node Mastery\n- **Arrays vs Linked Lists:** Arrays deliver O(1) indexed access and superior L1 CPU cache locality; Linked Lists give O(1) splice insertion/removal ONCE you already hold the node pointer.\n- Adding a `dummy` sentinel before `head` unifies inserting/deleting at position 0 cleanly without special branches.",
+              "ar": "تتوزع عقد القائمة في الذاكرة ويربط كل منها مؤشر بالتالية (والسابقة في المزدوجة). يمتاز الحذف والإدراج عند مؤشر معروف بـ O(1)، لكن الوصول للفهرس k يكلف O(k).\n\n### ربط المؤشرات والعقدة الوهمية Dummy Head\n- المصفوفات تتفوق بالوصول الفوري O(1) و Cache؛ بينما تتفوق القوائم بالإدراج والحذف O(1) بمجرد امتلاك مؤشر العقدة.\n- وضع عقدة وهمية `dummy` قبل الرأس يوحّد منطق تعديل أو حذف العقدة الأولى مع باقي العقد."
             },
             "questions": [
               {
@@ -5871,7 +6451,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "بنية العقدة والإدراج في البداية"
             },
             "isRequired": true,
-            "content": "struct ListNode { int val; ListNode* next; };\nListNode* pushFront(ListNode* head, int x) {\n    return new ListNode{x, head}; // Next points to old head safely!\n}",
+            "content": {
+              "en": "### Tracing Rewiring & In-Place Reversal\n- Before flipping `curr.next = prev`, ALWAYS store `savedNext = curr.next` first so you never lose the remaining list.\n- Open the **Linked List Pointer Lab** below to step visually through insertions and pointer links.",
+              "ar": "### تتبع إعادة الربط وعكس القائمة\n- قبل تعديل `curr.next = prev` احفظ دائماً `next = curr.next` حتى لا ينقطع المسار لبقية القائمة.\n- جرّب **مختبر القوائم المترابطة** بالأسفل وشاهد تغير الروابط."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Initializing `next` with old `head` in one step prevents losing the tail chain.",
@@ -5924,7 +6507,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "مختبر القوائم المترابطة وتحريك المؤشرات"
             },
             "isRequired": true,
-            "content": "linked-list-visualizer",
+            "content": {
+              "en": "### Guided Lab: Non-Contiguous Nodes & Pointer Wiring\nInsert at head (`O(1)`), append at tail, and delete nodes while tracking exact `next` pointer updates across heap addresses.\n\n**Experiments to Run:**\n1. Insert a new node at `head` and confirm zero shifting of subsequent nodes.\n2. Traverse node by node to measure why random index access stays `O(n)`.\n3. Delete an interior node by rewiring `prev.next = target.next`.",
+              "ar": "### المعمل التفاعلي: القوائم المترابطة وتوجيه المؤشرات\nأضف عقداً في البداية أو الوسط واحذف عقداً مع متابعة تغير روابط `next`.\n\n**تجارب مقترحة:**\n1. أدرج عند الرأس O(1) ولاحظ عدم إزاحة أي عناصر.\n2. تتبّع السير من البداية لفهم سبب بطء البحث الفهرسي O(n).\n3. احذف عقدة وسطى بإعادة ربط المؤشر السابق بالتالي."
+            },
             "interactiveModuleId": "linked-list-visualizer"
           },
           {
@@ -5936,8 +6522,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Always write `while (fast != nullptr && fast->next != nullptr)` before reading `fast->next->next`; checking only `fast` crashes on lists whose length is odd or ends next step!",
-              "ar": "عند تحريك المؤشر السريع خطوتين اكتب دائماً `while (fast != null && fast.next != null)` لتجنب الانهيار على الحواف."
+              "en": "Always write `while (fast != nullptr && fast->next != nullptr)` before reading `fast->next->next`; checking only `fast` crashes on lists whose length is odd or ends next step!\n\n### Pointer & Cycle Safety Bugs\n- Calling `fast->next->next` without guarding `fast && fast->next` crashes with Null Pointer Dereference.\n- Remember removing interior nodes in C/C++ without `delete` leaks orphaned nodes.",
+              "ar": "عند تحريك المؤشر السريع خطوتين اكتب دائماً `while (fast != null && fast.next != null)` لتجنب الانهيار على الحواف.\n\n### أخطاء التعامل مع المؤشرات الفارغة\n- فحص `fast->next->next` دون التأكد من وجود `fast` و `fast->next` يسبب انهياراً فورياً.\n- في اللغات غير المدارة تأكد من تحرير العقد المحذوفة لتجنب تسرب الذاكرة."
             },
             "questions": [
               {
@@ -5986,8 +6572,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Key Takeaways:\n- Arrays excel at random O(1) lookup and CPU cache; Linked Lists enable O(1) splice/LRU eviction given node iterators.\n- Use dummy sentinel nodes and safe null guards cleanly.",
-              "ar": "الخلاصة:\n- المصفوفة تتفوق في القراءة السريعة والـ Cache، وتصلح القائمة المترابطة لحالات الإزالة/النقل المباشر بمؤشر العقدة مثل LRU Cache."
+              "en": "Key Takeaways:\n- Arrays excel at random O(1) lookup and CPU cache; Linked Lists enable O(1) splice/LRU eviction given node iterators.\n- Use dummy sentinel nodes and safe null guards cleanly.\n\n### Coding & Visualizer Exercise\nImplement Floyd's `hasCycle(head)` slow/fast pointer trace in Live JS Sandbox and link nodes interactively in the Visualizer below.",
+              "ar": "الخلاصة:\n- المصفوفة تتفوق في القراءة السريعة والـ Cache، وتصلح القائمة المترابطة لحالات الإزالة/النقل المباشر بمؤشر العقدة مثل LRU Cache.\n\n### تمرين عملي\nاختبر كشف الحلقات السريع/البطيء في **Live JS Sandbox** وأضف/احذف عقداً في المحاكي بالأسفل."
             }
           }
         ],
@@ -6001,7 +6587,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "DS-LL-M-003",
           "DS-LL-M-004",
           "DS-LL-H-005",
-          "DS-LL-E-006"
+          "DS-LL-E-006",
+          "EXP-LL-101",
+          "EXP-LL-102",
+          "EXP-LL-103",
+          "EXP-LL-104",
+          "EXP-LL-105"
         ]
       }
     ]
@@ -6072,10 +6663,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
         ],
         "externalReferences": [
           {
-            "title": "LeetCode 20: Valid Parentheses",
-            "url": "https://leetcode.com/problems/valid-parentheses/",
+            "title": "CP-Algorithms: Stack & Queue Modifications",
+            "url": "https://cp-algorithms.com/data_structures/stack_queue_modification.html",
             "type": "practice_problem",
-            "source": "LeetCode"
+            "source": "CP-Algorithms"
           },
           {
             "title": "cppreference: std::stack & std::queue",
@@ -6087,6 +6678,18 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             "description": {
               "en": "Container adapters, O(1) push/pop, and deque backing.",
               "ar": "مرجع المكدس والرتل القياسي."
+            }
+          },
+          {
+            "title": "cppreference: std::stack Container Adapter",
+            "url": "https://en.cppreference.com/w/cpp/container/stack",
+            "type": "documentation",
+            "source": "cppreference",
+            "category": "STL",
+            "language": "en",
+            "description": {
+              "en": "LIFO push/pop guarantees and underlying deque container.",
+              "ar": "مرجع المكدس std::stack القياسي."
             }
           }
         ],
@@ -6100,8 +6703,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• Stack (LIFO): Last pushed item pops first -> powers function Call Stacks, browser Back button, expression validation.\n• Queue (FIFO): First enqueued item leaves first -> drives OS task queues and BFS level traversal. Backing with a naive array makes `dequeue` O(N); a Circular Buffer wraps `(idx + 1) % CAP` for true O(1)!\n• Deque: Generalized double-ended queue supporting O(1) front AND back push/pop.",
-              "ar": "• المكدس (LIFO): آخر ما يدخل يخرج أولاً (مكدس الاستدعاءات وتطابق الأقواس).\n• الطابور (FIFO): أول من يدخل يخرج أولاً (جدولة المعالج و BFS)؛ وباستخدام فهرسة `% CAP` في مصفوفة حلقية تبقى كل عملياته O(1).\n• Deque: يجمع الإدخال والحذف في O(1) من الأمام والخلف معاً."
+              "en": "• Stack (LIFO): Last pushed item pops first -> powers function Call Stacks, browser Back button, expression validation.\n• Queue (FIFO): First enqueued item leaves first -> drives OS task queues and BFS level traversal. Backing with a naive array makes `dequeue` O(N); a Circular Buffer wraps `(idx + 1) % CAP` for true O(1)!\n• Deque: Generalized double-ended queue supporting O(1) front AND back push/pop.\n\n### LIFO vs FIFO & Monotonic Stack / Ring Buffer Patterns\n- **Stack (LIFO):** Reverses history, parses nested brackets `({[]})`, evaluates expressions, and powers DFS & Call Stack.\n- **Queue (FIFO):** Fair job buffering, breadth-first shortest path (`BFS`), and fixed O(1) Ring Buffers (`(head + 1) % cap`).",
+              "ar": "• المكدس (LIFO): آخر ما يدخل يخرج أولاً (مكدس الاستدعاءات وتطابق الأقواس).\n• الطابور (FIFO): أول من يدخل يخرج أولاً (جدولة المعالج و BFS)؛ وباستخدام فهرسة `% CAP` في مصفوفة حلقية تبقى كل عملياته O(1).\n• Deque: يجمع الإدخال والحذف في O(1) من الأمام والخلف معاً.\n\n### المكدس LIFO والرتل FIFO والأنماط المتقدمة\n- **المكدس (Stack):** لموازنة الأقواس المتداخلة والتراجع (Undo) وتتبع العمق DFS وإطارات الدوال.\n- **الرتل (Queue):** لجدولة الطلبات بالوصول والبحث العرضي BFS والمخازن الدائرية O(1)."
             },
             "questions": [
               {
@@ -6150,8 +6753,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Stacks and Queues restrict insertion/removal ends purposely so invariants stay O(1):\n\n1. Stack (LIFO - Last In, First Out): Powers CPU call frames, browser history, expression/bracket matching, Undo stacks, and iterative DFS.\n2. Queue (FIFO - First In, First Out): Powers OS print/task queues, breadth-first search (BFS), and rate limiters. Implementing a fixed queue on an array requires circular wrap-around (`(tail + 1) % cap`) so dequeue avoids shifting O(N)!\n3. Deque (`std::deque`) & Monotonic Stack: Finds Next Greater Element or Sliding Window Maximum across an entire array in linear O(N) time.",
-              "ar": "المكدس والرتل يقيّدان أطراف الإضافة والحذف لضمان سرعة `O(1)`:\n\n1. المكدس Stack (LIFO): يدير استدعاء الدوال، ومطابقة الأقواس، وعمليات التراجع Undo، وخوارزمية DFS.\n2. الرتل Queue (FIFO): يدير طوابير المهام وخوارزمية BFS، ولتنفيذه على مصفوفة نستخدم الفهرسة الدائرية `(tail + 1) % cap` لتجنب تكلفة الإزاحة `O(N)`.\n3. الرتل ذو النهايتين Deque والـ Monotonic Stack: يحل مسائل أكبر عنصر لاحق ونافذة الانزلاق القصوى في وقت خطي `O(N)`."
+              "en": "Stacks and Queues restrict insertion/removal ends purposely so invariants stay O(1):\n\n1. Stack (LIFO - Last In, First Out): Powers CPU call frames, browser history, expression/bracket matching, Undo stacks, and iterative DFS.\n2. Queue (FIFO - First In, First Out): Powers OS print/task queues, breadth-first search (BFS), and rate limiters. Implementing a fixed queue on an array requires circular wrap-around (`(tail + 1) % cap`) so dequeue avoids shifting O(N)!\n3. Deque (`std::deque`) & Monotonic Stack: Finds Next Greater Element or Sliding Window Maximum across an entire array in linear O(N) time.\n\n### LIFO vs FIFO & Monotonic Stack / Ring Buffer Patterns\n- **Stack (LIFO):** Reverses history, parses nested brackets `({[]})`, evaluates expressions, and powers DFS & Call Stack.\n- **Queue (FIFO):** Fair job buffering, breadth-first shortest path (`BFS`), and fixed O(1) Ring Buffers (`(head + 1) % cap`).",
+              "ar": "المكدس والرتل يقيّدان أطراف الإضافة والحذف لضمان سرعة `O(1)`:\n\n1. المكدس Stack (LIFO): يدير استدعاء الدوال، ومطابقة الأقواس، وعمليات التراجع Undo، وخوارزمية DFS.\n2. الرتل Queue (FIFO): يدير طوابير المهام وخوارزمية BFS، ولتنفيذه على مصفوفة نستخدم الفهرسة الدائرية `(tail + 1) % cap` لتجنب تكلفة الإزاحة `O(N)`.\n3. الرتل ذو النهايتين Deque والـ Monotonic Stack: يحل مسائل أكبر عنصر لاحق ونافذة الانزلاق القصوى في وقت خطي `O(N)`.\n\n### المكدس LIFO والرتل FIFO والأنماط المتقدمة\n- **المكدس (Stack):** لموازنة الأقواس المتداخلة والتراجع (Undo) وتتبع العمق DFS وإطارات الدوال.\n- **الرتل (Queue):** لجدولة الطلبات بالوصول والبحث العرضي BFS والمخازن الدائرية O(1)."
             },
             "questions": [
               {
@@ -6199,7 +6802,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "تطبيق عملي: التحقق من توازن الأقواس باستخدام Stack"
             },
             "isRequired": true,
-            "content": "bool isBalanced(const string& s) {\n    stack<char> st;\n    for (char c : s) {\n        if (c == '(' || c == '[' || c == '{') {\n            st.push(c);\n        } else {\n            if (st.empty()) return false;\n            char top = st.top(); st.pop();\n            if ((c == ')' && top != '(') || (c == ']' && top != '[') || (c == '}' && top != '{'))\n                return false;\n        }\n    }\n    return st.empty(); // Must leave no unmatched opening brackets!\n}",
+            "content": {
+              "en": "### Monotonic Stack & Brackets Trace\n- Notice why Monotonic Stack resolves Next Greater Element in **O(n)**: each element pushes once and pops at most once.\n- Experiment interactively with BOTH the **Stack Visualizer** and **Queue Visualizer** below!",
+              "ar": "### تتبع المكدس الرتيب وموازنة الأقواس\n- يحل المكدس الرتيب مسألة العنصر الأكبر التالي بزمن **O(n)** لأن كل عنصر يُدفع ويُسحب مرة على الأكثر.\n- تفاعل مع محاكي **Stack** و **Queue** بالأسفل لاختبار العمليات."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Every closing bracket must match the MOST RECENT unmatched opener, making Stack LIFO ordering exact in O(N) time and O(N) worst-case space.",
@@ -6252,7 +6858,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "محاكي المكدس التفاعلي (LIFO)"
             },
             "isRequired": true,
-            "content": "stack-visualizer",
+            "content": {
+              "en": "### Guided Lab: LIFO Push, Pop, Peek & Overflow Checks\nPractice Last-In-First-Out discipline interactively with bounded capacity checks.\n\n**Experiments to Run:**\n1. Push multiple items and verify `Peek` only inspects top index `n - 1` (`O(1)`).\n2. Pop items back down until empty to verify Underflow protection.\n3. Push up to capacity to inspect Stack Overflow handling.",
+              "ar": "### المعمل التفاعلي: مكدس LIFO وعمليات الدفع والسحب\nجرّب عمليات Push و Pop و Peek في سعة محدودة.\n\n**تجارب مقترحة:**\n1. ادفع عناصر متعددة وافحص `Peek` في قمة المكدس.\n2. اسحب حتى يفرغ المكدس لملاحظة حماية Underflow.\n3. املا المكدس لمشاهدة تنبيه Overflow."
+            },
             "interactiveModuleId": "stack-visualizer"
           },
           {
@@ -6263,7 +6872,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "محاكي طابور الانتظار (FIFO)"
             },
             "isRequired": true,
-            "content": "queue-visualizer",
+            "content": {
+              "en": "### Guided Lab: FIFO Enqueue & Dequeue Discipline\nWatch items enter the tail and exit the front strictly in arrival order (`First-In, First-Out`).\n\n**Experiments to Run:**\n1. Enqueue 3 jobs and verify the oldest job stays at `front` until dequeued.\n2. Compare Queue FIFO ordering against Stack LIFO ordering for BFS vs DFS.",
+              "ar": "### المعمل التفاعلي: الرتل FIFO والجدولة بالوصول\nشاهد دخول العناصر من الخلف وخروجها بالترتيب من المقدمة.\n\n**تجارب مقترحة:**\n1. أضف 3 عناصر وتأكد من بقاء الأقدم في المقدمة.\n2. قارن ترتيب الرتل في BFS بترتيب المكدس في DFS."
+            },
             "interactiveModuleId": "queue-visualizer"
           },
           {
@@ -6275,8 +6887,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Calling `.top()` or `.front()` on an empty C++ `stack`/`queue` triggers immediate Undefined Behavior! Always guard with `if (!st.empty())` first. Also remember FIFO Queues power level-order BFS, while LIFO Stacks mirror DFS.",
-              "ar": "استدعاء `.top()` أو `.front()` على مكدس أو رتل فارغ خطأ جسيم؛ تحقق دائماً من `!empty()` أولاً."
+              "en": "Calling `.top()` or `.front()` on an empty C++ `stack`/`queue` triggers immediate Undefined Behavior! Always guard with `if (!st.empty())` first. Also remember FIFO Queues power level-order BFS, while LIFO Stacks mirror DFS.\n\n### Underflow & Unbounded Growth Traps\n- Calling `.top()`, `.pop()`, or `.front()` on an empty container triggers crashes or undefined behavior; guard `!empty()` first.\n- Shifting elements (`array.shift()`) inside a loop makes a Queue degrade to **O(n^2)**; use Ring Buffer indices or linked nodes.",
+              "ar": "استدعاء `.top()` أو `.front()` على مكدس أو رتل فارغ خطأ جسيم؛ تحقق دائماً من `!empty()` أولاً.\n\n### أخطاء الإفراغ والسحب غير المحمي\n- لا تستدعِ `pop()` أو `front()` قبل فحص عدم الفراغ.\n- إزاحة المصفوفة عند كل سحب من البداية يحول الرتل لـ `O(n^2)`؛ استخدم مؤشراً دائرياً."
             },
             "questions": [
               {
@@ -6325,8 +6937,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Model balanced brackets, undo stacks, and postfix parsing with LIFO Stacks.\n- Implement O(1) Circular Queues using `(rear + 1) % capacity` ring arithmetic.\n- Apply Deques for both-ended operations.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- استخدام المكدس LIFO لمطابقة الأقواس والتراجع وتقييم التعبيرات.\n- تطبيق الطابور الدائري بمصفوفة دون إهدار الذاكرة أو إزاحة العناصر.\n- فهم عمل Deque من الطرفين."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Model balanced brackets, undo stacks, and postfix parsing with LIFO Stacks.\n- Implement O(1) Circular Queues using `(rear + 1) % capacity` ring arithmetic.\n- Apply Deques for both-ended operations.\n\n### Applied Drill\nRun the Balanced Brackets checker inside **Live JS Sandbox** and verify invalid inputs like `\"([)]\"` and `\"((\"` reject immediately.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- استخدام المكدس LIFO لمطابقة الأقواس والتراجع وتقييم التعبيرات.\n- تطبيق الطابور الدائري بمصفوفة دون إهدار الذاكرة أو إزاحة العناصر.\n- فهم عمل Deque من الطرفين.\n\n### تدريب برمجي\nشغّل فاحص الأقواس المتوازنة داخل المختبر واختبر حالات خاطئة مثل `\"([)]\"` و `\"((\"`."
             }
           }
         ],
@@ -6340,7 +6952,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "DS-SQ-M-003",
           "DS-SQ-M-004",
           "DS-SQ-H-005",
-          "DS-SQ-E-006"
+          "DS-SQ-E-006",
+          "EXP-SQ-101",
+          "EXP-SQ-102",
+          "EXP-SQ-103",
+          "EXP-SQ-104",
+          "EXP-SQ-105"
         ]
       }
     ]
@@ -6428,6 +7045,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Key-value hash storage semantics and iteration complexity.",
               "ar": "شرح خرائط المفتاح والقيمة ومميزاتها."
             }
+          },
+          {
+            "title": "cppreference: std::unordered_map Internals",
+            "url": "https://en.cppreference.com/w/cpp/container/unordered_map",
+            "type": "documentation",
+            "source": "cppreference",
+            "category": "Hash Maps",
+            "language": "en",
+            "description": {
+              "en": "Buckets, load factor, rehashing, and custom key hashes.",
+              "ar": "تفاصيل الخانات ومعامل التحميل وإعادة التجزئة."
+            }
+          },
+          {
+            "title": "cppreference: std::unordered_set Reference",
+            "url": "https://en.cppreference.com/w/cpp/container/unordered_set",
+            "type": "documentation",
+            "source": "cppreference",
+            "category": "Hash Sets",
+            "language": "en",
+            "description": {
+              "en": "O(1) expected set membership and collision tradeoffs.",
+              "ar": "مرجع مجموعات التجزئة الفريدة."
+            }
           }
         ],
         "sections": [
@@ -6440,8 +7081,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "A Hash Table stores key-value pairs in a backing bucket array indexed by `h(key) % M`. Because key space exceeds `M` (Pigeonhole Principle), collisions happen:\n• Separate Chaining: Each bucket holds a mini list/bucket of colliding entries.\n• Open Addressing (Linear Probing): Advances slot-by-slot `(idx + 1) % M` inside the main array; deletes MUST place Tombstones so probe chains don't break!\nWhen `N / M > 0.75`, resizing to `2M` keeps expected lookups O(1).",
-              "ar": "يحوّل جدول التجزئة المفتاح إلى فهرس مصفوفة عبر `h(key) % M`. عند تصادم مفتاحين:\n• Separate Chaining: يُخزن كل متصادمات الخانة في قائمة داخلها.\n• Open Addressing / Linear Probing: يبحث في الخانات المجاورة، ويلزم وضع علامة Tombstone عند الحذف.\nعندما يتجاوز معامل التحميل N/M حد 0.75 نضاعف الحجم للحفاظ على متوسط O(1)."
+              "en": "A Hash Table stores key-value pairs in a backing bucket array indexed by `h(key) % M`. Because key space exceeds `M` (Pigeonhole Principle), collisions happen:\n• Separate Chaining: Each bucket holds a mini list/bucket of colliding entries.\n• Open Addressing (Linear Probing): Advances slot-by-slot `(idx + 1) % M` inside the main array; deletes MUST place Tombstones so probe chains don't break!\nWhen `N / M > 0.75`, resizing to `2M` keeps expected lookups O(1).\n\n### Hashing, Collisions & Load Factor Tradeoffs\n- Hash functions project keys (`\"user_42\"`) evenly across buckets `[0..M-1]` via `hash(key) % M` for expected **O(1)** lookup.\n- Collisions resolve via **Separate Chaining** (linked/dynamic bucket lists) or **Open Addressing** (probing next free slot), while **Rehashing** doubles capacity whenever load factor crosses ~0.75.",
+              "ar": "يحوّل جدول التجزئة المفتاح إلى فهرس مصفوفة عبر `h(key) % M`. عند تصادم مفتاحين:\n• Separate Chaining: يُخزن كل متصادمات الخانة في قائمة داخلها.\n• Open Addressing / Linear Probing: يبحث في الخانات المجاورة، ويلزم وضع علامة Tombstone عند الحذف.\nعندما يتجاوز معامل التحميل N/M حد 0.75 نضاعف الحجم للحفاظ على متوسط O(1).\n\n### التجزئة والتصادم ومعامل التحميل\n- تحول دالة التجزئة المفتاح إلى فهرس في `[0..M-1]` لتحقيق بحث متوسط بزمن **O(1)**.\n- تُحل التصادمات إما بقائمة داخل الخانة (Separate Chaining) أو بالبحث المفتوح عن خانة تالية (Open Addressing) مع توسيع السعة عند تخطي معامل التحميل 0.75."
             },
             "questions": [
               {
@@ -6539,7 +7180,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "تطبيق عملي: مسألة Two Sum بزمن O(N) عبر Hash Map"
             },
             "isRequired": true,
-            "content": "vector<int> twoSum(const vector<int>& nums, int target) {\n    unordered_map<int, int> seen; // value -> index\n    for (int i = 0; i < (int)nums.size(); i++) {\n        int need = target - nums[i];\n        if (seen.count(need)) return {seen[need], i};\n        seen[nums[i]] = i;\n    }\n    return {};\n}",
+            "content": {
+              "en": "### Applying Hash Maps to Collapse O(n^2) to O(n)\n- For Two-Sum, store `seen[num] = idx` while checking `target - num` in one single linear pass!\n- Try inserting colliding keys into the **Hash Table Visualizer** below to compare Chaining vs Linear Probing.",
+              "ar": "### تسريع الخوارزميات بجداول التجزئة من O(n^2) إلى O(n)\n- في مسألة Two-Sum نخزن القيم التي مررنا بها ونبحث عن المكمل `target - num` خلال مرور خطي واحد.\n- جرّب تصادم المفاتيح عملياً في **محاكي جدول التجزئة** بالأسفل."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Instead of checking all O(N^2) pairs, we hash each visited value so searching `target - nums[i]` runs in O(1) average per step -> O(N) total.",
@@ -6592,7 +7236,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "مختبر جداول التجزئة والتصادمات التفاعلي"
             },
             "isRequired": true,
-            "content": "hash-table-visualizer",
+            "content": {
+              "en": "### Guided Lab: Hash Functions, Buckets & Collision Resolution\nInsert keys directly and inspect modular bucket indices, collision chains, and probing offsets.\n\n**Experiments to Run:**\n1. Insert keys that yield the same `(hash % capacity)` bucket to trigger a collision.\n2. Watch load factor climb as buckets fill.\n3. Trace O(1) average lookup path directly to the hashed bucket.",
+              "ar": "### المعمل التفاعلي: جداول التجزئة وحل التصادمات\nأدرج مفاتيح وراقب دالة التجزئة ومعالجة التصادم داخل الخانات.\n\n**تجارب مقترحة:**\n1. أضف مفتاحين يقعان بنفس الخانة لمشاهدة التصادم.\n2. راقب ارتفاع معامل التحميل Load Factor.\n3. تتبّع الوصول السريع عبر المفتاح."
+            },
             "interactiveModuleId": "hash-table-visualizer"
           },
           {
@@ -6604,8 +7251,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• NEVER mutate an object's fields used by `hashCode()` while it sits inside a HashMap/HashSet: you won't find it again!\n• Remember Hash Tables are UNORDERED (unlike B-Trees / `TreeMap`); use B-Trees when range queries or sorted iteration are required.",
-              "ar": "• لا تعدّل أبداً خصائص مفتاح يُحسب منها hashCode بعد وضعه داخل الخريطة وإلا فُقد موضعه!\n• جداول التجزئة غير مرتبة ولا تصلح لاستعلامات المدى."
+              "en": "• NEVER mutate an object's fields used by `hashCode()` while it sits inside a HashMap/HashSet: you won't find it again!\n• Remember Hash Tables are UNORDERED (unlike B-Trees / `TreeMap`); use B-Trees when range queries or sorted iteration are required.\n\n### Security & Key Immutability Rules\n- **Never mutate an inserted key object!** Changing fields alters its hash code, breaking lookup permanently.\n- In contests, adversarial inputs can collide fixed powers-of-two hashes; randomize hash seeds cleanly in C++ `unordered_map`.",
+              "ar": "• لا تعدّل أبداً خصائص مفتاح يُحسب منها hashCode بعد وضعه داخل الخريطة وإلا فُقد موضعه!\n• جداول التجزئة غير مرتبة ولا تصلح لاستعلامات المدى.\n\n### قواعد ثبات المفاتيح وأمان التجزئة\n- **لا تعدّل أبداً كائناً مضافاً كمفتاح!** تغير تجزئته يضيع موقعه عن البحث.\n- في المسابقات قد تصطدم التجزئة الثابتة بمدخلات خبيثة لتبلغ O(n)؛ أضف بذرة عشوائية أو خصص Hash."
             }
           },
           {
@@ -6617,8 +7264,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Key Takeaways:\n- Hash Maps trade extra bucket memory and lack of ordering for average O(1) lookup, insert, and delete.\n- Immutable keys + well-distributed hashes keep load factor low.\n- Choose `map`/`TreeMap` (`O(log N)`) when sorted keys or range queries (`lower_bound`) are required.",
-              "ar": "الخلاصة:\n- تقدم جداول التجزئة أسرع بحث O(1) وسطياً دون ترتيب، بينما تحافظ أشجار البحث المتوازنة على الترتيب و`lower_bound` بزمن `O(log N)`."
+              "en": "Key Takeaways:\n- Hash Maps trade extra bucket memory and lack of ordering for average O(1) lookup, insert, and delete.\n- Immutable keys + well-distributed hashes keep load factor low.\n- Choose `map`/`TreeMap` (`O(log N)`) when sorted keys or range queries (`lower_bound`) are required.\n\n### Applied Drill\nSolve frequency counting / first unique character in a string in strictly **O(n)** using `new Map()` in **Live JS Sandbox**.",
+              "ar": "الخلاصة:\n- تقدم جداول التجزئة أسرع بحث O(1) وسطياً دون ترتيب، بينما تحافظ أشجار البحث المتوازنة على الترتيب و`lower_bound` بزمن `O(log N)`.\n\n### تمرين تطبيقي\nأوجد أول حرف غير مكرر في سلسلة نصية بزمن **O(n)** باستخدام `Map` داخل المختبر."
             }
           }
         ],
@@ -6632,7 +7279,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "DS-HSH-M-003",
           "DS-HSH-M-004",
           "DS-HSH-H-005",
-          "DS-HSH-E-006"
+          "DS-HSH-E-006",
+          "EXP-HSH-101",
+          "EXP-HSH-102",
+          "EXP-HSH-103",
+          "EXP-HSH-104",
+          "EXP-HSH-105"
         ]
       }
     ]
@@ -6724,6 +7376,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Hierarchical data structures overview and complexity table.",
               "ar": "مقارنة شاملة للأشجار والكومات وTrie."
             }
+          },
+          {
+            "title": "VisuAlgo: Binary Search Tree & AVL Rotations",
+            "url": "https://visualgo.net/en/bst",
+            "type": "article",
+            "source": "VisuAlgo",
+            "category": "Trees",
+            "language": "en",
+            "description": {
+              "en": "Step-by-step BST insert, delete, and AVL balancing rotations.",
+              "ar": "تمثيل بصري لعمليات BST والتوازن."
+            }
+          },
+          {
+            "title": "CP-Algorithms: Randomized Balanced Trees",
+            "url": "https://cp-algorithms.com/data_structures/treap.html",
+            "type": "cp_platform",
+            "source": "CP-Algorithms",
+            "category": "Trees",
+            "language": "en",
+            "description": {
+              "en": "Balanced tree invariants and logarithmic height bounds.",
+              "ar": "خوارزميات الأشجار المتوازنة."
+            }
           }
         ],
         "sections": [
@@ -6736,8 +7412,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• BST Invariant: All left-subtree keys < node.val < all right-subtree keys (so In-order traversal prints sorted sequence!). Inserting already-sorted numbers into an unbalanced BST degrades height to O(N): fixed by AVL (`|hL - hR| <= 1`) and Red-Black trees (`std::map`).\n• Binary Heap (Priority Queue): Complete binary tree stored flat inside an array supporting O(1) top(), O(log N) push/pop, and O(N) bottom-up heapify.\n• Trie: Character/bit edge tree answering dictionary prefix lookups in O(wordLength).",
-              "ar": "• شجرة BST: اليسار أصغر من العقدة واليمين أكبر، وعبور In-order يطبعها مرتبة. ولضمان عدم تحولها لقائمة مائلة عند إدخال أرقام مرتبة نستخدم التوازن الذاتي AVL أو Red-Black.\n• الكومة (Heap): أساس Priority Queue، قمتها O(1) والإدراج والحذف O(log N).\n• شجرة Trie: تخزن الحروف أو البتات للبحث بالبادئة في O(طول الكلمة)."
+              "en": "• BST Invariant: All left-subtree keys < node.val < all right-subtree keys (so In-order traversal prints sorted sequence!). Inserting already-sorted numbers into an unbalanced BST degrades height to O(N): fixed by AVL (`|hL - hR| <= 1`) and Red-Black trees (`std::map`).\n• Binary Heap (Priority Queue): Complete binary tree stored flat inside an array supporting O(1) top(), O(log N) push/pop, and O(N) bottom-up heapify.\n• Trie: Character/bit edge tree answering dictionary prefix lookups in O(wordLength).\n\n### Hierarchical Trees, BSTs, AVL Balance & Heaps\n- **BST Invariant:** `every left key < root < every right key`, yielding **O(h)** lookup (`O(log n)` if self-balanced like AVL / Red-Black!).\n- **Min/Max Heap:** Only maintains `parent <= children` in a compact array (`left=2i+1`, `right=2i+2`), giving **O(1)** top-element peek & **O(log n)** priority insertion.\n- **Trie (Prefix Tree):** Searches/autocompletes words strictly in `O(wordLength)` independently of dictionary count.",
+              "ar": "• شجرة BST: اليسار أصغر من العقدة واليمين أكبر، وعبور In-order يطبعها مرتبة. ولضمان عدم تحولها لقائمة مائلة عند إدخال أرقام مرتبة نستخدم التوازن الذاتي AVL أو Red-Black.\n• الكومة (Heap): أساس Priority Queue، قمتها O(1) والإدراج والحذف O(log N).\n• شجرة Trie: تخزن الحروف أو البتات للبحث بالبادئة في O(طول الكلمة).\n\n### مقارنة الأشجار البحثية، التوازن، الأكوام، و Trie\n- **شجرة البحث BST:** كل اليسار أصغر من الجذر وكل اليمين أكبر؛ وتضمن AVL/Red-Black بقاء الارتفاع لوغاريتمياً `O(log n)`.\n- **الكومة (Heap):** ترتب الأب مع أبنائه فقط وتُخزن بمصفوفة للوصول لأصغر/أكبر عنصر بـ **O(1)** وتحديث بـ **O(log n)**.\n- **شجرة البوادئ (Trie):** تبحث عن الكلمات حسب طول الكلمة فقط مستقلة عن حجم القاموس."
             },
             "questions": [
               {
@@ -6835,7 +7511,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "البحث والعبور الداخلي في BST"
             },
             "isRequired": true,
-            "content": "bool contains(Node* root, int target) {\n    if (!root) return false;\n    if (root->val == target) return true;\n    return target < root->val ? contains(root->left, target)\n                              : contains(root->right, target);\n}",
+            "content": {
+              "en": "### Traversals & Balance Inspection\n- **In-order** prints BST sorted; **Pre-order** clones structure; **Post-order** frees bottom-up cleanly.\n- Experiment directly inside the **BST Visualizer** below: try inserting balanced values vs strictly increasing values `10, 20, 30, 40`!",
+              "ar": "### استعراض الأشجار وفحص التوازن\n- الاستعراض الوسطي (In-order) يخرج القيم مرتبة؛ والقبلي ينسخ البنية؛ والبعدي يحذف من الأسفل.\n- قارن في **محاكي BST** إدراج قيم متوازنة مع إدراج قيم مرتبة لتشاهد انحراف الشجرة."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Each comparison cuts one entire subtree branch out of consideration in O(height).",
@@ -6888,7 +7567,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "محاكي شجرة البحث الثنائية التفاعلي"
             },
             "isRequired": true,
-            "content": "tree-bst-visualizer",
+            "content": {
+              "en": "### Guided Lab: Binary Search Tree Invariant & Traversals\nInsert keys dynamically and confirm every node maintains `left < node < right`.\n\n**Experiments to Run:**\n1. Insert balanced keys (e.g. `50, 30, 70, 20, 40`) and inspect search depth.\n2. Now insert ascending keys (`10, 20, 30, 40, 50`) to observe BST skew degradation toward `O(n)`.\n3. Run in-order output confirmation.",
+              "ar": "### المعمل التفاعلي: شجرة البحث الثنائية BST والتوازن\nأدرج قيماً واختبر شرط الشجرة `يسار < عقدة < يمين`.\n\n**تجارب مقترحة:**\n1. أدرج قيماً متوازنة لمشاهدة عمق البحث اللوغاريتمي.\n2. أدرج قيماً مرتبة تصاعدياً لتلاحظ انحراف الشجرة نحو O(n).\n3. تتبّع الاستعراض الوسطي Sorted Output."
+            },
             "interactiveModuleId": "tree-bst-visualizer"
           },
           {
@@ -6900,8 +7582,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Remember: a Min-Heap guarantees parent <= children, NOT left < right! Searching an arbitrary target in a Heap still costs O(N); use Heaps ONLY for fast minimum/maximum extraction (like Dijkstra or Top-K) and balanced BSTs for full sorted ordering.",
-              "ar": "لا تخلط بين القواعد: في Min-Heap الأب أصغر من أبنائه فقط دون ترتيب بين اليسار واليمين، لذا فالـ Heap مخصص لاستخراج الأصغر/الأكبر (`O(log N)`) وليس للبحث العشوائي."
+              "en": "Remember: a Min-Heap guarantees parent <= children, NOT left < right! Searching an arbitrary target in a Heap still costs O(N); use Heaps ONLY for fast minimum/maximum extraction (like Dijkstra or Top-K) and balanced BSTs for full sorted ordering.\n\n### Common Tree Confusions\n- Do NOT confuse **Heap** (`parent <= child`) with **BST** (`left < parent < right`); an In-order scan on a Heap is NOT sorted.\n- Always guard null children cleanly before reading `node.left` / `node.val`.",
+              "ar": "لا تخلط بين القواعد: في Min-Heap الأب أصغر من أبنائه فقط دون ترتيب بين اليسار واليمين، لذا فالـ Heap مخصص لاستخراج الأصغر/الأكبر (`O(log N)`) وليس للبحث العشوائي.\n\n### أخطاء شائعة في هياكل الأشجار\n- لا تخلط بين الكومة و BST؛ الكومة لا تضمن ترتيب اليسار قبل اليمين ولا تفيد في الاستعراض المرتب.\n- تحقق دوماً من أن العقدة غير فارغة (`null`) قبل الوصول لأبنائها."
             },
             "questions": [
               {
@@ -6950,8 +7632,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Key Takeaways:\n- Balanced BST: O(log N) sorted search, predecessor/successor, and range queries.\n- Heap: array-backed O(log N) priority queue.\n- Trie: prefix autocomplete matching character-by-character in O(|word|).",
-              "ar": "الخلاصة:\n- Balanced BST للترتيب والنطاقات، وHeap للأولوية، وTrie للبادئات النصية."
+              "en": "Key Takeaways:\n- Balanced BST: O(log N) sorted search, predecessor/successor, and range queries.\n- Heap: array-backed O(log N) priority queue.\n- Trie: prefix autocomplete matching character-by-character in O(|word|).\n\n### Applied Drill\nTrace BST deletion of a node having TWO children: replace cleanly with its In-order Successor (minimum node of its right subtree).",
+              "ar": "الخلاصة:\n- Balanced BST للترتيب والنطاقات، وHeap للأولوية، وTrie للبادئات النصية.\n\n### تمرين عملي\nتتبّع حذف عقدة تملك ابنين من BST عبر استبدالها بأصغر عقدة في فرعها الأيمن (In-order Successor)."
             }
           }
         ],
@@ -6968,7 +7650,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "DS-TRE-M-003",
           "DS-TRE-M-004",
           "DS-TRE-H-005",
-          "DS-TRE-E-006"
+          "DS-TRE-E-006",
+          "EXP-TRE-101",
+          "EXP-TRE-102",
+          "EXP-TRE-103"
         ]
       }
     ]
@@ -7047,6 +7732,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Graph representations, BFS shortest hops, and DFS properties.",
               "ar": "تمثيل الرسوم البيانية وخوارزميات التمرير."
             }
+          },
+          {
+            "title": "USACO Guide: Depth-First Search & Components",
+            "url": "https://usaco.guide/silver/dfs",
+            "type": "article",
+            "source": "USACO Guide",
+            "category": "Graphs",
+            "language": "en",
+            "description": {
+              "en": "Graph representations, connected components, and bipartiteness.",
+              "ar": "تمثيل الرسوم البيانية والمكونات المترابطة."
+            }
+          },
+          {
+            "title": "VisuAlgo: Graph Data Structures & Traversals",
+            "url": "https://visualgo.net/en/graphds",
+            "type": "article",
+            "source": "VisuAlgo",
+            "category": "Visualizers",
+            "language": "en",
+            "description": {
+              "en": "Adjacency matrix vs list interactive comparisons.",
+              "ar": "مقارنة تفاعلية بين تمثيلات الرسم البياني."
+            }
           }
         ],
         "sections": [
@@ -7059,8 +7768,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Graphs G = (V, E) represent pairwise relationships:\n• Adjacency List (`vector<vector<int>> adj(V)`): Takes O(V + E) space: the default choice when V = 10⁵.\n• Adjacency Matrix (`bool adj[V][V]`): Takes O(V²) space: gives O(1) edge check for dense small graphs (V <= 500).\n• Key Invariants: Sum of degrees = 2E; any connected acyclic undirected graph has V - 1 edges (a Tree); a graph is Bipartite iff it contains zero odd-length cycles.",
-              "ar": "تتكون الرسوم من رؤوس V وحواف E:\n• قائمة المجاورة O(V + E): الخيار المعياري للرسوم الضخمة متناثرة الحواف.\n• مصفوفة المجاورة O(V²): للرسوم الصغيرة الكثيفة مع فحص وجود الحافة في O(1).\n• قواعد جوهرية: مجموع الدرجات = 2E، والشجرة تحوي V - 1 حافة، والرسم الثنائي Bipartite يخلو من الدورات الفردية."
+              "en": "Graphs G = (V, E) represent pairwise relationships:\n• Adjacency List (`vector<vector<int>> adj(V)`): Takes O(V + E) space: the default choice when V = 10⁵.\n• Adjacency Matrix (`bool adj[V][V]`): Takes O(V²) space: gives O(1) edge check for dense small graphs (V <= 500).\n• Key Invariants: Sum of degrees = 2E; any connected acyclic undirected graph has V - 1 edges (a Tree); a graph is Bipartite iff it contains zero odd-length cycles.\n\n### Graph Representations & Degree Math\n- **Adjacency List (`vector<vector<int>>`):** Space `O(V + E)` and iterates a node's true neighbors cleanly  -  default choice for nearly all sparse real-world graphs.\n- **Adjacency Matrix (`V x V`):** O(1) edge check `(u, v)`, yet costs `O(V^2)` memory (impossible at `V = 100,000`).\n- A tree is simply a connected acyclic undirected graph with `|E| = |V| - 1`.",
+              "ar": "تتكون الرسوم من رؤوس V وحواف E:\n• قائمة المجاورة O(V + E): الخيار المعياري للرسوم الضخمة متناثرة الحواف.\n• مصفوفة المجاورة O(V²): للرسوم الصغيرة الكثيفة مع فحص وجود الحافة في O(1).\n• قواعد جوهرية: مجموع الدرجات = 2E، والشجرة تحوي V - 1 حافة، والرسم الثنائي Bipartite يخلو من الدورات الفردية.\n\n### تمثيل الرسوم البيانية ومعادلات الدرجات\n- **قائمة التجاور (Adjacency List):** مساحتها `O(V + E)` وهي الأنسب للرسوم المتباعدة الواقعية.\n- **مصفوفة التجاور (Adjacency Matrix):** تفحص وجود الحافة في `O(1)` لكنها تستهلك مساحة `O(V^2)` ضخمة.\n- الشجرة ليست سوى رسم غير موجه متصل وخالٍ من الدورات بعدد حواف `|V| - 1`."
             },
             "questions": [
               {
@@ -7109,8 +7818,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Graphs model arbitrary relationships `G = (V, E)` across maps, dependency builds, and social networks:\n\n1. Sparse Graphs -> Adjacency List (`O(V + E)` space): Stores ONLY actual edges per vertex; iterates direct neighbors fast without checking empty pairs.\n2. Dense Graphs (`E ~ V^2`) -> Adjacency Matrix (`O(V^2)` space): Allows instant `O(1)` lookup of `hasEdge(u, v)` at quadratic memory cost.\n3. Directed Acyclic Graphs (DAGs): Graphs with zero directed cycles accept a **Topological Sort**, ordering build steps or course prerequisites so every dependency executes first!",
-              "ar": "تمثل الرسوم البيانية `G = (V, E)` العلاقات العامة من خرائط الطرق حتى التبعيات البرمجية:\n\n1. قائمة الجوار Adjacency List بذاكرة `O(V + E)`: الخيار القياسي لمعظم المسائل وتمر على الجيران الفعليين فقط.\n2. مصفوفة الجوار `O(V^2)`: تفحص وجود الحافة في `O(1)` لكنها تستهلك ذاكرة تربيعية.\n3. الرسم الموجّه الخالي من الدورات (DAG): يقبل ترتيباً طوبولوجياً يحترم جميع المتطلبات السابقة قبل كل مهمة."
+              "en": "Graphs model arbitrary relationships `G = (V, E)` across maps, dependency builds, and social networks:\n\n1. Sparse Graphs -> Adjacency List (`O(V + E)` space): Stores ONLY actual edges per vertex; iterates direct neighbors fast without checking empty pairs.\n2. Dense Graphs (`E ~ V^2`) -> Adjacency Matrix (`O(V^2)` space): Allows instant `O(1)` lookup of `hasEdge(u, v)` at quadratic memory cost.\n3. Directed Acyclic Graphs (DAGs): Graphs with zero directed cycles accept a **Topological Sort**, ordering build steps or course prerequisites so every dependency executes first!\n\n### Graph Representations & Degree Math\n- **Adjacency List (`vector<vector<int>>`):** Space `O(V + E)` and iterates a node's true neighbors cleanly  -  default choice for nearly all sparse real-world graphs.\n- **Adjacency Matrix (`V x V`):** O(1) edge check `(u, v)`, yet costs `O(V^2)` memory (impossible at `V = 100,000`).\n- A tree is simply a connected acyclic undirected graph with `|E| = |V| - 1`.",
+              "ar": "تمثل الرسوم البيانية `G = (V, E)` العلاقات العامة من خرائط الطرق حتى التبعيات البرمجية:\n\n1. قائمة الجوار Adjacency List بذاكرة `O(V + E)`: الخيار القياسي لمعظم المسائل وتمر على الجيران الفعليين فقط.\n2. مصفوفة الجوار `O(V^2)`: تفحص وجود الحافة في `O(1)` لكنها تستهلك ذاكرة تربيعية.\n3. الرسم الموجّه الخالي من الدورات (DAG): يقبل ترتيباً طوبولوجياً يحترم جميع المتطلبات السابقة قبل كل مهمة.\n\n### تمثيل الرسوم البيانية ومعادلات الدرجات\n- **قائمة التجاور (Adjacency List):** مساحتها `O(V + E)` وهي الأنسب للرسوم المتباعدة الواقعية.\n- **مصفوفة التجاور (Adjacency Matrix):** تفحص وجود الحافة في `O(1)` لكنها تستهلك مساحة `O(V^2)` ضخمة.\n- الشجرة ليست سوى رسم غير موجه متصل وخالٍ من الدورات بعدد حواف `|V| - 1`."
             },
             "questions": [
               {
@@ -7158,7 +7867,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "بناء قائمة مجاورة غير موجهة وموزونة"
             },
             "isRequired": true,
-            "content": "int V = 4;\nvector<vector<pair<int, int>>> adj(V); // (neighbor, weight)\nauto addEdge = [&](int u, int v, int w) {\n    adj[u].push_back({v, w});\n    adj[v].push_back({u, w}); // Undirected: store both directions!\n};",
+            "content": {
+              "en": "### Directed vs Undirected Wiring & Traversal Lab\n- Note directed edges push solely `adj[u].push_back(v)`, whereas undirected edges push symmetrically in both directions.\n- Test graph construction and neighbor traversal interactively in the **Graph Visualizer** below.",
+              "ar": "### التمثيل الموجه مقابل غير الموجه\n- الحافة الموجهة تُضاف من `u` إلى `v` فقط، أما غير الموجهة فتضاف للطرفين معاً.\n- استكشف استعراض الرسم في **محاكي Graph Traversal** بالأسفل."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Each adjacency list edge stores destination + weight neatly for BFS, DFS, Dijkstra, or Prim.",
@@ -7211,7 +7923,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "مختبر الرسوم البيانية التفاعلي"
             },
             "isRequired": true,
-            "content": "graph-traversal-visualizer",
+            "content": {
+              "en": "### Guided Lab: Comparing BFS Layer Waves vs DFS Depth Paths\nSwitch between Queue-driven Breadth-First Search and Stack/Recursive Depth-First Search on the same graph.\n\n**Experiments to Run:**\n1. Run BFS from root and verify level-by-level hop distances (unweighted shortest path).\n2. Run DFS and watch backtracking when a branch terminates.\n3. Compare visited order between BFS and DFS.",
+              "ar": "### المعمل التفاعلي: مقارنة البحث العرضي BFS والعمقي DFS\nبدّل بين BFS المعتمد على الرتل و DFS المعتمد على التعمق.\n\n**تجارب مقترحة:**\n1. شغّل BFS لمشاهدة مسح العقد طبقة بطبقة (أقصر مسار بالخطوات).\n2. شغّل DFS لملاحظة التعمق والتراجع عند المسارات المسدودة.\n3. قارن ترتيب الزيارة بينهما."
+            },
             "interactiveModuleId": "graph-traversal-visualizer"
           },
           {
@@ -7223,8 +7938,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Unlike trees, general graphs contain cycles! Traversals without a boolean `visited[node]` array bounce endlessly across edges (`0 -> 1 -> 0 -> 1...`). When checking cycles in undirected graphs, ignore the immediate `parent` node edge cleanly.",
-              "ar": "على عكس الأشجار، تحتوي الرسوم البيانية على دورات؛ لذا فنسيان تسجيل `visited[u]` يعلق التنقل في حلقة أبدية."
+              "en": "Unlike trees, general graphs contain cycles! Traversals without a boolean `visited[node]` array bounce endlessly across edges (`0 -> 1 -> 0 -> 1...`). When checking cycles in undirected graphs, ignore the immediate `parent` node edge cleanly.\n\n### Crucial Graph Bugs\n- Forgetting `visited[node] = true` triggers infinite traversal loops on cyclic graphs.\n- Remember undirected cycle checks MUST ignore returning directly along the `parent` edge.",
+              "ar": "على عكس الأشجار، تحتوي الرسوم البيانية على دورات؛ لذا فنسيان تسجيل `visited[u]` يعلق التنقل في حلقة أبدية.\n\n### أخطاء حرجة في الرسوم البيانية\n- إهمال مصفوفة `visited` يدخل الخوارزمية في حلقة لانهائية بمجرد وجود دورة.\n- في الرسوم غير الموجهة استثنِ الأب المباشر حتى لا يُحسب طريق الذهاب والعودة دورةً."
             },
             "questions": [
               {
@@ -7273,8 +7988,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Key Takeaways:\n- Adjacency List (`O(V + E)`) fits virtually all sparse problems and BFS/DFS traversals.\n- Store `(neighbor, weight)` pairs cleanly for weighted graphs.\n- DAGs (cycle-free directed graphs) permit valid topological dependency orders.",
-              "ar": "الخلاصة:\n- استخدم قائمة الجوار للحجم `O(V + E)`، وأزواج `(الجار، الوزن)` للرسوم الموزونة."
+              "en": "Key Takeaways:\n- Adjacency List (`O(V + E)`) fits virtually all sparse problems and BFS/DFS traversals.\n- Store `(neighbor, weight)` pairs cleanly for weighted graphs.\n- DAGs (cycle-free directed graphs) permit valid topological dependency orders.\n\n### Applied Check\nDetermine maximum edge density in a simple undirected graph of `10` vertices (`V*(V-1)/2 = 45` edges) and confirm sum of degrees equals `2 * E`.",
+              "ar": "الخلاصة:\n- استخدم قائمة الجوار للحجم `O(V + E)`، وأزواج `(الجار، الوزن)` للرسوم الموزونة.\n\n### تمرين تطبيقي\nاحسب أقصى عدد حواف ممكن في رسم غير موجه بسيط من `10` عقد، وتأكد من أن مجموع الدرجات يساوي ضعف الحواف."
             }
           }
         ],
@@ -7289,7 +8004,11 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "DS-GRP-M-003",
           "DS-GRP-M-004",
           "DS-GRP-H-005",
-          "DS-GRP-E-006"
+          "DS-GRP-E-006",
+          "EXP-GRP-101",
+          "EXP-GRP-102",
+          "EXP-GRP-103",
+          "EXP-GRP-104"
         ]
       }
     ]
@@ -7365,6 +8084,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Big-O reference charts across structures and sorting.",
               "ar": "مخطط تعقيد الخوارزميات وهياكل البيانات."
             }
+          },
+          {
+            "title": "CS50: Asymptotic Complexity Notes",
+            "url": "https://cs50.harvard.edu/x/",
+            "type": "article",
+            "source": "Harvard CS50",
+            "category": "Algorithms",
+            "language": "en",
+            "description": {
+              "en": "Comparing O(1), O(log n), O(n), O(n log n), and O(n^2).",
+              "ar": "مقارنة مراتب التعقيد الزمني والمكاني."
+            }
+          },
+          {
+            "title": "CP-Algorithms: Algorithmic Foundations",
+            "url": "https://cp-algorithms.com/",
+            "type": "cp_platform",
+            "source": "CP-Algorithms",
+            "category": "Algorithms",
+            "language": "en",
+            "description": {
+              "en": "Practical operation counting and constraint budgeting.",
+              "ar": "تقدير التعقيد وتحديد قيود الإدخال."
+            }
           }
         ],
         "sections": [
@@ -7377,8 +8120,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Big-O measures how operations scale as input size `N -> ∞`, ignoring hardware speeds and constant factors:\n• O(1): Constant (array lookup, hash table avg)\n• O(log N): Logarithmic (binary search: N=10⁹ needs only ~30 steps!)\n• O(N): Linear (single array pass)\n• O(N log N): Linearithmic (Merge Sort, Quick Sort avg)\n• O(N²): Quadratic (nested pair loops)\n• O(2^N) / O(N!): Exponential (brute-force subsets / permutations).",
-              "ar": "يقيس Big-O سلوك الخوارزمية عند تضخم N، مهملاً الثوابت والأجهزة:\n• O(1): ثابت\n• O(log N): لوغاريتمي (مليار عنصر في 30 خطوة فقط!)\n• O(N): خطي\n• O(N log N): الفرز الكفء\n• O(N²): حلقات متداخلة\n• O(2^N): أسي بطيء جداً للأحجام الكبيرة."
+              "en": "Big-O measures how operations scale as input size `N -> ∞`, ignoring hardware speeds and constant factors:\n• O(1): Constant (array lookup, hash table avg)\n• O(log N): Logarithmic (binary search: N=10⁹ needs only ~30 steps!)\n• O(N): Linear (single array pass)\n• O(N log N): Linearithmic (Merge Sort, Quick Sort avg)\n• O(N²): Quadratic (nested pair loops)\n• O(2^N) / O(N!): Exponential (brute-force subsets / permutations).\n\n### Operation Budgeting & Asymptotic Hierarchy\n`O(1) < O(log n) < O(sqrt(n)) < O(n) < O(n log n) < O(n^2) < O(2^n) < O(n!)`\n- Typical online judge budgets handle **~10^8 simple operations/second** cleanly:\n  - `n <= 20` -> `O(2^n)` passes\n  - `n <= 5,000` -> `O(n^2)` passes\n  - `n <= 200,000` -> need `O(n log n)` or `O(n)`.",
+              "ar": "يقيس Big-O سلوك الخوارزمية عند تضخم N، مهملاً الثوابت والأجهزة:\n• O(1): ثابت\n• O(log N): لوغاريتمي (مليار عنصر في 30 خطوة فقط!)\n• O(N): خطي\n• O(N log N): الفرز الكفء\n• O(N²): حلقات متداخلة\n• O(2^N): أسي بطيء جداً للأحجام الكبيرة.\n\n### تقدير الميزانية الزمنية وتسلسل مراتب Big-O\n`O(1) < O(log n) < O(sqrt(n)) < O(n) < O(n log n) < O(n^2) < O(2^n) < O(n!)`\n- تستطيع المعالجات الحديثة تنفيذ نحو **10^8 عملية/ثانية**، لذا:\n  - إذا كان `n <= 20` يكفي `O(2^n)`\n  - إذا كان `n <= 5,000` ينجح `O(n^2)`\n  - إذا كان `n <= 200,000` يلزم `O(n log n)` أو `O(n)`."
             },
             "questions": [
               {
@@ -7476,7 +8219,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "تحليل الحلقات المتداخلة والمتوالية"
             },
             "isRequired": true,
-            "content": "// Sequential loops ADD: O(N + M) -> O(N) if M <= N\nfor (int i = 0; i < n; i++) work();\n// Triangular nested loop: (n-1) + (n-2) + ... + 1 = n(n-1)/2 = O(N^2)\nfor (int i = 0; i < n; i++)\n    for (int j = i + 1; j < n; j++) checkPair(i, j);",
+            "content": {
+              "en": "### Analyzing Nested & Shrinking Loops\n- Nested `i: 0..n` and `j: i..n` drops by half (`n*(n+1)/2`), yet STILL stays `O(n^2)` asymptotically!\n- By contrast, halving `i /= 2` drops iterations dramatically down to **O(log n)**.",
+              "ar": "### تحليل الحلقات المتداخلة والمتناقصة\n- الحلقة المثلثية `j = i..n` تظل ذات تعقيد تربيعي `O(n^2)` رغم النصف.\n- أما القسمة المتتالية `i /= 2` فتنخفض بالتعقيد إلى `O(log n)` فوراً."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Remember: sequential independent phases ADD (`O(A + B)`), while nested loops MULTIPLY (`O(N * N) = O(N²)`).",
@@ -7530,8 +8276,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Calling `vec.erase(vec.begin())`, passing huge strings by value instead of `const string&`, or checking linear `find()` inside a `for (N)` loop silently degrades an `O(N)` algorithm into `O(N^2)`!",
-              "ar": "تمرير المصفوفات أو السلاسل بالقيمة داخل دالة في حلقة أو استخدام `erase(begin())` يرفع التكلفة خفية إلى `O(N^2)`!"
+              "en": "Calling `vec.erase(vec.begin())`, passing huge strings by value instead of `const string&`, or checking linear `find()` inside a `for (N)` loop silently degrades an `O(N)` algorithm into `O(N^2)`!\n\n### Hidden Complexity Killers\n- Calling `arr.shift()` / `vec.erase(begin)` or `sort()` inside an O(n) loop silently elevates total runtime by another factor (`O(n^2)` or `O(n^2 log n)`).\n- Copying large vectors/strings by value into recursive functions multiplies both memory and CPU.",
+              "ar": "تمرير المصفوفات أو السلاسل بالقيمة داخل دالة في حلقة أو استخدام `erase(begin())` يرفع التكلفة خفية إلى `O(N^2)`!\n\n### قاتلات الأداء الخفية\n- استدعاء `shift()` أو `erase(begin)` أو `sort()` داخل حلقة O(n) يضرب التعقيد الكلي خفيةً.\n- تمرير المصفوفات بالقيمة (Copy) داخل الاستدعاء العودي يضيع الوقت والذاكرة."
             },
             "questions": [
               {
@@ -7580,8 +8326,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Simplify polynomial expressions cleanly to Big-O worst-case bounds.\n- Recognize logarithmic `i /= 2` vs linear vs quadratic vs exponential runtime curves.\n- Measure Auxiliary Space including call-stack recursion frames.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- تبسيط الدوال الزمنية إلى تعبير Big-O الأدق.\n- تمييز الحلقات اللوغاريتمية والخطية والتربيعية والأسية.\n- حساب تعقيد المساحة المساعدة متضمناً مكدس الاستدعاء."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Simplify polynomial expressions cleanly to Big-O worst-case bounds.\n- Recognize logarithmic `i /= 2` vs linear vs quadratic vs exponential runtime curves.\n- Measure Auxiliary Space including call-stack recursion frames.\n\n### Constraint Budgeting Drill\nGiven `n = 100,000` queries and `m = 100,000` array items with a 1-second limit, choose cleanly between nested scan `O(n * m)` vs binary search / hash map.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- تبسيط الدوال الزمنية إلى تعبير Big-O الأدق.\n- تمييز الحلقات اللوغاريتمية والخطية والتربيعية والأسية.\n- حساب تعقيد المساحة المساعدة متضمناً مكدس الاستدعاء.\n\n### تمرين تقدير القيود\nمع `10^5` استعلام و `10^5` عنصر بمهلة ثانية واحدة، برّر اختيار خوارزمية O(log n) لكل استعلام بدلاً من المسح الخطي."
             }
           }
         ],
@@ -7595,7 +8341,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "AL-CMP-M-003",
           "AL-CMP-M-004",
           "AL-CMP-E-005",
-          "AL-CMP-H-006"
+          "AL-CMP-H-006",
+          "EXP-CMP-101",
+          "EXP-CMP-102",
+          "EXP-CMP-103",
+          "EXP-CMP-104",
+          "EXP-CMP-105"
         ]
       }
     ]
@@ -7669,6 +8420,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Visual intuition comparing unsorted linear scan and binary halving.",
               "ar": "مقارنة البحث الخطي بالبحث الثنائي."
             }
+          },
+          {
+            "title": "roadmap.sh: Searching & Data Structures Roadmap",
+            "url": "https://roadmap.sh/datastructures-and-algorithms",
+            "type": "roadmap",
+            "source": "roadmap.sh",
+            "category": "Algorithms",
+            "language": "en",
+            "description": {
+              "en": "Where linear scan fits before sorting or hashing.",
+              "ar": "موقع البحث الخطي مقارنة بالفرز والتجزئة."
+            }
+          },
+          {
+            "title": "MDN: Array Lookup & Iteration Semantics",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration",
+            "type": "documentation",
+            "source": "MDN",
+            "category": "Programming",
+            "language": "en",
+            "description": {
+              "en": "Clean iteration patterns with early loop exit.",
+              "ar": "أنماط التكرار والخروج المبكر عند المطابقة."
+            }
           }
         ],
         "sections": [
@@ -7681,8 +8456,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "If an unsorted array will only be searched ONCE, sorting it first takes O(N log N) followed by O(log N): slower than doing a single O(N) Linear Search directly! Binary Search or Hash Tables pay off once multiple lookups amortize setup cost.",
-              "ar": "إذا كنت ستبحث مرة واحدة فقط في مصفوفة غير مرتبة، فالمسح الخطي في O(N) أسرع من الفرز O(N log N)؛ أما عند تكرار البحث فالحل بالفرز والبحث الثنائي أو بـ Hash Table."
+              "en": "If an unsorted array will only be searched ONCE, sorting it first takes O(N log N) followed by O(log N): slower than doing a single O(N) Linear Search directly! Binary Search or Hash Tables pay off once multiple lookups amortize setup cost.\n\n### Linear Scan Tradeoffs & Sentinel Technique\n- Linear search visits index `0..n-1` checking `a[i] === target`: Best Case **O(1)** (index 0), Average/Worst Case **O(n)**, Auxiliary Space **O(1)**.\n- It is strictly optimal for unsorted data queried once, linked lists lacking random access, or tiny arrays (`n <= 16`) living inside one CPU cache line.",
+              "ar": "إذا كنت ستبحث مرة واحدة فقط في مصفوفة غير مرتبة، فالمسح الخطي في O(N) أسرع من الفرز O(N log N)؛ أما عند تكرار البحث فالحل بالفرز والبحث الثنائي أو بـ Hash Table.\n\n### موازنات البحث الخطي وتقنية الحارس\n- يفحص البحث الخطي العناصر بالتسلسل: أفضل حالة `O(1)` وأسوأ حالة `O(n)` وذاكرة إضافية `O(1)`.\n- يظل الخيار الأسرع والأنسب عند البحث مرة واحدة بمصفوفة غير مرتبة أو عبر قائمة مترابطة أو مصفوفة بالغة الصغر."
             },
             "questions": [
               {
@@ -7780,7 +8555,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "كود البحث الخطي القياسي"
             },
             "isRequired": true,
-            "content": "int linearSearch(const vector<int>& arr, int target) {\n    for (int i = 0; i < (int)arr.size(); i++) {\n        if (arr[i] == target) return i; // Early exit on first hit\n    }\n    return -1;\n}",
+            "content": {
+              "en": "### Early Return & All-Matches Variants\n- Returning immediately (`return i`) yields first matching index and avoids trailing wasted scans.\n- Experiment with modifying `linearSearch` in **Live JS Sandbox** to return all matching indices or last occurrence.",
+              "ar": "### الخروج المبكر وصور البحث المتعددة\n- الإرجاع الفوري عند المطابقة الأولى يوفر بقية المقارنات ويحدد الظهور الأول.\n- عدّل الدالة في **Live JS Sandbox** لتجميع كافة فهارس التكرار في مصفوفة."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Immediate return on match gives O(1) best case when found near front and O(N) worst case.",
@@ -7834,8 +8612,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Classic beginner bug: putting `else { return -1; }` INSIDE the `for` loop! If `arr[0] != target`, the function returns `-1` on iteration 0 without inspecting indices `1..N-1`! Only return `-1` AFTER the full loop finishes.",
-              "ar": "أشهر خطأ للمبتدئين هو وضع `else return -1;` داخل حلقة `for`! هذا يعيد `-1` فور اختلاف أول عنصر قبل فحص بقية المصفوفة؛ يجب وضع `return -1` بعد انتهاء الحلقة."
+              "en": "Classic beginner bug: putting `else { return -1; }` INSIDE the `for` loop! If `arr[0] != target`, the function returns `-1` on iteration 0 without inspecting indices `1..N-1`! Only return `-1` AFTER the full loop finishes.\n\n### Loop Return & Boundary Mistakes\n- Putting `return -1;` inside the `else` branch of iteration `i = 0` aborts search after inspecting only the first element!\n- Only conclude absence (`-1`) strictly AFTER the entire loop finishes checking `n - 1`.",
+              "ar": "أشهر خطأ للمبتدئين هو وضع `else return -1;` داخل حلقة `for`! هذا يعيد `-1` فور اختلاف أول عنصر قبل فحص بقية المصفوفة؛ يجب وضع `return -1` بعد انتهاء الحلقة.\n\n### أخطاء شائعة في كتابة البحث الخطي\n- وضع `return -1;` داخل فرع `else` بالحلقة ينهي البحث من أول عنصر غير مطابق!\n- الإرجاع بقيمة `-1` يجب أن يقع خارج الحلقة بعد إتمام فحص كل العناصر."
             },
             "questions": [
               {
@@ -7884,8 +8662,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Implement clean Linear Search with `-1` sentinel return on miss.\n- Decide when keeping data unsorted (1-off O(N) scan) beats paying O(N log N) to sort first.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- تنفيذ خوارزمية البحث الخطي وإرجاع `-1` عند عدم العثور على الهدف.\n- تحديد متى يكون البحث الخطي أسرع من فرز البيانات أولاً."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Implement clean Linear Search with `-1` sentinel return on miss.\n- Decide when keeping data unsorted (1-off O(N) scan) beats paying O(N log N) to sort first.\n\n### Applied Drill\nCount maximum comparisons Linear Search needs on `1,000` unsorted IDs vs sorting + Binary Search for `1` lookup vs `10,000` lookups.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- تنفيذ خوارزمية البحث الخطي وإرجاع `-1` عند عدم العثور على الهدف.\n- تحديد متى يكون البحث الخطي أسرع من فرز البيانات أولاً.\n\n### تمرين عملي\nقارن عدد العمليات لـ `1,000` عنصر غير مرتب عند إجراء استعلام واحد مقابل إجراء `10,000` استعلام."
             }
           }
         ],
@@ -7899,7 +8677,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "AL-LNS-M-003",
           "AL-LNS-M-004",
           "AL-LNS-E-005",
-          "AL-LNS-H-006"
+          "AL-LNS-H-006",
+          "EXP-LNS-101",
+          "EXP-LNS-102",
+          "EXP-LNS-103",
+          "EXP-LNS-104",
+          "EXP-LNS-105"
         ]
       }
     ]
@@ -7967,10 +8750,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
         ],
         "externalReferences": [
           {
-            "title": "LeetCode 704: Binary Search",
-            "url": "https://leetcode.com/problems/binary-search/",
+            "title": "GeeksforGeeks: Binary Search Walkthrough",
+            "url": "https://www.geeksforgeeks.org/binary-search/",
             "type": "practice_problem",
-            "source": "LeetCode"
+            "source": "GeeksforGeeks"
           },
           {
             "title": "CP-Algorithms: Binary Search & Lower Bound",
@@ -7995,6 +8778,18 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Standard library binary search lower bound guarantee.",
               "ar": "توثيق دالة lower_bound القياسية."
             }
+          },
+          {
+            "title": "USACO Guide: Binary Search Variants",
+            "url": "https://usaco.guide/silver/binary-search",
+            "type": "article",
+            "source": "USACO Guide",
+            "category": "Binary Search",
+            "language": "en",
+            "description": {
+              "en": "Lower bound, monotonic predicates, and zero off-by-one bugs.",
+              "ar": "متغيرات البحث الثنائي الخالية من الأخطاء."
+            }
           }
         ],
         "sections": [
@@ -8007,8 +8802,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Binary Search shrinks a valid candidate window `[left, right]` by half every step -> O(log N).\n\nCritical implementation details:\n1. Sorted requirement: Without sorted monotonic ordering, discarding half is invalid.\n2. Safe midpoint: `mid = left + (right - left) / 2` avoids signed 32-bit overflow when `left + right > 2^31 - 1`.\n3. Duplicates: `lower_bound(x)` finds the FIRST index with `arr[i] >= x`.",
-              "ar": "يقلّص البحث الثنائي مجال البحث إلى النصف في كل مقارنة (O(log N)) بشرط أن تكون البيانات مرتبة.\n\nنقاط حاسمة في الكود:\n• الصيغة الآمنة للمنتصف `left + (right - left) / 2` تحمي من فيض الذاكرة للأعداد الكبيرة.\n• في حال التكرار، تجد `lower_bound(x)` أول فهرس يحقق `arr[i] >= x`."
+              "en": "Binary Search shrinks a valid candidate window `[left, right]` by half every step -> O(log N).\n\nCritical implementation details:\n1. Sorted requirement: Without sorted monotonic ordering, discarding half is invalid.\n2. Safe midpoint: `mid = left + (right - left) / 2` avoids signed 32-bit overflow when `left + right > 2^31 - 1`.\n3. Duplicates: `lower_bound(x)` finds the FIRST index with `arr[i] >= x`.\n\n### Monotonic Halving & Bound Arithmetic Trace\n- Over `1,000,000` sorted rows (`~2^20`), Binary Search inspects at most **20 comparisons** (`ceil(log2(N))`), whereas Linear Search can take **1,000,000**.\n- `lower_bound(x)` targets the FIRST index where `a[i] >= x`, while `upper_bound(x)` targets the FIRST index where `a[i] > x` (count of `x` = `upper - lower`).",
+              "ar": "يقلّص البحث الثنائي مجال البحث إلى النصف في كل مقارنة (O(log N)) بشرط أن تكون البيانات مرتبة.\n\nنقاط حاسمة في الكود:\n• الصيغة الآمنة للمنتصف `left + (right - left) / 2` تحمي من فيض الذاكرة للأعداد الكبيرة.\n• في حال التكرار، تجد `lower_bound(x)` أول فهرس يحقق `arr[i] >= x`.\n\n### تتبع البحث الثنائي وحساب الحدود\n- في مليون سجل مرتب يحتاج البحث الثنائي 20 مقارنة على الأكثر مقارنةً بمليون مقارنة في البحث الخطي.\n- دالة `lower_bound` تحدد أول فهرس `>= x` و `upper_bound` تحدد أول فهرس `> x` (وعدد التكرارات يساوي الفرق بينهما)."
             },
             "questions": [
               {
@@ -8057,8 +8852,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Beyond finding an exact equality hit, Binary Search shines on duplicates via Boundary Search:\n\n1. `lower_bound(x)`: Smallest index where `a[i] >= x` (first occurrence or insertion position).\n2. `upper_bound(x)`: Smallest index where `a[i] > x` (one past the last occurrence, so frequency of `x` equals `upper_bound - lower_bound` in O(log N)!).\n3. Integer Overflow Midpoint: Computing `(lo + hi) / 2` can overflow 32-bit `int` when `lo + hi > 2^31 - 1`; ALWAYS write `lo + (hi - lo) / 2`!\n4. Monotonicity Condition: Binary search works on ANY ordered domain where predicate `P(x)` switches strictly once (`FFF...TTT` or `TTT...FFF`).",
-              "ar": "لا يقتصر البحث الثنائي على وجود القيمة فقط، بل يتألق في التعامل مع العناصر المكررة:\n\n1. `lower_bound(x)`: أول فهرس يحقق `a[i] >= x` (بداية تكرار القيمة).\n2. `upper_bound(x)`: أول فهرس يحقق `a[i] > x`؛ وبالتالي عدد تكرارات `x` يساوي الفرق بينهما بزمن `O(log N)`!\n3. تجنب Overflow: كتابة `(lo + hi) / 2` قد تسبب فيضاناً مع الفهارس الكبيرة، والبديل الآمن هو `lo + (hi - lo) / 2`."
+              "en": "Beyond finding an exact equality hit, Binary Search shines on duplicates via Boundary Search:\n\n1. `lower_bound(x)`: Smallest index where `a[i] >= x` (first occurrence or insertion position).\n2. `upper_bound(x)`: Smallest index where `a[i] > x` (one past the last occurrence, so frequency of `x` equals `upper_bound - lower_bound` in O(log N)!).\n3. Integer Overflow Midpoint: Computing `(lo + hi) / 2` can overflow 32-bit `int` when `lo + hi > 2^31 - 1`; ALWAYS write `lo + (hi - lo) / 2`!\n4. Monotonicity Condition: Binary search works on ANY ordered domain where predicate `P(x)` switches strictly once (`FFF...TTT` or `TTT...FFF`).\n\n### Monotonic Halving & Bound Arithmetic Trace\n- Over `1,000,000` sorted rows (`~2^20`), Binary Search inspects at most **20 comparisons** (`ceil(log2(N))`), whereas Linear Search can take **1,000,000**.\n- `lower_bound(x)` targets the FIRST index where `a[i] >= x`, while `upper_bound(x)` targets the FIRST index where `a[i] > x` (count of `x` = `upper - lower`).",
+              "ar": "لا يقتصر البحث الثنائي على وجود القيمة فقط، بل يتألق في التعامل مع العناصر المكررة:\n\n1. `lower_bound(x)`: أول فهرس يحقق `a[i] >= x` (بداية تكرار القيمة).\n2. `upper_bound(x)`: أول فهرس يحقق `a[i] > x`؛ وبالتالي عدد تكرارات `x` يساوي الفرق بينهما بزمن `O(log N)`!\n3. تجنب Overflow: كتابة `(lo + hi) / 2` قد تسبب فيضاناً مع الفهارس الكبيرة، والبديل الآمن هو `lo + (hi - lo) / 2`.\n\n### تتبع البحث الثنائي وحساب الحدود\n- في مليون سجل مرتب يحتاج البحث الثنائي 20 مقارنة على الأكثر مقارنةً بمليون مقارنة في البحث الخطي.\n- دالة `lower_bound` تحدد أول فهرس `>= x` و `upper_bound` تحدد أول فهرس `> x` (وعدد التكرارات يساوي الفرق بينهما)."
             },
             "questions": [
               {
@@ -8106,7 +8901,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "التنفيذ الآمن للبحث الثنائي و lower_bound"
             },
             "isRequired": true,
-            "content": "int binarySearch(const vector<int>& arr, int target) {\n    int left = 0, right = (int)arr.size() - 1;\n    while (left <= right) {\n        int mid = left + (right - left) / 2; // Prevents int overflow!\n        if (arr[mid] == target) return mid;\n        if (arr[mid] < target) left = mid + 1;\n        else right = mid - 1;\n    }\n    return -1;\n}",
+            "content": {
+              "en": "### Overflow-Safe Midpoint & Custom Array Lab\n- Always compute `mid = left + Math.floor((right - left) / 2)` so `(left + right)` never overflows signed 32-bit bounds.\n- Open the enhanced **Binary Search Visualizer** below and enter your own sorted comma-separated numbers!",
+              "ar": "### تجنب فيضان المنتصف وتجربة مصفوفة مخصصة\n- استخدم دوماً `left + Math.floor((right - left) / 2)` لمنع فيضان الجمع في 32 بت.\n- أدخل مصفوفة مرتبة من اختيارك في **محاكي البحث الثنائي** بالأسفل وجرّب قيماً موجودة ومفقودة."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Moving strictly past `mid` (`mid + 1` or `mid - 1`) guarantees `[left, right]` shrinks every iteration and never hangs.",
@@ -8159,7 +8957,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "محاكي البحث الثنائي التفاعلي"
             },
             "isRequired": true,
-            "content": "binary-search-visualizer",
+            "content": {
+              "en": "### Guided Lab: Custom Sorted Array & Halving Probes\nEnter custom sorted arrays and search targets (present and missing) to verify O(log n) interval collapse.\n\n**Experiments to Run:**\n1. Set a custom sorted array like `3, 9, 14, 21, 35, 48, 72` and probe target `35`.\n2. Probe missing target `50` and observe `left > right` clean termination.\n3. Step forward comparing `arr[mid]` against target each beat.",
+              "ar": "### المعمل التفاعلي: البحث الثنائي بمصفوفات مخصصة\nأدخل مصفوفة مرتبة وقيمة هدف (موجودة أو مفقودة) لتتبع تقليص المجال.\n\n**تجارب مقترحة:**\n1. أدخل مصفوفة مخصصة وجرب البحث عن عنصر موجود.\n2. ابحث عن رقم غير موجود لمراقبة توقف الحلقة عندما `left > right`.\n3. قارن عدد الخطوات الفعلية بقيمة `log2(N)`."
+            },
             "interactiveModuleId": "binary-search-visualizer"
           },
           {
@@ -8171,8 +8972,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Classic bug: Writing `while (lo < hi)` with `mid = (lo + hi) / 2` and setting `lo = mid`! When `lo = 4, hi = 5`, floor division gives `mid = 4`, resetting `lo = 4` forever! Always pair interval shrinking rules carefully (`hi = mid; lo = mid + 1` OR ceil `(lo + hi + 1)/2` with `lo = mid`).",
-              "ar": "فخ مشهور: إذا كتبت `while (lo < hi)` وحسبت `mid = lo + (hi - lo)/2` ثم وضعت `lo = mid` فقد يثبت المؤشران على `[4, 5]` إلى الأبد! استخدم دائماً `lo = mid + 1` مع `hi = mid` أو التقريب للأعلى عند تحريك `lo` إلى `mid`."
+              "en": "Classic bug: Writing `while (lo < hi)` with `mid = (lo + hi) / 2` and setting `lo = mid`! When `lo = 4, hi = 5`, floor division gives `mid = 4`, resetting `lo = 4` forever! Always pair interval shrinking rules carefully (`hi = mid; lo = mid + 1` OR ceil `(lo + hi + 1)/2` with `lo = mid`).\n\n### Classic Binary Search Bugs\n1. Forgetting array sortedness precondition yields silent wrong misses.\n2. Updating `l = mid` with floor `mid = (l + r) / 2` freezes `[l..r]` at length 2 (`[4..5]`). Save candidate `ans = mid` cleanly and advance `l = mid + 1` or `r = mid - 1`!",
+              "ar": "فخ مشهور: إذا كتبت `while (lo < hi)` وحسبت `mid = lo + (hi - lo)/2` ثم وضعت `lo = mid` فقد يثبت المؤشران على `[4, 5]` إلى الأبد! استخدم دائماً `lo = mid + 1` مع `hi = mid` أو التقريب للأعلى عند تحريك `lo` إلى `mid`.\n\n### أخطاء البحث الثنائي الشائعة\n1. تطبيق الخوارزمية على بيانات غير مرتبة يعطي نتائج خاطئة صامتة.\n2. كتابة `l = mid` مع تقريب `mid` للأسفل يعلق بحلقة لا نهائية عند بقاء عنصرين؛ الأفضل حفظ `ans` وتقليص الحدود دوماً."
             },
             "questions": [
               {
@@ -8221,8 +9022,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Trace `left`, `right`, and `mid = left + (right - left) / 2` boundary updates without infinite loops.\n- Locate leftmost `lower_bound` and rightmost `upper_bound` on duplicate keys.\n- Reuse this foundation seamlessly across Algorithms & Competitive Programming.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- تتبع مؤشرات `left` و `right` وحساب المنتصف الآمن دون حلقات لا نهائية.\n- إيجاد أول وآخر ظهور عند وجود عناصر متكررة (`lower_bound` / `upper_bound`).\n- فهم إعادة استخدام هذه الوحدة المشتركة عبر مسارَي الخوارزميات والبرمجة التنافسية."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Trace `left`, `right`, and `mid = left + (right - left) / 2` boundary updates without infinite loops.\n- Locate leftmost `lower_bound` and rightmost `upper_bound` on duplicate keys.\n- Reuse this foundation seamlessly across Algorithms & Competitive Programming.\n\n### Hands-On Challenge\nLoad `[4, 4, 4, 9, 12, 18]` into Live JS Sandbox and write `firstOccurrence(arr, 4)` + `lastOccurrence(arr, 4)` cleanly in `O(log n)`.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- تتبع مؤشرات `left` و `right` وحساب المنتصف الآمن دون حلقات لا نهائية.\n- إيجاد أول وآخر ظهور عند وجود عناصر متكررة (`lower_bound` / `upper_bound`).\n- فهم إعادة استخدام هذه الوحدة المشتركة عبر مسارَي الخوارزميات والبرمجة التنافسية.\n\n### تحدي برمجي\nاكتب دالتين بزمن `O(log n)` في المختبر لإيجاد أول ظهور وآخر ظهور لقيمة مكررة داخل مصفوفة مرتبة."
             }
           }
         ],
@@ -8237,7 +9038,11 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "AL-BSR-M-003",
           "AL-BSR-M-004",
           "AL-BSR-H-005",
-          "AL-BSR-E-006"
+          "AL-BSR-E-006",
+          "EXP-BSR-101",
+          "EXP-BSR-102",
+          "EXP-BSR-103",
+          "EXP-BSR-104"
         ]
       },
       {
@@ -8296,10 +9101,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             "source": "Other"
           },
           {
-            "title": "LeetCode 1011: Capacity To Ship Packages",
-            "url": "https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/",
+            "title": "CSES: Array Division (Binary Search on Answer)",
+            "url": "https://cses.fi/problemset/task/1085/",
             "type": "practice_problem",
-            "source": "LeetCode"
+            "source": "CSES"
           },
           {
             "title": "CP-Algorithms: Parametric Binary Search on Answer",
@@ -8311,6 +9116,18 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             "description": {
               "en": "Search on predicate boundaries for optimization problems.",
               "ar": "تطبيقات البحث الثنائي على دالة الاختبار."
+            }
+          },
+          {
+            "title": "CSES Problem Set: Factory Machines & Array Division",
+            "url": "https://cses.fi/problemset/",
+            "type": "cp_platform",
+            "source": "CSES",
+            "category": "Practice",
+            "language": "en",
+            "description": {
+              "en": "Canonical parametric binary search on answer tasks.",
+              "ar": "مسائل تدريبية كلاسيكية على البحث على الإجابة."
             }
           }
         ],
@@ -8324,8 +9141,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Unlike foundational Binary Search on an array of numbers, CP problems often ask: \"What is the minimum truck capacity C to ship all boxes within D days?\"\n\nNotice monotonicity: if capacity `C` works (`can(C) == true`), every `C' > C` also works! Evaluating `0..totalWeight` produces `[F, F, F, ..., T, T, T]`. Binary searching for the FIRST `T` solves the optimization in `O(N · log(Sum))`!",
-              "ar": "في البرمجة التنافسية لا نبحث داخل مصفوفة دائماً، بل نبحث عن قيمة الإجابة نفسها! إذا كان التحقق `can(x)` يحقق نمط `[F, F, F, T, T, T]` (أي كل ما هو أكبر من الإجابة ينجح أيضاً)، فإننا نبحث ثنائياً عن أصغر قيمة تحقق `true`."
+              "en": "Unlike foundational Binary Search on an array of numbers, CP problems often ask: \"What is the minimum truck capacity C to ship all boxes within D days?\"\n\nNotice monotonicity: if capacity `C` works (`can(C) == true`), every `C' > C` also works! Evaluating `0..totalWeight` produces `[F, F, F, ..., T, T, T]`. Binary searching for the FIRST `T` solves the optimization in `O(N · log(Sum))`!\n\n### Parametric Feasibility Pattern (`FFFFTTTT`)\n- Suppose ships carry boxes `[3, 2, 2, 4, 1, 4]` within `D = 3` days. You cannot split a box, so `lo = max(weights) = 4` and `hi = sum(weights) = 16`.\n- Predicate `canShip(cap)` greedily packs boxes per day; because bigger capacity never needs MORE days, answers stay monotonic (`FFFFTTTT`) across `[4..16]` -> solved in `O(n log sum)`.",
+              "ar": "في البرمجة التنافسية لا نبحث داخل مصفوفة دائماً، بل نبحث عن قيمة الإجابة نفسها! إذا كان التحقق `can(x)` يحقق نمط `[F, F, F, T, T, T]` (أي كل ما هو أكبر من الإجابة ينجح أيضاً)، فإننا نبحث ثنائياً عن أصغر قيمة تحقق `true`.\n\n### نمط دالة الصلاحية الرتيبة (`FFFFTTTT`)\n- لنقل صناديق `[3, 2, 2, 4, 1, 4]` خلال `3` أيام، يبدأ الحد الأدنى للسعة من أثقل صندوق `4` حتى المجموع `16`.\n- دالة `canShip(cap)` تتصرف برتابة: زيادة السعة لا تزيد الأيام أبداً، مما يتيح البحث الثنائي على الإجابة بزمن `O(n log sum)`."
             },
             "questions": [
               {
@@ -8423,7 +9240,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "القالب الذهبي للبحث الثنائي على الإجابة"
             },
             "isRequired": true,
-            "content": "long long lo = maxElement, hi = totalSum, ans = hi;\nwhile (lo <= hi) {\n    long long mid = lo + (hi - lo) / 2;\n    if (canFinishWithinDays(weights, days, mid)) {\n        ans = mid;       // Record valid feasible candidate\n        hi = mid - 1;    // Try pushing capacity even smaller!\n    } else {\n        lo = mid + 1;    // Too small, must increase capacity\n    }\n}",
+            "content": {
+              "en": "### Floating-Point vs Integer Answer Loops\n- Keep integer bounds tight `[minValid..maxPossible]` and track `bestAns = mid` cleanly.\n- For continuous real answers (`sqrt(x)`, geometry), run 90-100 fixed binary-split iterations cleanly avoiding floating epsilon infinite loops.",
+              "ar": "### حلقات الأعداد الصحيحة مقابل العشرية\n- حدد نطاق البحث بدقة واحفظ أفضل قيمة صالحة في `ans` مع تحريك الحدود لتفادي التعليق.\n- للمسائل العشرية اعتمد 100 تكرار ثابت بدلاً من مقارنة الفرق الصغير."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Recording `ans = mid` inside the feasible branch guarantees a crystal-clear off-by-one-free implementation.",
@@ -8477,8 +9297,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Always verify lower bound `lo` (e.g., `max(element)` when splitting packages!) and upper bound `hi` (e.g., `sum(elements)` in 64-bit `long long`), AND double check whether small values work while large fail or vice versa before writing update branches.",
-              "ar": "تأكد من بدء `lo` بأصغر قيمة ممكنة مثل أكبر عنصر مفرد في تقسيم المهام، ومن أن `hi` يستوعب مجموع كل العناصر في `long long`."
+              "en": "Always verify lower bound `lo` (e.g., `max(element)` when splitting packages!) and upper bound `hi` (e.g., `sum(elements)` in 64-bit `long long`), AND double check whether small values work while large fail or vice versa before writing update branches.\n\n### Predicate & Bound Bugs\n- Setting `lo = 0` instead of `max(weights)` lets infeasible low capacities pass false checks.\n- Double-check monotonicity BEFORE applying Binary Search on Answer; bimodal peaks fail cleanly.",
+              "ar": "تأكد من بدء `lo` بأصغر قيمة ممكنة مثل أكبر عنصر مفرد في تقسيم المهام، ومن أن `hi` يستوعب مجموع كل العناصر في `long long`.\n\n### أخطاء الحدود والرتابة\n- بدء النطاق من `0` بدلاً من `max(weights)` يربك دالة الاختبار.\n- تحقق رياضياً من اتجاه التحول الواحد (`FFFTTT`) قبل كتابة الكود."
             },
             "questions": [
               {
@@ -8527,8 +9347,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Transform 'Minimize the maximum X' / 'Maximize the minimum X' into a monotonic boolean check `canAchieve(X)`.\n- Identify exact `lo`/`hi` bounds across integers and floating-point domains.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- تحويل مسائل (تقليل القيمة العظمى / تعظيم القيمة الصغرى) إلى دالة تحقق رتيبة `canAchieve(X)`.\n- ضبط الحدود الآمنة وحفظ أفضل إجابة صحيحة `ans`."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Transform 'Minimize the maximum X' / 'Maximize the minimum X' into a monotonic boolean check `canAchieve(X)`.\n- Identify exact `lo`/`hi` bounds across integers and floating-point domains.\n\n### Coding Exercise\nAdapt the **Live JS Sandbox** binary search template to compute `integerSqrt(x)` for `x = 2,147,395,599` safely without overflow.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- تحويل مسائل (تقليل القيمة العظمى / تعظيم القيمة الصغرى) إلى دالة تحقق رتيبة `canAchieve(X)`.\n- ضبط الحدود الآمنة وحفظ أفضل إجابة صحيحة `ans`.\n\n### تمرين برمجي\nحوّل قالب البحث الثنائي في المختبر لحساب الجذر التربيعي الصحيح لعدد كبير دون فيضان."
             }
           }
         ],
@@ -8542,7 +9362,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "AL-BOA-M-003",
           "AL-BOA-M-004",
           "AL-BOA-H-005",
-          "AL-BOA-E-006"
+          "AL-BOA-E-006",
+          "EXP-BOA-101",
+          "EXP-BOA-102",
+          "EXP-BOA-103",
+          "EXP-BOA-104",
+          "EXP-BOA-105"
         ]
       }
     ]
@@ -8630,6 +9455,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Strict weak ordering contract and O(N log N) worst-case guarantees.",
               "ar": "عقد الترتيب الصارم وتعقيد دالة الفرز القياسية."
             }
+          },
+          {
+            "title": "VisuAlgo: Sorting Algorithms Animated Lab",
+            "url": "https://visualgo.net/en/sorting",
+            "type": "article",
+            "source": "VisuAlgo",
+            "category": "Sorting",
+            "language": "en",
+            "description": {
+              "en": "Compare Bubble, Selection, Insertion, Merge, Quick, and Radix.",
+              "ar": "محاكاة مرئية لجميع خوارزميات الفرز."
+            }
+          },
+          {
+            "title": "roadmap.sh: Divide & Conquer Sorting Track",
+            "url": "https://roadmap.sh/datastructures-and-algorithms",
+            "type": "roadmap",
+            "source": "roadmap.sh",
+            "category": "Algorithms",
+            "language": "en",
+            "description": {
+              "en": "Comparison lower bounds and stability tradeoffs.",
+              "ar": "الحد الأدنى للمقارنات وثبات الفرز."
+            }
           }
         ],
         "sections": [
@@ -8642,8 +9491,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• Elementary O(N²): Insertion Sort excels on small/nearly-sorted runs.\n• Merge Sort: Divide-and-conquer guaranteeing O(N log N) worst-case & stability, requiring O(N) temp buffer.\n• Quick Sort: Partitioning around a pivot gives fast O(N log N) average in-place speed (randomize pivot to avoid O(N²) on pre-sorted input).\n• Counting & Radix Sort: Non-comparison sorts running in O(N + K) on bounded integers.",
-              "ar": "• خوارزميات O(N²): يتألق Insertion Sort على المصفوفات الصغيرة وشبه المرتبة.\n• Merge Sort: يضمن O(N log N) واستقراراً بتكلفة مساحة إضافية O(N).\n• Quick Sort: فائق السرعة عملياً في نفس الذاكرة مع اختيار محور عشوائي لتفادي أسوأ حالة.\n• الفرز الخطي (Counting / Radix): يتجاوز حد Ω(N log N) للأعداد الصحيحة محدودة المدى."
+              "en": "• Elementary O(N²): Insertion Sort excels on small/nearly-sorted runs.\n• Merge Sort: Divide-and-conquer guaranteeing O(N log N) worst-case & stability, requiring O(N) temp buffer.\n• Quick Sort: Partitioning around a pivot gives fast O(N log N) average in-place speed (randomize pivot to avoid O(N²) on pre-sorted input).\n• Counting & Radix Sort: Non-comparison sorts running in O(N + K) on bounded integers.\n\n### Comparison Lower Bounds & Algorithm Tradeoffs\n- **O(N^2) Sorts:** Insertion Sort hits O(N) on nearly-sorted arrays and runs great for `N <= 32`; Bubble Sort exposes adjacent swaps clearly.\n- **O(N log N) Sorts:** Merge Sort guarantees worst-case O(N log N) and **Stability**, costing O(N) extra space; Quick Sort sorts in-place with great cache speed (randomized pivot guards O(N^2)); Introsort blends Quick + Heap + Insertion.\n- **O(N + K) Non-Comparison:** Counting/Radix Sort break the `Omega(N log N)` bound using bucket arithmetic when keys are small bounded integers.",
+              "ar": "• خوارزميات O(N²): يتألق Insertion Sort على المصفوفات الصغيرة وشبه المرتبة.\n• Merge Sort: يضمن O(N log N) واستقراراً بتكلفة مساحة إضافية O(N).\n• Quick Sort: فائق السرعة عملياً في نفس الذاكرة مع اختيار محور عشوائي لتفادي أسوأ حالة.\n• الفرز الخطي (Counting / Radix): يتجاوز حد Ω(N log N) للأعداد الصحيحة محدودة المدى.\n\n### مقارنة خوارزميات الفرز والحد النظري\n- **الفرز التربيعي O(N^2):** يتفوق Insertion Sort على البيانات شبه المرتبة (`O(N)`) والصغيرة.\n- **O(N log N):** تضمن Merge Sort الاستقرار وثبات الزمن بمساحة O(N)، بينما يتفوق Quick Sort في الذاكرة والـ Cache مع محور عشوائي.\n- **فرز O(N + K):** تتجاوز Counting و Radix Sort حد `N log N` عند وجود مفاتيح رقمية محصورة."
             },
             "questions": [
               {
@@ -8741,7 +9590,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "خطوة الدمج في Merge Sort"
             },
             "isRequired": true,
-            "content": "void mergeRanges(vector<int>& a, int l, int mid, int r) {\n    vector<int> tmp;\n    int i = l, j = mid + 1;\n    while (i <= mid && j <= r)\n        tmp.push_back(a[i] <= a[j] ? a[i++] : a[j++]); // <= keeps sort STABLE!\n    while (i <= mid) tmp.push_back(a[i++]);\n    while (j <= r)   tmp.push_back(a[j++]);\n    for (int k = 0; k < (int)tmp.size(); k++) a[l + k] = tmp[k];\n}",
+            "content": {
+              "en": "### Tracing Stability & Custom Array Benchmarking\n- Stable sorts preserve original relative positions when keys tie (vital for multi-column UI/SQL sorting).\n- Use the **Sorting Visualizer** below with custom inputs like `[9, 8, 7, 6, 5]` vs `[1, 2, 3, 5, 4]` to watch swaps drop dramatically!",
+              "ar": "### الاستقرار ومقارنة المدخلات المخصصة\n- الفرز المستقر يحفظ الترتيب الأصلي للعناصر المتساوية (مهم للفرز متعدد الأعمدة).\n- اختبر مصفوفة معكوسة وأخرى شبه مرتبة في **محاكي الفرز** بالأسفل لمراقبة فرق المقارنات والتبديلات."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Using `<=` when picking from the left half breaks ties cleanly to preserve stability.",
@@ -8794,7 +9646,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "محاكي خوارزميات الفرز التفاعلي"
             },
             "isRequired": true,
-            "content": "sorting-visualizer",
+            "content": {
+              "en": "### Guided Lab: Custom Arrays, Comparisons & Swap Counters\nLoad custom arrays (reverse-sorted, nearly-sorted, random) and benchmark Bubble Sort vs Selection Sort side by side.\n\n**Experiments to Run:**\n1. Enter a reverse array `90, 70, 50, 30, 10` and compare swap counts between Bubble and Selection Sort.\n2. Enter an already sorted array `10, 20, 30, 40, 50` and observe comparisons vs swaps.\n3. Randomize arrays and verify sorted suffix growth.",
+              "ar": "### المعمل التفاعلي: مقارنة خوارزميات الفرز بمصفوفات مخصصة\nجرّب مصفوفة معكوسة أو شبه مرتبة وقارن عدد المقارنات والتبديلات.\n\n**تجارب مقترحة:**\n1. أدخل مصفوفة معكوسة وقارن تبديلات Bubble Sort مقابل Selection Sort.\n2. أدخل مصفوفة مرتبة مسبقاً لمراقبة عدد التبديلات.\n3. استخدم التوليد العشوائي لتتبع نمو الجزء المرتب."
+            },
             "interactiveModuleId": "sorting-visualizer"
           },
           {
@@ -8806,8 +9661,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Always randomize pivot selection (or median-of-three) in Quicksort so pre-sorted arrays don't hit `O(N^2)`, and remember JS `.sort()` sorts NUMBERS lexicographically as strings (`[10, 2]`) unless passing `(a, b) => a - b`!",
-              "ar": "استخدم محوراً عشوائياً في Quicksort، وانتبه في JavaScript أن `.sort()` بدون دالة مقارنة تفرز الأرقام كنصوص (`10` قبل `2`)!"
+              "en": "Always randomize pivot selection (or median-of-three) in Quicksort so pre-sorted arrays don't hit `O(N^2)`, and remember JS `.sort()` sorts NUMBERS lexicographically as strings (`[10, 2]`) unless passing `(a, b) => a - b`!\n\n### Comparator & Pivot Pitfalls\n- Custom comparators MUST enforce Strict Weak Ordering: `cmp(a, a)` MUST return `false` (`<` NOT `<=`, or runtimes crash!).\n- Deterministic first-element pivots make naive Quick Sort degrade to `O(N^2)` on sorted arrays.",
+              "ar": "استخدم محوراً عشوائياً في Quicksort، وانتبه في JavaScript أن `.sort()` بدون دالة مقارنة تفرز الأرقام كنصوص (`10` قبل `2`)!\n\n### أخطاء المقارن والمحور (Pivot)\n- يجب أن يُرجع المقارن المخصص `false` عند تساوي العنصرين (`<` وليس `<=`).\n- اختيار أول عنصر دائماً كمحور يجعل Quick Sort بطيئاً `O(N^2)` على مصفوفات مرتبة."
             },
             "questions": [
               {
@@ -8856,8 +9711,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Analyze why Merge Sort guarantees worst-case O(N log N) + stability with O(N) auxiliary RAM.\n- Explain Quick Sort's pivot partitioning (O(N log N) avg, cache friendly) and randomized pivot protection.\n- Choose Counting/Radix Sort when keys fall in small integer ranges to break Ω(N log N).",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- مقارنة Merge Sort (استقرار وضمان O(N log N)) و Quick Sort (في المكان و cache-friendly).\n- تفسير خاصية الاستقرار (Stability) وأهميتها.\n- معرفة متى يتفوق Counting و Radix Sort على خوارزميات المقارنة."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Analyze why Merge Sort guarantees worst-case O(N log N) + stability with O(N) auxiliary RAM.\n- Explain Quick Sort's pivot partitioning (O(N log N) avg, cache friendly) and randomized pivot protection.\n- Choose Counting/Radix Sort when keys fall in small integer ranges to break Ω(N log N).\n\n### Applied Drill\nRun Bubble vs Selection Sort in the visualizer on reverse-sorted `80, 60, 40, 20, 10` and verify why Selection Sort caps swaps strictly at `N - 1`.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- مقارنة Merge Sort (استقرار وضمان O(N log N)) و Quick Sort (في المكان و cache-friendly).\n- تفسير خاصية الاستقرار (Stability) وأهميتها.\n- معرفة متى يتفوق Counting و Radix Sort على خوارزميات المقارنة.\n\n### تمرين المختبر\nقارن Bubble و Selection Sort على `80, 60, 40, 20, 10` ولاحظ لماذا لا تتجاوز تبديلات Selection Sort قيمة `N - 1`."
             }
           }
         ],
@@ -8951,6 +9806,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Greedy algorithm patterns and proof techniques.",
               "ar": "خوارزميات جشعة وبراهين صحتها."
             }
+          },
+          {
+            "title": "USACO Guide: Classical Greedy Algorithms",
+            "url": "https://usaco.guide/bronze/intro-greedy",
+            "type": "article",
+            "source": "USACO Guide",
+            "category": "Greedy",
+            "language": "en",
+            "description": {
+              "en": "Interval scheduling, sorting tricks, and counterexample checks.",
+              "ar": "جدولة الفترات واختبار الجشع بالأمثلة المضادة."
+            }
+          },
+          {
+            "title": "CSES Problem Set: Movie Festival & Tasks",
+            "url": "https://cses.fi/problemset/",
+            "type": "cp_platform",
+            "source": "CSES",
+            "category": "Practice",
+            "language": "en",
+            "description": {
+              "en": "Classic interval and deadline greedy tasks.",
+              "ar": "مسائل كلاسيكية على الخوارزميات الجشعة."
+            }
           }
         ],
         "sections": [
@@ -8963,8 +9842,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Greedy algorithms pick the best immediate option without looking back. They succeed ONLY when the problem has Greedy Choice Property and Optimal Substructure.\n\nClassic pitfall: In coin change `{1, 3, 4}` summing to `6`, greedy picks `4+1+1` (3 coins), missing optimal `3+3` (2 coins)! Always double-check counterexamples before trusting a greedy hunch.",
-              "ar": "تختار الخوارزمية الجشعة أفضل خطوة فورية دون تراجع. وهي لا تصح إلا بتحقق خاصية الاختيار الجشع.\n\nمثال مهم: في العملات {1, 3, 4} للمبلغ 6، يختار الحل الجشع 4+1+1 (3 قطع) ويفوّت الحل الأمثل 3+3 (قطعتان)! لذا يجب التحقق بالأمثلة المضادة دائماً."
+              "en": "Greedy algorithms pick the best immediate option without looking back. They succeed ONLY when the problem has Greedy Choice Property and Optimal Substructure.\n\nClassic pitfall: In coin change `{1, 3, 4}` summing to `6`, greedy picks `4+1+1` (3 coins), missing optimal `3+3` (2 coins)! Always double-check counterexamples before trusting a greedy hunch.\n\n### When Locally Optimal Choices Become Globally Optimal\n- **Interval Scheduling:** Picking earliest finish time leaves maximum room for remaining intervals.\n- **Counterexample Discipline:** Coin change `[1, 3, 4]` for `6`: Greedy takes `4+1+1` (3 coins) while true optimum is `3+3` (2 coins)!\n- Only commit to Greedy once you prove the Exchange Argument or test small counterexamples.",
+              "ar": "تختار الخوارزمية الجشعة أفضل خطوة فورية دون تراجع. وهي لا تصح إلا بتحقق خاصية الاختيار الجشع.\n\nمثال مهم: في العملات {1, 3, 4} للمبلغ 6، يختار الحل الجشع 4+1+1 (3 قطع) ويفوّت الحل الأمثل 3+3 (قطعتان)! لذا يجب التحقق بالأمثلة المضادة دائماً.\n\n### متى يضمن الاختيار الجشع الحل الأمثل العالمي؟\n- **جدولة الفترات:** اختيار النشاط المنتهي أبكر يترك أوسع وقت متاح للبقية.\n- **اختبار المثال المضاد:** لصرف `6` بفئات `[1, 3, 4]` يأخذ الجشع `4+1+1` (3 عملات) ويفوته `3+3` (عملتان).\n- اعتمد الجشع فقط بعد برهان الاستبدال أو اختبار أمثلة صغيرة ضد البحث الشامل."
             },
             "questions": [
               {
@@ -9013,8 +9892,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "To trust any greedy heuristic in interviews or contests, justify it with an Exchange Argument:\n\n1. Exchange Argument: Take an arbitrary optimal solution O and show swapping its first disagreeing choice with your greedy choice produces an equally good or better valid solution O'.\n2. Fractional Knapsack vs 0/1 Knapsack: If items break into continuous fractions (gold dust), sorting by `value / weight` works greedily in `O(N log N)`. When items must be taken whole (`0/1`), greedy fails and DP is required!\n3. Huffman Prefix Coding: Repeatedly merging the two lowest-frequency nodes in a Min-Heap constructs an optimal prefix-free compression tree in `O(N log N)`.",
-              "ar": "لإثبات صحة أي حل جشع قبل برمجته نعتمد حجة التبديل (Exchange Argument):\n\n1. استبدال خطوة الحل الأمثل بأول خطوة جشعة مع إبقاء الجودة مساوية أو أفضل يضمن أمثلية الخيار الجشع.\n2. حقيبة الظهر القابلة للتجزئة تُحل جشعاً بالترتيب حسب `القيمة / الوزن`، بينما حقيبة `0/1` الكاملة لا يصلح لها الجشع وتحتاج برمجة ديناميكية!\n3. ترميز هوفمان يدمج أقل ترددين باستمرار داخل Min-Heap لتوليد شجرة ضغط مثالية."
+              "en": "To trust any greedy heuristic in interviews or contests, justify it with an Exchange Argument:\n\n1. Exchange Argument: Take an arbitrary optimal solution O and show swapping its first disagreeing choice with your greedy choice produces an equally good or better valid solution O'.\n2. Fractional Knapsack vs 0/1 Knapsack: If items break into continuous fractions (gold dust), sorting by `value / weight` works greedily in `O(N log N)`. When items must be taken whole (`0/1`), greedy fails and DP is required!\n3. Huffman Prefix Coding: Repeatedly merging the two lowest-frequency nodes in a Min-Heap constructs an optimal prefix-free compression tree in `O(N log N)`.\n\n### When Locally Optimal Choices Become Globally Optimal\n- **Interval Scheduling:** Picking earliest finish time leaves maximum room for remaining intervals.\n- **Counterexample Discipline:** Coin change `[1, 3, 4]` for `6`: Greedy takes `4+1+1` (3 coins) while true optimum is `3+3` (2 coins)!\n- Only commit to Greedy once you prove the Exchange Argument or test small counterexamples.",
+              "ar": "لإثبات صحة أي حل جشع قبل برمجته نعتمد حجة التبديل (Exchange Argument):\n\n1. استبدال خطوة الحل الأمثل بأول خطوة جشعة مع إبقاء الجودة مساوية أو أفضل يضمن أمثلية الخيار الجشع.\n2. حقيبة الظهر القابلة للتجزئة تُحل جشعاً بالترتيب حسب `القيمة / الوزن`، بينما حقيبة `0/1` الكاملة لا يصلح لها الجشع وتحتاج برمجة ديناميكية!\n3. ترميز هوفمان يدمج أقل ترددين باستمرار داخل Min-Heap لتوليد شجرة ضغط مثالية.\n\n### متى يضمن الاختيار الجشع الحل الأمثل العالمي؟\n- **جدولة الفترات:** اختيار النشاط المنتهي أبكر يترك أوسع وقت متاح للبقية.\n- **اختبار المثال المضاد:** لصرف `6` بفئات `[1, 3, 4]` يأخذ الجشع `4+1+1` (3 عملات) ويفوته `3+3` (عملتان).\n- اعتمد الجشع فقط بعد برهان الاستبدال أو اختبار أمثلة صغيرة ضد البحث الشامل."
             },
             "questions": [
               {
@@ -9062,7 +9941,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "حل مسألة جدولة الأنشطة بالخوارزمية الجشعة"
             },
             "isRequired": true,
-            "content": "sort(intervals.begin(), intervals.end(), [](auto& a, auto& b) {\n    return a.end < b.end; // Sort by earliest end time\n});\nint count = 0, lastEnd = INT_MIN;\nfor (auto& iv : intervals) {\n    if (iv.start >= lastEnd) { count++; lastEnd = iv.end; }\n}",
+            "content": {
+              "en": "### Interval Sorting & Exchange Trace\n- Sort intervals by `[end, start]` ascending cleanly before scanning sequentially once in `O(N log N)`.\n- Test writing a brute-force vs greedy verifier script in **Live JS Sandbox** on small random test arrays.",
+              "ar": "### ترتيب الفترات والتحقق التلقائي\n- رتب الفترات وفق وقت الانتهاء تصاعدياً ثم امرر مرة واحدة `O(N log N)`.\n- اختبر مقارنة الجشع مع حل شامل على مدخلات صغيرة داخل **Live JS Sandbox**."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "O(N log N) sorting dominates; single O(N) scan commits each earliest-finishing non-overlapping interval.",
@@ -9116,8 +9998,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Sorting by earliest START time or SHORTEST duration fails on overlapping intervals cleanly (e.g. `[1, 10], [2, 3], [4, 5]`). Always construct small adversarial test cases `[1..10]` vs `[2..3],[4..5]` before coding greedy heuristics!",
-              "ar": "فرز الفترات حسب البداية المبكرة أو أقصر مدة يسقط أمام أمثلة مضادة بسيطة! جرّب دائماً مثالاً صغيراً قبل اعتماد القاعدة الجشعة."
+              "en": "Sorting by earliest START time or SHORTEST duration fails on overlapping intervals cleanly (e.g. `[1, 10], [2, 3], [4, 5]`). Always construct small adversarial test cases `[1..10]` vs `[2..3],[4..5]` before coding greedy heuristics!\n\n### Greedy Blind Spots\n- Sorting intervals by shortest duration or earliest start fails easily on bridging overlapping intervals.\n- Remember 0/1 Knapsack cannot split whole items; greedy ratio heuristics miss optimal packings unless DP runs.",
+              "ar": "فرز الفترات حسب البداية المبكرة أو أقصر مدة يسقط أمام أمثلة مضادة بسيطة! جرّب دائماً مثالاً صغيراً قبل اعتماد القاعدة الجشعة.\n\n### أخطاء شائعة في الخوارزميات الجشعة\n- الترتيب حسب أقصر مدة أو أبكر بداية قد يفشل على فترات متداخلة بسيطة.\n- في حقيبة `0/1` لا يضمن الترتيب بالقيمة/الوزن الحل الأمثل عند عدم القابلية للتجزئة."
             },
             "questions": [
               {
@@ -9166,8 +10048,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Verify when greedy fails (0/1 Knapsack) vs works (Interval Scheduling, Fractional Knapsack, Huffman).\n- Sort intervals by earliest finish time to maximize non-overlapping events.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- التمييز بين المسائل التي ينجح فيها الحل الجشع وتلك التي تتطلب برمجة ديناميكية.\n- ترتيب الفترات حسب أقرب وقت انتهاء لتحقيق أقصى عدد أنشطة."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Verify when greedy fails (0/1 Knapsack) vs works (Interval Scheduling, Fractional Knapsack, Huffman).\n- Sort intervals by earliest finish time to maximize non-overlapping events.\n\n### Applied Challenge\nConstruct one concrete 3-interval counterexample showing why sorting intervals by earliest START time loses to earliest FINISH time.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- التمييز بين المسائل التي ينجح فيها الحل الجشع وتلك التي تتطلب برمجة ديناميكية.\n- ترتيب الفترات حسب أقرب وقت انتهاء لتحقيق أقصى عدد أنشطة.\n\n### تحدي المثال المضاد\nكوّن مثالاً من 3 فترات يثبت فشل الترتيب بوقت البداية مقارنة بالترتيب بوقت الانتهاء."
             }
           }
         ],
@@ -9181,7 +10063,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "AL-GRD-M-003",
           "AL-GRD-M-004",
           "AL-GRD-H-005",
-          "AL-GRD-E-006"
+          "AL-GRD-E-006",
+          "EXP-GRD-101",
+          "EXP-GRD-102",
+          "EXP-GRD-103",
+          "EXP-GRD-104",
+          "EXP-GRD-105"
         ]
       }
     ]
@@ -9260,6 +10147,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "State transitions, knapsack, LIS, and bottom-up DP patterns.",
               "ar": "أساسيات البرمجة الديناميكية وتصميم الحالات."
             }
+          },
+          {
+            "title": "USACO Guide: Introduction to Dynamic Programming",
+            "url": "https://usaco.guide/gold/intro-dp",
+            "type": "article",
+            "source": "USACO Guide",
+            "category": "DP",
+            "language": "en",
+            "description": {
+              "en": "Transition formulation, memoization, and bottom-up loops.",
+              "ar": "تصميم الحالة والانتقال في البرمجة الديناميكية."
+            }
+          },
+          {
+            "title": "CP-Algorithms: Longest Increasing Subsequence & DP",
+            "url": "https://cp-algorithms.com/sequences/longest_increasing_subsequence.html",
+            "type": "cp_platform",
+            "source": "CP-Algorithms",
+            "category": "DP",
+            "language": "en",
+            "description": {
+              "en": "Classic sequence DP optimization cleanly derived.",
+              "ar": "تطبيقات السلاسل في البرمجة الديناميكية."
+            }
           }
         ],
         "sections": [
@@ -9272,8 +10183,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Every DP solution answers 3 questions:\n1. What is `dp[state]`'s precise meaning? (e.g., `dp[w]` = max value fitting weight <= w)\n2. What Base Cases stop recursion? (`dp[0] = 0`)\n3. What Transition combines smaller states? (0/1 Knapsack: loop capacity `w` backwards from `W` down to `wt[i]` cleanly in 1D O(W) RAM!).",
-              "ar": "كل حل DP يجيب عن 3 أسئلة:\n1. ماذا تعني الحالة `dp[state]` بالضبط؟\n2. ما الحالات الأساسية؟\n3. ما معادلة الانتقال التي تربط الحالات الأصغر بالأكبر؟ (وفي حقيبة الظهر 0/1 نمرر حلقة الوزن بالعكس لنمنع تكرار نفس العنصر)."
+              "en": "Every DP solution answers 3 questions:\n1. What is `dp[state]`'s precise meaning? (e.g., `dp[w]` = max value fitting weight <= w)\n2. What Base Cases stop recursion? (`dp[0] = 0`)\n3. What Transition combines smaller states? (0/1 Knapsack: loop capacity `w` backwards from `W` down to `wt[i]` cleanly in 1D O(W) RAM!).\n\n### Top-Down Memoization vs Bottom-Up Tabulation + Space Compression\n- **State:** `dp[w]` = maximum value achievable using capacity `w`.\n- **Transition:** For each item `(wt, val)`, either skip (`dp[w]`) or take (`dp[w - wt] + val`), looping `w` from `W` down to `wt` so one item never counts twice in 0/1 Knapsack!\n- **Complexity:** Time `O(n * W)`, Memory compressed cleanly from `O(n * W)` down to **O(W)**.",
+              "ar": "كل حل DP يجيب عن 3 أسئلة:\n1. ماذا تعني الحالة `dp[state]` بالضبط؟\n2. ما الحالات الأساسية؟\n3. ما معادلة الانتقال التي تربط الحالات الأصغر بالأكبر؟ (وفي حقيبة الظهر 0/1 نمرر حلقة الوزن بالعكس لنمنع تكرار نفس العنصر).\n\n### التصميم من الأعلى للأسفل والجدولة من الأسفل وضغط الذاكرة\n- **الحالة:** `dp[w]` تعني أعلى ربح بسعة `w`.\n- **الانتقال:** لكل عنصر إما تركه أو أخذه `dp[w - wt] + val` مع دوران `w` تنازلياً لمنع استخدام العنصر نفسه مرتين.\n- **التعقيد:** الزمن `O(n * W)` مع ضغط الذاكرة من مصفوفة ثنائية إلى بعد واحد `O(W)`."
             },
             "questions": [
               {
@@ -9322,8 +10233,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Every DP solution reduces an exponential problem into overlapping polynomial states:\n\n1. Four-Step Framework: Define State meaning -> Base case -> Recurrence transition -> Extraction order.\n2. Top-Down (Memoization) vs Bottom-Up (Tabulation): Top-down computes ONLY reachable subproblems recursively, while bottom-up iterates cleanly without recursion overhead.\n3. Rolling Array Space Optimization: Notice `dp[i][w]` in 0/1 Knapsack only depends on row `dp[i-1][...]`; looping weight `w` **BACKWARD (`W` down to `wt[i]`)** compresses `O(N * W)` memory down cleanly to `O(W)` 1D array without reusing the same item twice!",
-              "ar": "تحول البرمجة الديناميكية التعقيد الأسي إلى زمن كثير حدود بتجنب تكرار الحالات:\n\n1. خطوات التصميم: حدد معنى الحالة، حالة الأساس، معادلة الانتقال، وترتيب الحساب.\n2. Top-Down (Memoization) يحسب فقط الحالات التي يتم الوصول إليها، بينما Bottom-Up (Tabulation) أسرع دون مكدس عودي.\n3. ضغط الذاكرة في 0/1 Knapsack: لأن الصف `i` يعتمد فقط على `i-1`، يمكن استخدام مصفوفة أحادية الأبعاد `O(W)` بشرط عكس حلقة الوزن من `W` تنازلياً لكي لا نستخدم العنصر نفسه مرتين."
+              "en": "Every DP solution reduces an exponential problem into overlapping polynomial states:\n\n1. Four-Step Framework: Define State meaning -> Base case -> Recurrence transition -> Extraction order.\n2. Top-Down (Memoization) vs Bottom-Up (Tabulation): Top-down computes ONLY reachable subproblems recursively, while bottom-up iterates cleanly without recursion overhead.\n3. Rolling Array Space Optimization: Notice `dp[i][w]` in 0/1 Knapsack only depends on row `dp[i-1][...]`; looping weight `w` **BACKWARD (`W` down to `wt[i]`)** compresses `O(N * W)` memory down cleanly to `O(W)` 1D array without reusing the same item twice!\n\n### Top-Down Memoization vs Bottom-Up Tabulation + Space Compression\n- **State:** `dp[w]` = maximum value achievable using capacity `w`.\n- **Transition:** For each item `(wt, val)`, either skip (`dp[w]`) or take (`dp[w - wt] + val`), looping `w` from `W` down to `wt` so one item never counts twice in 0/1 Knapsack!\n- **Complexity:** Time `O(n * W)`, Memory compressed cleanly from `O(n * W)` down to **O(W)**.",
+              "ar": "تحول البرمجة الديناميكية التعقيد الأسي إلى زمن كثير حدود بتجنب تكرار الحالات:\n\n1. خطوات التصميم: حدد معنى الحالة، حالة الأساس، معادلة الانتقال، وترتيب الحساب.\n2. Top-Down (Memoization) يحسب فقط الحالات التي يتم الوصول إليها، بينما Bottom-Up (Tabulation) أسرع دون مكدس عودي.\n3. ضغط الذاكرة في 0/1 Knapsack: لأن الصف `i` يعتمد فقط على `i-1`، يمكن استخدام مصفوفة أحادية الأبعاد `O(W)` بشرط عكس حلقة الوزن من `W` تنازلياً لكي لا نستخدم العنصر نفسه مرتين.\n\n### التصميم من الأعلى للأسفل والجدولة من الأسفل وضغط الذاكرة\n- **الحالة:** `dp[w]` تعني أعلى ربح بسعة `w`.\n- **الانتقال:** لكل عنصر إما تركه أو أخذه `dp[w - wt] + val` مع دوران `w` تنازلياً لمنع استخدام العنصر نفسه مرتين.\n- **التعقيد:** الزمن `O(n * W)` مع ضغط الذاكرة من مصفوفة ثنائية إلى بعد واحد `O(W)`."
             },
             "questions": [
               {
@@ -9371,7 +10282,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "خوارزمية 0/1 Knapsack بذاكرة محسنة O(W)"
             },
             "isRequired": true,
-            "content": "vector<int> dp(W + 1, 0);\nfor (int i = 0; i < n; i++) {\n    for (int cap = W; cap >= wt[i]; cap--) { // Backwards loop prevents item reuse!\n        dp[cap] = max(dp[cap], dp[cap - wt[i]] + val[i]);\n    }\n}",
+            "content": {
+              "en": "### Stepping Through 0/1 Knapsack Transitions\n- Compare Unbounded Knapsack (forward `w++`) vs 0/1 Knapsack (backward `w--`) inside **Live JS Sandbox**.\n- Open the **DP Knapsack Table Visualizer** below to inspect each `max(skip, take)` cell choice.",
+              "ar": "### تتبع انتقالات الجدول وتعديل الاتجاه\n- قارن الحقيبة غير المحدودة (`w++`) مع حقيبة `0/1` (`w--`) داخل **Live JS Sandbox**.\n- استخدم **محاكي جدول DP** بالأسفل لتتبع اختيار الخلايا."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Iterating capacity descending ensures `dp[cap - wt[i]]` holds values strictly BEFORE item `i` was considered.",
@@ -9424,7 +10338,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "محاكي جدول البرمجة الديناميكية (0/1 Knapsack)"
             },
             "isRequired": true,
-            "content": "dp-table-visualizer",
+            "content": {
+              "en": "### Guided Lab: 0/1 Knapsack DP Table Construction\nInspect cell-by-cell state transitions `max(skip, take)` filling the bottom-up DP grid.\n\n**Experiments to Run:**\n1. Step forward and trace how `dp[i][w]` picks between inheriting above vs `val + dp[i-1][w - wt]`.\n2. Verify the final bottom-right cell stores the exact optimal profit.",
+              "ar": "### المعمل التفاعلي: بناء جدول البرمجة الديناميكية 0/1 Knapsack\nتتبّع حساب الخلايا خطوة بخطوة ومقارنة خيار الترك مع خيار الأخذ.\n\n**تجارب مقترحة:**\n1. شاهد قراءة الحالة السابقة عند احتساب `dp[i][w]`.\n2. تحقق من أن الخلية الأخيرة تحمل القيمة المثلى النهائية."
+            },
             "interactiveModuleId": "dp-table-visualizer"
           },
           {
@@ -9436,8 +10353,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "When minimizing coin count to make sum `S`, initialize unreachable states to `+INF` (`1e9`, NOT `INT_MAX` which overflows on `+ 1`!), and set `dp[0] = 0` cleanly.",
-              "ar": "عند البحث عن أقل عدد خطوات هيّئ الحالات غير الممكنة بقيمة آمنة مثل `1e9` وليس `INT_MAX` لتفادي Overflow عند جمع `1 + dp[prev]`."
+              "en": "When minimizing coin count to make sum `S`, initialize unreachable states to `+INF` (`1e9`, NOT `INT_MAX` which overflows on `+ 1`!), and set `dp[0] = 0` cleanly.\n\n### DP Initialization Traps\n- When computing exact sums/minimums, initializing unreachable states with `0` instead of `+INF` / `-INF` corrupts transitions silently.\n- Always define exact Base Cases cleanly before writing inner recurrence loops.",
+              "ar": "عند البحث عن أقل عدد خطوات هيّئ الحالات غير الممكنة بقيمة آمنة مثل `1e9` وليس `INT_MAX` لتفادي Overflow عند جمع `1 + dp[prev]`.\n\n### أخطاء تهيئة جدول البرمجة الديناميكية\n- تهيئة الحالات المستحيلة بالصفر بدلاً من `-INF`/`+INF` في مسائل التصغير أو التطابق الدقيق يفسد الحساب.\n- ثبّت حالات الأساس (`dp[0]`) بدقة قبل حلقات الانتقال."
             },
             "questions": [
               {
@@ -9486,8 +10403,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Spot Overlapping Subproblems + Optimal Substructure distinguishing DP from plain Divide-and-Conquer.\n- Implement both top-down Memoization and bottom-up Tabulation.\n- Formulate 2D grid, 0/1 Knapsack, and subsequence DP state transitions.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- اكتشاف تداخل المشاكل الفرعية للتمييز بين DP وفرق تسد.\n- التنفيذ بطريقتي Memoization و Tabulation.\n- صياغة حالات ومعادلات الانتقال في الشبكات و 0/1 Knapsack و LIS."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Spot Overlapping Subproblems + Optimal Substructure distinguishing DP from plain Divide-and-Conquer.\n- Implement both top-down Memoization and bottom-up Tabulation.\n- Formulate 2D grid, 0/1 Knapsack, and subsequence DP state transitions.\n\n### Practice Drill\nModify the **Live JS Sandbox** Coin Change (`coins = [1, 3, 4], target = 6`) solution using DP table minimization and confirm output equals `2`.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- اكتشاف تداخل المشاكل الفرعية للتمييز بين DP وفرق تسد.\n- التنفيذ بطريقتي Memoization و Tabulation.\n- صياغة حالات ومعادلات الانتقال في الشبكات و 0/1 Knapsack و LIS.\n\n### تدريب برمجي\nاكتب حل مسألة أقل عملات للمبلغ `6` بالبرمجة الديناميكية في المختبر وتأكد أن الناتج هو `2`."
             }
           }
         ],
@@ -9504,7 +10421,9 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "AL-DPR-M-003",
           "AL-DPR-M-004",
           "AL-DPR-H-005",
-          "AL-DPR-E-006"
+          "AL-DPR-E-006",
+          "EXP-DP-101",
+          "EXP-DP-102"
         ]
       }
     ]
@@ -9595,6 +10514,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Sparse Dijkstra implementation and complexity proof.",
               "ar": "تفاصيل تنفيذ ديكسترا وتطبيقات المسار الأقصر."
             }
+          },
+          {
+            "title": "USACO Guide: Shortest Paths (Dijkstra / Bellman-Ford)",
+            "url": "https://usaco.guide/gold/shortest-paths",
+            "type": "article",
+            "source": "USACO Guide",
+            "category": "Graphs",
+            "language": "en",
+            "description": {
+              "en": "Priority-queue Dijkstra templates and edge relaxation.",
+              "ar": "قوالب ديكسترا وأقصر مسار عملياً."
+            }
+          },
+          {
+            "title": "CP-Algorithms: Kruskal Minimum Spanning Tree",
+            "url": "https://cp-algorithms.com/graph/mst_kruskal.html",
+            "type": "cp_platform",
+            "source": "CP-Algorithms",
+            "category": "MST",
+            "language": "en",
+            "description": {
+              "en": "Sorting edges with Disjoint Set Union cycles checks.",
+              "ar": "خوارزمية كروسكال لبناء شجرة الامتداد الصغرى."
+            }
           }
         ],
         "sections": [
@@ -9607,8 +10550,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• Unweighted shortest path -> BFS O(V + E).\n• Non-negative weighted shortest path -> Dijkstra w/ min-heap O((V + E) log V).\n• Negative edge weights -> Bellman-Ford O(VE) (also flags negative cycles).\n• All-Pairs small graphs (V <= 400) -> Floyd-Warshall O(V³).\n• Minimum Spanning Tree -> Kruskal O(E log E) w/ DSU or Prim O(E log V).",
-              "ar": "• رسم غير موزون -> BFS بزمن O(V + E).\n• أوزان موجبة -> Dijkstra مع Min-Heap بزمن O((V+E) log V).\n• أوزان سالبة -> Bellman-Ford بزمن O(VE) لكشف الدورات السالبة.\n• كل الأزواج لرسوم صغيرة -> Floyd-Warshall.\n• أقل شجرة تربط الكل (MST) -> Kruskal أو Prim."
+              "en": "• Unweighted shortest path -> BFS O(V + E).\n• Non-negative weighted shortest path -> Dijkstra w/ min-heap O((V + E) log V).\n• Negative edge weights -> Bellman-Ford O(VE) (also flags negative cycles).\n• All-Pairs small graphs (V <= 400) -> Floyd-Warshall O(V³).\n• Minimum Spanning Tree -> Kruskal O(E log E) w/ DSU or Prim O(E log V).\n\n### Selecting BFS, Dijkstra, Bellman-Ford, or MST\n- **Unweighted shortest path:** BFS (`O(V + E)` queue hops).\n- **Non-negative edge weights:** Dijkstra with Min-Heap (`O((V + E) log V)`), discarding stale popped pairs `if (d > dist[u]) continue;`.\n- **Negative weights / cycle detection:** Bellman-Ford (`V - 1` edge relaxations, `O(V * E)`).\n- **Minimum Spanning Tree:** Sort edges + Kruskal Union-Find (`O(E log E)`).",
+              "ar": "• رسم غير موزون -> BFS بزمن O(V + E).\n• أوزان موجبة -> Dijkstra مع Min-Heap بزمن O((V+E) log V).\n• أوزان سالبة -> Bellman-Ford بزمن O(VE) لكشف الدورات السالبة.\n• كل الأزواج لرسوم صغيرة -> Floyd-Warshall.\n• أقل شجرة تربط الكل (MST) -> Kruskal أو Prim.\n\n### اختيار الخوارزمية المناسبة للرسم البياني\n- **حواف غير موزونة:** يكفي BFS بوقت `O(V + E)`.\n- **أوزان موجبة فقط:** ديكسترا مع Min-Heap بوقت `O((V + E) log V)` مع تجاهل المسافات القديمة.\n- **أوزان سالبة وكشف دوراتها:** بيلمان-فورد بوقت `O(V * E)`.\n- **شجرة الامتداد الصغرى:** كروسكال عبر فرز الحواف وهيكل DSU."
             },
             "questions": [
               {
@@ -9657,8 +10600,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Selecting the exact graph shortest-path or spanning-tree algorithm hinges cleanly on edge weights:\n\n1. Unweighted Shortest Path -> BFS (`O(V + E)`): Simple FIFO queue finds minimum edge count immediately.\n2. Non-Negative Weights (`w >= 0`) -> Dijkstra with Min-Heap (`O((V + E) log V)`): Greedily finalizes closest settled vertices.\n3. Negative Weights -> Bellman-Ford (`O(V * E)`): Relaxes all edges `V - 1` times and detects negative cycles.\n4. Minimum Spanning Tree -> Kruskal (`O(E log E)`): Sorts edges ascending and unions disconnected endpoints safely using Disjoint Set Union (DSU).",
-              "ar": "اختيار خوارزمية أقصر مسار أو شجرة التغطية يعتمد على أوزان الحواف:\n\n1. أوزان موحدة/غير موزونة -> BFS (`O(V + E)`).\n2. أوزان غير سالبة (`w >= 0`) -> ديكسترا بكومة الأولوية (`O((V + E) log V)`).\n3. أوزان سالبة -> بيلمان فورد `O(V * E)` وتكتشف الدورات السالبة.\n4. شجرة التغطية الصغرى (MST) -> كروسكال يفرز الحواف تصاعدياً ويربط المكونات المنفصلة بـ DSU."
+              "en": "Selecting the exact graph shortest-path or spanning-tree algorithm hinges cleanly on edge weights:\n\n1. Unweighted Shortest Path -> BFS (`O(V + E)`): Simple FIFO queue finds minimum edge count immediately.\n2. Non-Negative Weights (`w >= 0`) -> Dijkstra with Min-Heap (`O((V + E) log V)`): Greedily finalizes closest settled vertices.\n3. Negative Weights -> Bellman-Ford (`O(V * E)`): Relaxes all edges `V - 1` times and detects negative cycles.\n4. Minimum Spanning Tree -> Kruskal (`O(E log E)`): Sorts edges ascending and unions disconnected endpoints safely using Disjoint Set Union (DSU).\n\n### Selecting BFS, Dijkstra, Bellman-Ford, or MST\n- **Unweighted shortest path:** BFS (`O(V + E)` queue hops).\n- **Non-negative edge weights:** Dijkstra with Min-Heap (`O((V + E) log V)`), discarding stale popped pairs `if (d > dist[u]) continue;`.\n- **Negative weights / cycle detection:** Bellman-Ford (`V - 1` edge relaxations, `O(V * E)`).\n- **Minimum Spanning Tree:** Sort edges + Kruskal Union-Find (`O(E log E)`).",
+              "ar": "اختيار خوارزمية أقصر مسار أو شجرة التغطية يعتمد على أوزان الحواف:\n\n1. أوزان موحدة/غير موزونة -> BFS (`O(V + E)`).\n2. أوزان غير سالبة (`w >= 0`) -> ديكسترا بكومة الأولوية (`O((V + E) log V)`).\n3. أوزان سالبة -> بيلمان فورد `O(V * E)` وتكتشف الدورات السالبة.\n4. شجرة التغطية الصغرى (MST) -> كروسكال يفرز الحواف تصاعدياً ويربط المكونات المنفصلة بـ DSU.\n\n### اختيار الخوارزمية المناسبة للرسم البياني\n- **حواف غير موزونة:** يكفي BFS بوقت `O(V + E)`.\n- **أوزان موجبة فقط:** ديكسترا مع Min-Heap بوقت `O((V + E) log V)` مع تجاهل المسافات القديمة.\n- **أوزان سالبة وكشف دوراتها:** بيلمان-فورد بوقت `O(V * E)`.\n- **شجرة الامتداد الصغرى:** كروسكال عبر فرز الحواف وهيكل DSU."
             },
             "questions": [
               {
@@ -9706,7 +10649,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "خوارزمية Dijkstra باستخدام Min-Heap"
             },
             "isRequired": true,
-            "content": "priority_queue<pair<long long,int>, vector<pair<long long,int>>, greater<>> pq;\nvector<long long> dist(n, INF);\ndist[src] = 0; pq.push({0, src});\nwhile (!pq.empty()) {\n    auto [d, u] = pq.top(); pq.pop();\n    if (d > dist[u]) continue; // Crucial stale-entry skip!\n    for (auto [v, w] : adj[u])\n        if (d + w < dist[v]) { dist[v] = d + w; pq.push({dist[v], v}); }\n}",
+            "content": {
+              "en": "### Dijkstra & Interactive BFS/DFS Comparison\n- Notice negative priorities or reversed comparators make Min-Heap behave safely across languages.\n- Compare Breadth-First waves vs Depth-First recursion interactively in the **Graph Traversal Visualizer** below!",
+              "ar": "### تتبع ديكسترا ومقارنة BFS مع DFS\n- لاحظ أهمية الترتيب التصاعدي في رتل الأولوية واستبعاد النسخ المتأخرة.\n- قارن عملياً بين مسح المستويات والتعمق داخل **محاكي Graph Traversal** بالأسفل."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Checking `if (d > dist[u]) continue;` skips outdated heap entries in O(1), keeping runtime at O((V+E) log V).",
@@ -9759,7 +10705,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "مختبر مقارنة BFS و DFS التفاعلي"
             },
             "isRequired": true,
-            "content": "graph-traversal-visualizer",
+            "content": {
+              "en": "### Guided Lab: Comparing BFS Layer Waves vs DFS Depth Paths\nSwitch between Queue-driven Breadth-First Search and Stack/Recursive Depth-First Search on the same graph.\n\n**Experiments to Run:**\n1. Run BFS from root and verify level-by-level hop distances (unweighted shortest path).\n2. Run DFS and watch backtracking when a branch terminates.\n3. Compare visited order between BFS and DFS.",
+              "ar": "### المعمل التفاعلي: مقارنة البحث العرضي BFS والعمقي DFS\nبدّل بين BFS المعتمد على الرتل و DFS المعتمد على التعمق.\n\n**تجارب مقترحة:**\n1. شغّل BFS لمشاهدة مسح العقد طبقة بطبقة (أقصر مسار بالخطوات).\n2. شغّل DFS لملاحظة التعمق والتراجع عند المسارات المسدودة.\n3. قارن ترتيب الزيارة بينهما."
+            },
             "interactiveModuleId": "graph-traversal-visualizer"
           },
           {
@@ -9771,8 +10720,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Path sums across `10^5` edges with weight `10^9` hit `10^14` cleanly! Always store `dist[]` as 64-bit `long long` initialized to `LLONG_MAX / 4` (around `4e18`), NOT `INT_MAX`!",
-              "ar": "مجموع المسافات على مسار طويل يتجاوز حدود `int` بسهولة؛ استخدم `long long` مهيأ بقيمة مثل `4e18`."
+              "en": "Path sums across `10^5` edges with weight `10^9` hit `10^14` cleanly! Always store `dist[]` as 64-bit `long long` initialized to `LLONG_MAX / 4` (around `4e18`), NOT `INT_MAX`!\n\n### Shortest-Path & Overflow Hazards\n- Never declare `dist` as 32-bit `int` when path sums can exceed `2.14e9`; use 64-bit `INF = 4e18`.\n- Never run standard Dijkstra on negative-weight edges; greedy popped distances become invalid once negative edges relax later.",
+              "ar": "مجموع المسافات على مسار طويل يتجاوز حدود `int` بسهولة؛ استخدم `long long` مهيأ بقيمة مثل `4e18`.\n\n### أخطاء أقصر مسار والأوزان السالبة\n- استخدم أعداداً 64-bit لمصفوفة المسافات كي لا يفيض جمع الأوزان الطويلة.\n- لا تشغل ديكسترا على حواف بأوزان سالبة لأنها تفترض أن المسافات لا تتقلص بعد التثبيت."
             },
             "questions": [
               {
@@ -9821,8 +10770,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Pick BFS vs DFS vs Dijkstra vs Bellman-Ford vs Floyd-Warshall accurately based on weights and graph size.\n- Detect cycles in directed vs undirected graphs using DFS recursion states.\n- Build Minimum Spanning Trees with Kruskal (+ DSU) or Prim.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- اختيار الخوارزمية الصحيحة بين BFS و Dijkstra و Bellman-Ford و Floyd-Warshall حسب طبيعة الأوزان.\n- اكتشاف الدورات في الرسوم الموجهة وغير الموجهة.\n- فهم بناء شجرة الامتداد الصغرى Kruskal و Prim."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Pick BFS vs DFS vs Dijkstra vs Bellman-Ford vs Floyd-Warshall accurately based on weights and graph size.\n- Detect cycles in directed vs undirected graphs using DFS recursion states.\n- Build Minimum Spanning Trees with Kruskal (+ DSU) or Prim.\n\n### Applied Drill\nRun both BFS and DFS starting from node `0` in the visualizer and list exact distance hops vs discovery timestamps.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- اختيار الخوارزمية الصحيحة بين BFS و Dijkstra و Bellman-Ford و Floyd-Warshall حسب طبيعة الأوزان.\n- اكتشاف الدورات في الرسوم الموجهة وغير الموجهة.\n- فهم بناء شجرة الامتداد الصغرى Kruskal و Prim.\n\n### تمرين عملي\nشغّل كلاً من BFS و DFS من العقدة `0` وسجّل ترتيب زيارة العقد وفرق المسافات."
             }
           }
         ],
@@ -9838,7 +10787,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "AL-GTR-M-003",
           "AL-GTR-M-004",
           "AL-GTR-H-005",
-          "AL-GTR-E-006"
+          "AL-GTR-E-006",
+          "EXP-GTR-101",
+          "EXP-GTR-102",
+          "EXP-GTR-103"
         ]
       }
     ]
@@ -9912,6 +10864,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Structured Edu modules on two pointers, DSU, segment trees, and binary search.",
               "ar": "دورات Codeforces التعليمية في خوارزميات المسابقات."
             }
+          },
+          {
+            "title": "CP-Algorithms: Asymptotics & Fast Techniques",
+            "url": "https://cp-algorithms.com/",
+            "type": "cp_platform",
+            "source": "CP-Algorithms",
+            "category": "CP",
+            "language": "en",
+            "description": {
+              "en": "Core competitive algorithms reference.",
+              "ar": "المرجع الأشمل لخوارزميات المسابقات."
+            }
+          },
+          {
+            "title": "CSES Problem Set: Introductory Track",
+            "url": "https://cses.fi/problemset/",
+            "type": "cp_platform",
+            "source": "CSES",
+            "category": "CP Practice",
+            "language": "en",
+            "description": {
+              "en": "Essential warmup problems checking fast I/O and bounds.",
+              "ar": "مجموعة المسائل التمهيدية لاختبار السرعة والدقة."
+            }
           }
         ],
         "sections": [
@@ -9924,8 +10900,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Online judges execute roughly ~10⁸ elementary operations per second in C++:\n• N <= 20: O(2^N) / Bitmask DP\n• N <= 500: O(N³) (Floyd-Warshall, Interval DP)\n• N <= 5,000: O(N²)\n• N <= 2·10⁵: O(N log N) or O(N)\n• N <= 10¹⁸: O(log N) or O(1) math / binary search.\n\nNever use `std::endl` inside large loops (flushes OS buffer every line causing TLE): always output `'\\n'`!",
-              "ar": "تنفذ خوادم المسابقات حوالي 10⁸ عملية بالثانية تقريباً:\n• N <= 20 تناسب O(2^N)\n• N <= 500 تناسب O(N³)\n• N <= 5000 تناسب O(N²)\n• N <= 2·10⁵ تتطلب O(N log N) أو O(N)\n• N <= 10¹⁸ تتطلب O(log N) أو O(1).\n\nتجنب استخدام `std::endl` داخل الحلقات الضخمة واستبدله بـ `'\\n'`."
+              "en": "Online judges execute roughly ~10⁸ elementary operations per second in C++:\n• N <= 20: O(2^N) / Bitmask DP\n• N <= 500: O(N³) (Floyd-Warshall, Interval DP)\n• N <= 5,000: O(N²)\n• N <= 2·10⁵: O(N log N) or O(N)\n• N <= 10¹⁸: O(log N) or O(1) math / binary search.\n\nNever use `std::endl` inside large loops (flushes OS buffer every line causing TLE): always output `'\\n'`!\n\n### Fast I/O, Judge Verdicts & Modular Arithmetic\n- Disable C stdio sync in C++ (`ios::sync_with_stdio(false); cin.tie(nullptr);`) and use `'\\n'` instead of `endl` so 300k lines run cleanly in `< 50ms`.\n- **Verdicts:** `AC` (Accepted), `WA` (Wrong Answer), `TLE` (Algorithm complexity / flush lag), `MLE` (Memory exceeding ~256 MB), `RE` (Invalid access / divide by 0).",
+              "ar": "تنفذ خوادم المسابقات حوالي 10⁸ عملية بالثانية تقريباً:\n• N <= 20 تناسب O(2^N)\n• N <= 500 تناسب O(N³)\n• N <= 5000 تناسب O(N²)\n• N <= 2·10⁵ تتطلب O(N log N) أو O(N)\n• N <= 10¹⁸ تتطلب O(log N) أو O(1).\n\nتجنب استخدام `std::endl` داخل الحلقات الضخمة واستبدله بـ `'\\n'`.\n\n### الإدخال السريع، أحكام المنصات، والعمليات المعيارية\n- في C++ افصل التزامن واستخدم `'\\n'` بدلاً من `endl` لتسريع طباعة مئات آلاف السطور.\n- **أهم الأحكام:** `AC` قبول، `WA` إجابة خاطئة، `TLE` تخطي الزمن، `MLE` نفاد الذاكرة، `RE` عطل تشغيل أو فهرس خاطئ."
             },
             "questions": [
               {
@@ -9974,8 +10950,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Competitive programming rewards precision under constraints:\n\n1. Fast I/O Essentials: `ios::sync_with_stdio(false); cin.tie(nullptr);` and printing `'\\n'` instead of `endl` prevents TLE from thousands of unnecessary stream flushes.\n2. Modular Arithmetic Invariants (`MOD = 1e9 + 7`): Distribute `% MOD` cleanly across `+`, `-`, `*`: critically write `((a - b) % MOD + MOD) % MOD` for subtraction so negative remainders turn positive!\n3. Reverse-Engineering N Bounds: Seeing `N <= 18` implies Bitmask DP; `N <= 2000` implies `O(N^2)` DP; `N <= 2e5` requires `O(N log N)` or `O(N)`!",
-              "ar": "تتطلب المسابقات البرمجية قراءة القيود وتجنب فخاخ الإدخال والحساب:\n\n1. تسريع الإدخال/الإخراج في C++ باستخدام `sync_with_stdio(false)` مع `'\\n'` بدل `endl` يمنع استهلاك الوقت في تفريغ المخزن المؤقت.\n2. باقي القسمة للأعداد السالبة: في الطرح نكتب `((a - b) % MOD + MOD) % MOD` لضمان نتيجة موجبة دائماً.\n3. قراءة الحد `N` تكشف التعقيد المطلوب قبل البدء بالكتابة."
+              "en": "Competitive programming rewards precision under constraints:\n\n1. Fast I/O Essentials: `ios::sync_with_stdio(false); cin.tie(nullptr);` and printing `'\\n'` instead of `endl` prevents TLE from thousands of unnecessary stream flushes.\n2. Modular Arithmetic Invariants (`MOD = 1e9 + 7`): Distribute `% MOD` cleanly across `+`, `-`, `*`: critically write `((a - b) % MOD + MOD) % MOD` for subtraction so negative remainders turn positive!\n3. Reverse-Engineering N Bounds: Seeing `N <= 18` implies Bitmask DP; `N <= 2000` implies `O(N^2)` DP; `N <= 2e5` requires `O(N log N)` or `O(N)`!\n\n### Fast I/O, Judge Verdicts & Modular Arithmetic\n- Disable C stdio sync in C++ (`ios::sync_with_stdio(false); cin.tie(nullptr);`) and use `'\\n'` instead of `endl` so 300k lines run cleanly in `< 50ms`.\n- **Verdicts:** `AC` (Accepted), `WA` (Wrong Answer), `TLE` (Algorithm complexity / flush lag), `MLE` (Memory exceeding ~256 MB), `RE` (Invalid access / divide by 0).",
+              "ar": "تتطلب المسابقات البرمجية قراءة القيود وتجنب فخاخ الإدخال والحساب:\n\n1. تسريع الإدخال/الإخراج في C++ باستخدام `sync_with_stdio(false)` مع `'\\n'` بدل `endl` يمنع استهلاك الوقت في تفريغ المخزن المؤقت.\n2. باقي القسمة للأعداد السالبة: في الطرح نكتب `((a - b) % MOD + MOD) % MOD` لضمان نتيجة موجبة دائماً.\n3. قراءة الحد `N` تكشف التعقيد المطلوب قبل البدء بالكتابة.\n\n### الإدخال السريع، أحكام المنصات، والعمليات المعيارية\n- في C++ افصل التزامن واستخدم `'\\n'` بدلاً من `endl` لتسريع طباعة مئات آلاف السطور.\n- **أهم الأحكام:** `AC` قبول، `WA` إجابة خاطئة، `TLE` تخطي الزمن، `MLE` نفاد الذاكرة، `RE` عطل تشغيل أو فهرس خاطئ."
             },
             "questions": [
               {
@@ -10023,7 +10999,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "قالب البداية السريع في C++ للمسابقات"
             },
             "isRequired": true,
-            "content": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // Avoid endl inside loops; use '\\n'\n    return 0;\n}",
+            "content": {
+              "en": "### Defensive Contest Header & Safe Modulo\n- Normalize modular subtraction via `((a - b) % MOD + MOD) % MOD` cleanly across signed languages.\n- Benchmark loop operation throughput in **Live JS Sandbox** for `10^5` vs `10^7` steps.",
+              "ar": "### قالب البدء الآمن وطرح باقي القسمة\n- احمِ الطرح المعياري بالصيغة `((a - b) % MOD + MOD) % MOD` لمنع القيم السالبة.\n- قِس سرعة الحلقات في **Live JS Sandbox** مع تكرارات مختلفة."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Decoupling C++ `cin/cout` from C `stdio` speeds up reading 200,000 numbers from ~800ms down to ~35ms!",
@@ -10077,8 +11056,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Writing `long long res = a * b;` where `a, b` are 32-bit `int` multiplies in 32-bit FIRST, overflowing before storing into `res`! Cast at least one operand: `1LL * a * b`! Also NEVER mix `scanf/printf` with `cin/cout` after disabling `sync_with_stdio(false)`.",
-              "ar": "كتابة `long long res = a * b;` عندما يكون `a` و`b` من نوع `int` تُجري الضرب بـ 32-بت فيحدث Overflow قبل التخزين! اكتب `1LL * a * b` دائماً، ولا تخلط `scanf` مع `cin` بعد إيقاف التزامن."
+              "en": "Writing `long long res = a * b;` where `a, b` are 32-bit `int` multiplies in 32-bit FIRST, overflowing before storing into `res`! Cast at least one operand: `1LL * a * b`! Also NEVER mix `scanf/printf` with `cin/cout` after disabling `sync_with_stdio(false)`.\n\n### Top Contest Mistakes\n- Mixing fast C++ `cin` (with `sync_with_stdio(false)`) and `scanf`/`printf` scrambles stream order unpredictably.\n- Casting `(1LL * a * b) % MOD` prevents 32-bit multiplication overflow BEFORE `% MOD` applies.",
+              "ar": "كتابة `long long res = a * b;` عندما يكون `a` و`b` من نوع `int` تُجري الضرب بـ 32-بت فيحدث Overflow قبل التخزين! اكتب `1LL * a * b` دائماً، ولا تخلط `scanf` مع `cin` بعد إيقاف التزامن.\n\n### أخطاء شائعة في المسابقات\n- لا تخلط بين `cin` و `scanf` بعد إيقاف التزامن.\n- اضرب بـ `1LL` قبل أخذ باقي القسمة حتى لا يفيض الناتج الوسيط."
             },
             "questions": [
               {
@@ -10127,8 +11106,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Infer safe target Big-O directly from constraint N (e.g., N<=20 -> 2^N; N<=10^5 -> N log N; N<=10^18 -> log N / O(1)).\n- Configure `ios::sync_with_stdio(false); cin.tie(nullptr);` and use `'\\n'` instead of `std::endl`.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- ربط حجم المدخلات N بالتعقيد الزمني المقبول في 1-2 ثانية.\n- تفعيل الإدخال السريع ومنع بطء تفريغ الـ buffer."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Infer safe target Big-O directly from constraint N (e.g., N<=20 -> 2^N; N<=10^5 -> N log N; N<=10^18 -> log N / O(1)).\n- Configure `ios::sync_with_stdio(false); cin.tie(nullptr);` and use `'\\n'` instead of `std::endl`.\n\n### Applied Challenge\nDetermine exact big-O complexity limits cleanly required for `n = 15`, `n = 2,000`, and `n = 500,000` under a strict 1-second judge limit.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- ربط حجم المدخلات N بالتعقيد الزمني المقبول في 1-2 ثانية.\n- تفعيل الإدخال السريع ومنع بطء تفريغ الـ buffer.\n\n### تمرين تحليل القيود\nاختر التعقيد المناسب لكل من `n = 15` و `n = 2,000` و `n = 500,000` ضمن مهلة ثانية واحدة."
             }
           }
         ],
@@ -10142,7 +11121,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "CP-INT-M-003",
           "CP-INT-M-004",
           "CP-INT-H-005",
-          "CP-INT-E-006"
+          "CP-INT-E-006",
+          "EXP-CPI-101",
+          "EXP-CPI-102",
+          "EXP-CPI-103",
+          "EXP-CPI-104",
+          "EXP-CPI-105"
         ]
       }
     ]
@@ -10218,15 +11202,39 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
         ],
         "externalReferences": [
           {
-            "title": "Codeforces Edu: Two Pointers Method",
-            "url": "https://codeforces.com/edu/course/2/lesson/9",
+            "title": "USACO Guide: Two Pointers Method",
+            "url": "https://usaco.guide/silver/two-pointers",
             "type": "cp_platform",
-            "source": "Codeforces",
+            "source": "USACO Guide",
             "category": "Competitive Programming",
             "language": "en",
             "description": {
               "en": "Proof-driven guide to two pointers and sliding window variants.",
               "ar": "شرح متكامل لأسلوب المؤشرين وبراهينه."
+            }
+          },
+          {
+            "title": "USACO Guide: Two Pointers Patterns",
+            "url": "https://usaco.guide/silver/two-pointers",
+            "type": "article",
+            "source": "USACO Guide",
+            "category": "Two Pointers",
+            "language": "en",
+            "description": {
+              "en": "2-Sum, subarrays, and monotonic sliding window proofs.",
+              "ar": "تطبيقات المؤشرين والنافذة المنزلقة."
+            }
+          },
+          {
+            "title": "CSES Problem Set: Sum of Two Values & Subarrays",
+            "url": "https://cses.fi/problemset/",
+            "type": "cp_platform",
+            "source": "CSES",
+            "category": "Practice",
+            "language": "en",
+            "description": {
+              "en": "Canonical O(N) pointer benchmarks.",
+              "ar": "مسائل تدريبية لتقنية المؤشرين."
             }
           }
         ],
@@ -10240,8 +11248,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "On a sorted array looking for `a[L] + a[R] == target`: if sum < target, only increasing `L` can raise it; if sum > target, decreasing `R` lowers it! Each pointer moves at most N total steps -> O(N).\n\nSimilarly, Sliding Window expands `R` while valid and shrinks `L` when invalid: valid whenever window cost changes monotonically (e.g. non-negative sums).",
-              "ar": "في مصفوفة مرتبة، إذا كان مجموع الطرفين أقل من الهدف نحرك L يميناً ليزداد المجموع، وإذا كان أكبر نحرك R يساراً ليقل؛ فيزور كل عنصر مرة واحدة فقط (O(N))."
+              "en": "On a sorted array looking for `a[L] + a[R] == target`: if sum < target, only increasing `L` can raise it; if sum > target, decreasing `R` lowers it! Each pointer moves at most N total steps -> O(N).\n\nSimilarly, Sliding Window expands `R` while valid and shrinks `L` when invalid: valid whenever window cost changes monotonically (e.g. non-negative sums).\n\n### Collapsing O(N^2) Brute Force to O(N) Monotonic Scans\n- **Opposing Pointers:** On sorted `a`, start `l = 0, r = n - 1`: if `a[l] + a[r] > K`, shrink `r--`; if `< K`, advance `l++`.\n- **Sliding Window:** With non-negative items, expand `r` adding `a[r]`, and while invalid (`sum > K`) shrink `l++`. Total moves stay `<= 2n` = **O(n)**.",
+              "ar": "في مصفوفة مرتبة، إذا كان مجموع الطرفين أقل من الهدف نحرك L يميناً ليزداد المجموع، وإذا كان أكبر نحرك R يساراً ليقل؛ فيزور كل عنصر مرة واحدة فقط (O(N)).\n\n### خفض الزمن من O(N^2) إلى O(N) بالمؤشرين\n- **المتقابلان:** بمصفوفة مرتبة، عند تجاوز الهدف قلص النهاية `r--` وعند النقص زد البداية `l++`.\n- **النافذة المنزلقة:** مع القيم الموجبة وسّع اليمين `r` وعند كسر الشرط قلّص اليسار `l++` في مجموع حركات لا يتعدى `2n`."
             },
             "questions": [
               {
@@ -10339,7 +11347,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "أطول مصفوفة فرعية مجموعها <= K بالنافذة المنزلقة"
             },
             "isRequired": true,
-            "content": "int L = 0, best = 0; long long sum = 0;\nfor (int R = 0; R < n; R++) {\n    sum += a[R];\n    while (sum > K) sum -= a[L++]; // Shrink left while constraint violated\n    best = max(best, R - L + 1);\n}",
+            "content": {
+              "en": "### Interactive Two Pointers Trace\n- Track `best = Math.max(best, r - l + 1)` strictly AFTER shrinking `while` restores validity.\n- Open the **Two Pointers Visualizer** below to step through opposite-end pointer contraction visually.",
+              "ar": "### تتبع النافذة المنزلقة والمؤشرين\n- احسب أقصى طول نافذة بعد إرجاع الحالة للشرط السليم بواسطة `while`.\n- افتح **محاكي Two Pointers** بالأسفل لتتبع التلاقي خطوة بخطوة."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "`R` increases N times and `L` increases at most N times total across the whole run -> strictly O(N).",
@@ -10392,7 +11403,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "محاكي تقنية المؤشرين التفاعلي"
             },
             "isRequired": true,
-            "content": "two-pointers-visualizer",
+            "content": {
+              "en": "### Guided Lab: Opposite-End Two Pointers Trace\nAdjust target sums and watch `left` and `right` converge in strictly `O(n)` without nested loops.\n\n**Experiments to Run:**\n1. Pick an achievable target and watch `sum > target` move `right--` while `sum < target` moves `left++`.\n2. Pick an unachievable target to see clean termination when `left >= right`.",
+              "ar": "### المعمل التفاعلي: تقنية المؤشرين Two Pointers\nحرّك `left` و `right` لإيجاد مجموع هدف في زمن O(n) دون حلقات متداخلة.\n\n**تجارب مقترحة:**\n1. جرب هدفاً متاحاً ولاحظ انكماش المؤشرين تبعاً للمجموع.\n2. جرب هدفاً مستحيلاً لملاحظة انتهاء البحث بأمان."
+            },
             "interactiveModuleId": "two-pointers-visualizer"
           },
           {
@@ -10404,8 +11418,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Sliding Window assumes adding an element strictly increases (or preserves) sum monotonicity! If an array contains NEGATIVE numbers, shrinking `L` could INCREASE the window sum, breaking variable-window monotonicity -> use Prefix Sums + HashMap (or deque for prefix minimums) when negatives appear!",
-              "ar": "تفترض نافذة الانزلاق للمجاميع وجود رتابة (الإضافة تزيد المجموع)! وجود أعداد سالبة يكسر الرتابة؛ وهنا نستخدم Prefix Sum + HashMap بدلاً من النافذة المباشرة."
+              "en": "Sliding Window assumes adding an element strictly increases (or preserves) sum monotonicity! If an array contains NEGATIVE numbers, shrinking `L` could INCREASE the window sum, breaking variable-window monotonicity -> use Prefix Sums + HashMap (or deque for prefix minimums) when negatives appear!\n\n### Sliding Window Failure Mode\n- Variable sliding windows break completely on negative array elements because advancing `r` could decrease total sum later! Switch cleanly to **Prefix Sums + HashMap** when negatives appear.",
+              "ar": "تفترض نافذة الانزلاق للمجاميع وجود رتابة (الإضافة تزيد المجموع)! وجود أعداد سالبة يكسر الرتابة؛ وهنا نستخدم Prefix Sum + HashMap بدلاً من النافذة المباشرة.\n\n### متى تفشل النافذة المنزلقة؟\n- وجود أعداد سالبة بالمصفوفة يكسر الرتابة لأن توسع النافذة قد يخفض المجموع لاحقاً؛ استخدم **Prefix Sum + HashMap** حينها."
             },
             "questions": [
               {
@@ -10454,8 +11468,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Optimize O(N²) pair-sum search on sorted inputs to single-sweep O(N) O(1)-space.\n- Implement expanding/shrinking sliding windows and understand why non-negativity matters.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- تقليل زمن البحث عن زوج في مصفوفة مرتبة من O(N²) إلى O(N) دون ذاكرة إضافية.\n- بناء النافذة المنزلقة (Sliding Window) والتأكد من رتابة الشرط."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Optimize O(N²) pair-sum search on sorted inputs to single-sweep O(N) O(1)-space.\n- Implement expanding/shrinking sliding windows and understand why non-negativity matters.\n\n### Live Practice Task\nWrite a minimum-length subarray with `sum >= target` (`>= 15` test cases) in **Live JS Sandbox** cleanly returning `0` when unreachable.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- تقليل زمن البحث عن زوج في مصفوفة مرتبة من O(N²) إلى O(N) دون ذاكرة إضافية.\n- بناء النافذة المنزلقة (Sliding Window) والتأكد من رتابة الشرط.\n\n### تدريب برمجي\nاكتب في المختبر دالة تجد أقصر مصفوفة فرعية مجموعها `>= target` بزمن `O(n)` وترجع `0` عند تعذر الوصول."
             }
           }
         ],
@@ -10470,7 +11484,11 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "CP-TWP-M-003",
           "CP-TWP-M-004",
           "CP-TWP-H-005",
-          "CP-TWP-E-006"
+          "CP-TWP-E-006",
+          "EXP-TWP-101",
+          "EXP-TWP-102",
+          "EXP-TWP-103",
+          "EXP-TWP-104"
         ]
       }
     ]
@@ -10547,6 +11565,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Classic number theory optimizations cleanly proved.",
               "ar": "شروحات دقيقة لغربال إراتوستينس والأس السريع."
             }
+          },
+          {
+            "title": "CP-Algorithms: Euclidean Algorithm & Extended GCD",
+            "url": "https://cp-algorithms.com/algebra/euclid-algorithm.html",
+            "type": "cp_platform",
+            "source": "CP-Algorithms",
+            "category": "Number Theory",
+            "language": "en",
+            "description": {
+              "en": "GCD, Bezout coefficients, and modular inverses.",
+              "ar": "خوارزمية إقليدس وحساب القاسم المشترك."
+            }
+          },
+          {
+            "title": "CP-Algorithms: Binary Exponentiation",
+            "url": "https://cp-algorithms.com/algebra/binary-exp.html",
+            "type": "cp_platform",
+            "source": "CP-Algorithms",
+            "category": "Number Theory",
+            "language": "en",
+            "description": {
+              "en": "O(log b) modular power tricks.",
+              "ar": "حساب الأس السريع مع باقي القسمة."
+            }
           }
         ],
         "sections": [
@@ -10559,8 +11601,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• GCD/LCM: Euclidean identity `gcd(a, b) = gcd(b, a % b)`; avoid `(a * b) / g` overflow via `(a / g) * b`.\n• Modular Arithmetic: Addition, subtraction `(a - b + M) % M`, and multiplication distribute safely mod `M = 10⁹ + 7`. For division `(a / b) % P`, multiply by Fermat's inverse `b^(P - 2) % P`.\n• Sieve of Eratosthenes: Marks multiples of primes in O(N log log N).",
-              "ar": "• القاسم المشترك GCD عبر باقي القسمة، والمضاعف LCM بالقسمة أولاً تجنباً للـ Overflow.\n• للقسمة باقي عدد أولي P، نضرب في المعكوس الضربي `b^(P-2) % P` (مبرهنة فيرما).\n• يولد غربال إراتوستينس الأعداد الأولية في O(N log log N)."
+              "en": "• GCD/LCM: Euclidean identity `gcd(a, b) = gcd(b, a % b)`; avoid `(a * b) / g` overflow via `(a / g) * b`.\n• Modular Arithmetic: Addition, subtraction `(a - b + M) % M`, and multiplication distribute safely mod `M = 10⁹ + 7`. For division `(a / b) % P`, multiply by Fermat's inverse `b^(P - 2) % P`.\n• Sieve of Eratosthenes: Marks multiples of primes in O(N log log N).\n\n### Euclid GCD, Sieve Primes & Modular Exponentiation\n- **Euclid GCD:** `gcd(a, b) = gcd(b, a % b)` finishes in `O(log min(a, b))`; safe LCM calculates `(a / gcd(a, b)) * b` dividing first.\n- **Sieve of Eratosthenes:** Cross multiples starting at `i * i` (`long long`) in `O(n log log n)`.\n- **Binary Exp + Fermat:** `a^b mod P` runs in `O(log b)`, and modular division `/ a mod prime P` becomes `* modPow(a, P - 2, P)`.",
+              "ar": "• القاسم المشترك GCD عبر باقي القسمة، والمضاعف LCM بالقسمة أولاً تجنباً للـ Overflow.\n• للقسمة باقي عدد أولي P، نضرب في المعكوس الضربي `b^(P-2) % P` (مبرهنة فيرما).\n• يولد غربال إراتوستينس الأعداد الأولية في O(N log log N).\n\n### إقليدس، الغربال، والأس السريع\n- **خوارزمية إقليدس:** تحسب القاسم المشترك الأكبر بزمن لوغاريتمي، وحساب المضاعف LCM يقسم أولاً قبل الضرب لتجنب الفيضان.\n- **الغربال:** يبدأ الشطب من `i * i` (بـ `long long`) بزمن شبه خطي `O(n log log n)`.\n- **فيرما والأس السريع:** حساب القوة بـ `O(log b)` والقسمة المعيارية لعدد أولي `P` تصبح ضرباً في `a^(P-2) mod P`."
             },
             "questions": [
               {
@@ -10609,8 +11651,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Modular arithmetic powers huge combinatorics answers under prime `M = 10^9 + 7`:\n\n1. Euclidean GCD: `gcd(a, b) = gcd(b, a % b)` finishes in `O(log min(a, b))`, giving `lcm(a, b) = (a / gcd(a, b)) * b` (divide BEFORE multiplying to avoid overflow!).\n2. Sieve of Eratosthenes: Marks composite multiples starting from `p * p` cleanly in `O(N log log N)`, generating primes up to `10^7` in milliseconds.\n3. Binary Exponentiation & Fermat's Inverse: Dividing `(A / B) mod P` does NOT divide raw remainder! For prime P not dividing B, `inv(B) = B^(P - 2) mod P` via O(log P) binary exponentiation!",
-              "ar": "الحساب المعياري يتيح التعامل مع الأرقام الفلكية تحت باقي أولي مثل `10^9 + 7`:\n\n1. القاسم المشترك الأكبر `gcd(a, b)` والمضاعف `lcm = (a / gcd) * b` (اقسم قبل الضرب دائماً لتجنب Overflow).\n2. غربال إراتوستينس يولّد الأعداد الأولية حتى الملايين بزمن `O(N log log N)` بالبدء من `p * p`.\n3. المعكوس المعياري: القسمة تحت `mod P` الأولي تتحول إلى ضرب في `pow(b, P - 2, P)` باستخدام الرفع السريع للأس `O(log P)`."
+              "en": "Modular arithmetic powers huge combinatorics answers under prime `M = 10^9 + 7`:\n\n1. Euclidean GCD: `gcd(a, b) = gcd(b, a % b)` finishes in `O(log min(a, b))`, giving `lcm(a, b) = (a / gcd(a, b)) * b` (divide BEFORE multiplying to avoid overflow!).\n2. Sieve of Eratosthenes: Marks composite multiples starting from `p * p` cleanly in `O(N log log N)`, generating primes up to `10^7` in milliseconds.\n3. Binary Exponentiation & Fermat's Inverse: Dividing `(A / B) mod P` does NOT divide raw remainder! For prime P not dividing B, `inv(B) = B^(P - 2) mod P` via O(log P) binary exponentiation!\n\n### Euclid GCD, Sieve Primes & Modular Exponentiation\n- **Euclid GCD:** `gcd(a, b) = gcd(b, a % b)` finishes in `O(log min(a, b))`; safe LCM calculates `(a / gcd(a, b)) * b` dividing first.\n- **Sieve of Eratosthenes:** Cross multiples starting at `i * i` (`long long`) in `O(n log log n)`.\n- **Binary Exp + Fermat:** `a^b mod P` runs in `O(log b)`, and modular division `/ a mod prime P` becomes `* modPow(a, P - 2, P)`.",
+              "ar": "الحساب المعياري يتيح التعامل مع الأرقام الفلكية تحت باقي أولي مثل `10^9 + 7`:\n\n1. القاسم المشترك الأكبر `gcd(a, b)` والمضاعف `lcm = (a / gcd) * b` (اقسم قبل الضرب دائماً لتجنب Overflow).\n2. غربال إراتوستينس يولّد الأعداد الأولية حتى الملايين بزمن `O(N log log N)` بالبدء من `p * p`.\n3. المعكوس المعياري: القسمة تحت `mod P` الأولي تتحول إلى ضرب في `pow(b, P - 2, P)` باستخدام الرفع السريع للأس `O(log P)`.\n\n### إقليدس، الغربال، والأس السريع\n- **خوارزمية إقليدس:** تحسب القاسم المشترك الأكبر بزمن لوغاريتمي، وحساب المضاعف LCM يقسم أولاً قبل الضرب لتجنب الفيضان.\n- **الغربال:** يبدأ الشطب من `i * i` (بـ `long long`) بزمن شبه خطي `O(n log log n)`.\n- **فيرما والأس السريع:** حساب القوة بـ `O(log b)` والقسمة المعيارية لعدد أولي `P` تصبح ضرباً في `a^(P-2) mod P`."
             },
             "questions": [
               {
@@ -10658,7 +11700,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "دالة الأس الثنائي mod P"
             },
             "isRequired": true,
-            "content": "long long modPow(long long a, long long e, long long M = 1000000007LL) {\n    long long res = 1;\n    a %= M;\n    while (e > 0) {\n        if (e & 1) res = (res * a) % M;\n        a = (a * a) % M;\n        e >>= 1;\n    }\n    return res;\n}",
+            "content": {
+              "en": "### Binary Squaring Walkthrough\n- Watch exponent bits halve `b >>= 1` each beat while squaring `base = (base * base) % mod`.\n- Test computing `(2^1000000) % 1000000007` interactively in **Live JS Sandbox** (using `BigInt`!).",
+              "ar": "### تتبع التربيع الثنائي المتكرر\n- يتربّع الأساس ويُقسم الأس على 2 بكل دورة لحساب أسس مليونية في أجزاء من الملي ثانية.\n- جرّب حساب `(2n ** 1000000n) % 1000000007n` في **Live JS Sandbox**."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Squares `a` and shifts exponent `e` right every step -> computes e up to 10¹⁸ in <= 60 iterations!",
@@ -10712,8 +11757,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "If `N = 10^6`, computing `int j = p * p` for `p = 46349` overflows signed 32-bit `int`! Use `long long` or keep the outer loop bound `i * i <= n` carefully. Similarly compute `lcm(a, b) = (a / gcd(a, b)) * b` rather than `(a * b) / gcd(a, b)`!",
-              "ar": "عند حدود المليون، حساب `p * p` بنوع `int` قد يفيض في C++! وكذلك احسب المضاعف المشترك بقسمة `a / gcd` قبل الضرب في `b`."
+              "en": "If `N = 10^6`, computing `int j = p * p` for `p = 46349` overflows signed 32-bit `int`! Use `long long` or keep the outer loop bound `i * i <= n` carefully. Similarly compute `lcm(a, b) = (a / gcd(a, b)) * b` rather than `(a * b) / gcd(a, b)`!\n\n### Arithmetic Overflow & `1` Edge Case\n- `1` is NOT a prime number (and `0` is non-prime); always initialize `isPrime[0] = isPrime[1] = false` cleanly.\n- Inside Sieve inner loop, writing `int j = i * i` overflows signed 32-bit `int` at `i >= 46,341`!",
+              "ar": "عند حدود المليون، حساب `p * p` بنوع `int` قد يفيض في C++! وكذلك احسب المضاعف المشترك بقسمة `a / gcd` قبل الضرب في `b`.\n\n### أخطاء الفيضان وحالة العدد 1\n- العدد `1` ليس أولياً أبداً؛ تذكّر استثناء 0 و 1 عند تهيئة الغربال.\n- حساب `i * i` بنوع `int` يفيض فور بلوغ `i >= 46,341`؛ استعمل `long long`."
             },
             "questions": [
               {
@@ -10762,8 +11807,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Compute `gcd(a, b)` in O(log min(a, b)) and overflow-safe `lcm`.\n- Evaluate `a^b mod M` via binary exponentiation and compute `a^(-1) mod P` using Fermat's Little Theorem.\n- Generate primes up to N in O(N log log N) with Sieve of Eratosthenes.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- حساب GCD و LCM دون فيض عددي.\n- حساب القوى الكبيرة باقي قسمة عدد أولي في O(log b).\n- بناء غربال إراتوستينس لتصنيف الأعداد الأولية حتى 10^7."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Compute `gcd(a, b)` in O(log min(a, b)) and overflow-safe `lcm`.\n- Evaluate `a^b mod M` via binary exponentiation and compute `a^(-1) mod P` using Fermat's Little Theorem.\n- Generate primes up to N in O(N log log N) with Sieve of Eratosthenes.\n\n### Applied Drill\nCompute `nCr(10, 3) mod 1,000,000,007` using modular inverse via Fermat's Little Theorem and verify `120` cleanly.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- حساب GCD و LCM دون فيض عددي.\n- حساب القوى الكبيرة باقي قسمة عدد أولي في O(log b).\n- بناء غربال إراتوستينس لتصنيف الأعداد الأولية حتى 10^7.\n\n### تمرين تطبيقي\nاحسب `C(10, 3) mod 1000000007` باستخدام المعكوس الضربي عبر فيرما وتأكد أن النتيجة `120`."
             }
           }
         ],
@@ -10777,7 +11822,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "CP-NTH-M-003",
           "CP-NTH-M-004",
           "CP-NTH-H-005",
-          "CP-NTH-E-006"
+          "CP-NTH-E-006",
+          "EXP-NTH-101",
+          "EXP-NTH-102",
+          "EXP-NTH-103",
+          "EXP-NTH-104",
+          "EXP-NTH-105"
         ]
       }
     ]
@@ -10867,6 +11917,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Point/range queries, lazy propagation, and BIT formulas.",
               "ar": "مرجع أشجار القطع وفينويك وDSU."
             }
+          },
+          {
+            "title": "CP-Algorithms: Fenwick Binary Indexed Tree",
+            "url": "https://cp-algorithms.com/data_structures/fenwick.html",
+            "type": "cp_platform",
+            "source": "CP-Algorithms",
+            "category": "Range Queries",
+            "language": "en",
+            "description": {
+              "en": "Compact BIT prefix query/update templates.",
+              "ar": "قوالب شجرة فينويك لاستعلامات النطاق."
+            }
+          },
+          {
+            "title": "CP-Algorithms: Disjoint Set Union & KMP",
+            "url": "https://cp-algorithms.com/data_structures/disjoint_set_union.html",
+            "type": "cp_platform",
+            "source": "CP-Algorithms",
+            "category": "DSU",
+            "language": "en",
+            "description": {
+              "en": "Path compression and union by size/rank.",
+              "ar": "هيكل المجموعات المنفصلة وضغط المسارات."
+            }
           }
         ],
         "sections": [
@@ -10879,8 +11953,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• Fenwick Tree (BIT): ~10 lines, `idx += idx & -idx`, excels at point-update + prefix-sum queries in O(log N).\n• Segment Tree: Supports arbitrary associative merges (min/max/gcd/sum), and Lazy Propagation defers range-update pushes in O(log N).\n• DSU (Path Compression + Union by Size): Connects/queries components in amortized O(α(N)).\n• KMP Prefix Function `π[i]`: Tracks longest proper prefix-suffix border in O(|S|) for linear string matching.",
-              "ar": "• شجرة Fenwick: مختصرة وسريعة لمجاميع البدايات والتحديثات النقطية في O(log N).\n• شجرة Segment Tree: تدعم أي عملية تجميعية ومع Lazy Propagation تحدّث نطاقاً كاملاً في O(log N).\n• DSU: دمج واستعلام المكونات المتصلة بوقت ثابت تقريباً O(α(N)).\n• KMP: للبحث عن أنماط النصوص في O(N + M)."
+              "en": "• Fenwick Tree (BIT): ~10 lines, `idx += idx & -idx`, excels at point-update + prefix-sum queries in O(log N).\n• Segment Tree: Supports arbitrary associative merges (min/max/gcd/sum), and Lazy Propagation defers range-update pushes in O(log N).\n• DSU (Path Compression + Union by Size): Connects/queries components in amortized O(α(N)).\n• KMP Prefix Function `π[i]`: Tracks longest proper prefix-suffix border in O(|S|) for linear string matching.\n\n### Dynamic Range Queries, Union-Find & Linear KMP\n- **Fenwick BIT:** 1-indexed array jumping by `i += (i & -i)` for O(log N) prefix sums & point updates in ~10 lines of code.\n- **Segment Tree (`4*N` heap array):** Handles arbitrary associative merges (`min`, `max`, `gcd`, range lazy updates).\n- **DSU + KMP:** Union-Find merges components in `~O(1)` (`alpha(N)`); KMP border table `pi` eliminates backtracking in substring search (`O(N + M)`).",
+              "ar": "• شجرة Fenwick: مختصرة وسريعة لمجاميع البدايات والتحديثات النقطية في O(log N).\n• شجرة Segment Tree: تدعم أي عملية تجميعية ومع Lazy Propagation تحدّث نطاقاً كاملاً في O(log N).\n• DSU: دمج واستعلام المكونات المتصلة بوقت ثابت تقريباً O(α(N)).\n• KMP: للبحث عن أنماط النصوص في O(N + M).\n\n### استعلامات النطاق الديناميكية، DSU، ومطابقة KMP\n- **شجرة فينويك BIT:** تبدأ من الفهرس `1` وتقفز عبر `i & -i` لاستعلامات المجاميع والتحديث بزمن `O(log N)`.\n- **شجرة القطع (4*N):** تعالج أي دالة تجميعية (`min/max/gcd`) وتدعم تحديث النطاق بالتأجيل Lazy.\n- **DSU و KMP:** لدمج المجموعات بأداء شبه ثابت ومطابقة النصوص بزمن خطي `O(N + M)`."
             },
             "questions": [
               {
@@ -10978,7 +12052,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "كود DSU القياسي بضغط المسار والحجم"
             },
             "isRequired": true,
-            "content": "struct DSU {\n    vector<int> p, sz;\n    DSU(int n) : p(n), sz(n, 1) { iota(p.begin(), p.end(), 0); }\n    int find(int x) { return p[x] == x ? x : p[x] = find(p[x]); } // Path compression\n    bool unite(int a, int b) {\n        a = find(a); b = find(b);\n        if (a == b) return false;\n        if (sz[a] < sz[b]) swap(a, b);\n        p[b] = a; sz[a] += sz[b]; return true;\n    }\n};",
+            "content": {
+              "en": "### Analyzing Path Compression in DSU\n- Notice `find(x)` flattens parent pointers straight toward root (`return parent[x] = find(parent[x])`), collapsing long trees permanently.\n- Combine DSU directly with Kruskal edges inside **Live JS Sandbox**!",
+              "ar": "### ضغط المسار في المجموعات المنفصلة\n- يعيد `find(x)` ربط كل عقدة مباشرة بالجذر فتنهار الارتفاعات إلى شبه O(1).\n- طبّق هيكل DSU مع اختبار المكونات المترابطة في **Live JS Sandbox**."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "Clean 10-line DSU powers Kruskal's MST, connected components, and cycle detection.",
@@ -11032,8 +12109,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Inside Fenwick BIT (`for (; i <= n; i += i & -i)`), passing index `0` causes `0 + (0 & -0) = 0`, hanging in an infinite loop! Fenwick Trees are strictly **1-indexed (`1..N`)**! Also in Segment Tree Lazy Propagation, always push pending lazy values to children BEFORE recursing left or right.",
-              "ar": "انتبه: في Fenwick Tree إذا مررت الفهرس `0` ستتوقف في حلقة لا نهائية لأن `0 & -0 = 0`! فهرسة BIT تكون دائماً 1-based (`1..N`). كما يجب دفع قيم Lazy للأطفال قبل النزول إليهم في شجرة القطع."
+              "en": "Inside Fenwick BIT (`for (; i <= n; i += i & -i)`), passing index `0` causes `0 + (0 & -0) = 0`, hanging in an infinite loop! Fenwick Trees are strictly **1-indexed (`1..N`)**! Also in Segment Tree Lazy Propagation, always push pending lazy values to children BEFORE recursing left or right.\n\n### Index & Lazy Update Mistakes\n- Indexing Fenwick BIT from `0` causes `0 + (0 & -0) = 0` infinite loop! Strictly start BIT indices at `1`.\n- In Lazy Segment Tree, ALWAYS push `lazy[node]` down to `2*node` and `2*node+1` before querying children.",
+              "ar": "انتبه: في Fenwick Tree إذا مررت الفهرس `0` ستتوقف في حلقة لا نهائية لأن `0 & -0 = 0`! فهرسة BIT تكون دائماً 1-based (`1..N`). كما يجب دفع قيم Lazy للأطفال قبل النزول إليهم في شجرة القطع.\n\n### أخطاء الفهرسة والتأجيل (Lazy Propagation)\n- البدء من الفهرس `0` في شجرة فينويك يسبب حلقة لا نهائية عند `0 & -0`؛ ابدأ دائماً من `1`.\n- ادفع قيمة `lazy` للأبناء قبل قراءة أي جزء من أبناء الشجرة."
             },
             "questions": [
               {
@@ -11082,8 +12159,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Pick between Fenwick BIT (fast, compact sum/prefix ops), Segment Tree (+ Lazy for range updates), and Sparse Table (O(1) static RMQ).\n- Maintain dynamic connected components cleanly in O(α(N)) using DSU.\n- Match patterns in O(N+M) via KMP/Z-Algorithm and navigate tree queries with LCA.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- الاختيار الأمثل بين Fenwick و Segment Tree و Sparse Table حسب نوع التحديثات.\n- إدارة المكونات المتصلة بسرعة O(α(N)) باستخدام DSU.\n- تطبيق KMP لمطابقة النصوص و LCA لأشجار المسابقات."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Pick between Fenwick BIT (fast, compact sum/prefix ops), Segment Tree (+ Lazy for range updates), and Sparse Table (O(1) static RMQ).\n- Maintain dynamic connected components cleanly in O(α(N)) using DSU.\n- Match patterns in O(N+M) via KMP/Z-Algorithm and navigate tree queries with LCA.\n\n### Applied Drill\nTrace KMP prefix function `pi` on pattern `\"ababa\"`, producing `[0, 0, 1, 2, 3]`, explaining why mismatching shifts cleanly without re-reading text.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- الاختيار الأمثل بين Fenwick و Segment Tree و Sparse Table حسب نوع التحديثات.\n- إدارة المكونات المتصلة بسرعة O(α(N)) باستخدام DSU.\n- تطبيق KMP لمطابقة النصوص و LCA لأشجار المسابقات.\n\n### تمرين عملي\nاستخرج مصفوفة الحدود `pi` للنمط `\"ababa\"` (`[0, 0, 1, 2, 3]`) ووضّح كيف تمنع العودة للخلف أثناء البحث."
             }
           }
         ],
@@ -11171,6 +12248,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Official constraint rules for PK, FK, Unique, and Check.",
               "ar": "التوثيق الرسمي لقيود الجداول والمفاتيح في PostgreSQL."
             }
+          },
+          {
+            "title": "PostgreSQL Docs: Table Expressions & Joins",
+            "url": "https://www.postgresql.org/docs/current/queries-table-expressions.html",
+            "type": "documentation",
+            "source": "PostgreSQL Docs",
+            "category": "Databases",
+            "language": "en",
+            "description": {
+              "en": "FROM clauses, table relations, and foreign keys.",
+              "ar": "بنية الجداول والعلاقات في PostgreSQL."
+            }
+          },
+          {
+            "title": "SQLBolt: Interactive Relational Table Lessons",
+            "url": "https://sqlbolt.com/",
+            "type": "article",
+            "source": "SQLBolt",
+            "category": "Interactive SQL",
+            "language": "en",
+            "description": {
+              "en": "Guided hands-on relational schema and query drills.",
+              "ar": "دروس تفاعلية لتعلم قواعد البيانات."
+            }
           }
         ],
         "sections": [
@@ -11183,8 +12284,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "A Relational Database structures data into normalized tables (relations) of typed columns and rows. Primary Keys uniquely identify every row (`UNIQUE` + `NOT NULL`). Foreign Keys reference another table's key, preventing orphaned pointers. Many-to-Many (`Students` <-> `Courses`) decomposes cleanly into a third junction table (`Enrollments(student_id, course_id)`).",
-              "ar": "تنظم قواعد البيانات العلائقية المعلومات في جداول مترابطة. يُعرّف المفتاح الأساسي كل صف بشكل فريد غير فارغ، بينما يربط المفتاح الأجنبي الجداول ويمنع السجلات اليتيمة. وتُحل علاقات متعدد لمتعدد M:N بإنشاء جدول وسيط ثالث."
+              "en": "A Relational Database structures data into normalized tables (relations) of typed columns and rows. Primary Keys uniquely identify every row (`UNIQUE` + `NOT NULL`). Foreign Keys reference another table's key, preventing orphaned pointers. Many-to-Many (`Students` <-> `Courses`) decomposes cleanly into a third junction table (`Enrollments(student_id, course_id)`).\n\n### Entities, Keys, Cardinality & Integrity Rules\n- **1:N (One-to-Many):** Foreign Key sits on the 'Many' table (`orders.customer_id -> customers.id`).\n- **M:N (Many-to-Many):** Modeled strictly via a clean Junction table (`enrollments(student_id, course_id)` with composite PK/FKs).\n- Database-level `PRIMARY KEY`, `FOREIGN KEY`, `UNIQUE`, `NOT NULL`, and `CHECK` guard bad data across all callers uniformly.",
+              "ar": "تنظم قواعد البيانات العلائقية المعلومات في جداول مترابطة. يُعرّف المفتاح الأساسي كل صف بشكل فريد غير فارغ، بينما يربط المفتاح الأجنبي الجداول ويمنع السجلات اليتيمة. وتُحل علاقات متعدد لمتعدد M:N بإنشاء جدول وسيط ثالث.\n\n### الكيانات، المفاتيح، والربط المرجعي\n- **واحد-لمتعدد (1:N):** يوضع المفتاح الأجنبي بجدول المتعدد (`orders.customer_id`).\n- **متعدد-لمتعدد (M:N):** يحتاج جدولاً وسيطاً يحتوي مفتاحين أجنبيين (`enrollments`).\n- القيود (`PRIMARY KEY`, `FOREIGN KEY`, `CHECK`, `NOT NULL`) تحمي البيانات داخل قاعدة البيانات نفسها."
             },
             "questions": [
               {
@@ -11282,7 +12383,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "تعريف جدول وعلاقة M:N بلغة SQL DDL"
             },
             "isRequired": true,
-            "content": "CREATE TABLE students (id INT PRIMARY KEY, full_name TEXT NOT NULL);\nCREATE TABLE courses  (id INT PRIMARY KEY, title TEXT NOT NULL);\nCREATE TABLE enrollments (\n    student_id INT REFERENCES students(id) ON DELETE CASCADE,\n    course_id  INT REFERENCES courses(id)  ON DELETE CASCADE,\n    PRIMARY KEY (student_id, course_id)\n);",
+            "content": {
+              "en": "### Inspecting Relational DDL & Testing Live Queries\n- Examine how `ON DELETE RESTRICT` stops orphan deletions while `CHECK (xp >= 0)` stops negative corruption.\n- Try running live SQL `SELECT * FROM enrollments;` in the **Interactive SQL Playground** above or inspect seeded tables!",
+              "ar": "### تتبع تعريف الجداول وتجربة الاستعلام الحي\n- لاحظ كيف تمنع قيود `FOREIGN KEY` و `CHECK` البيانات اليتيمة والخاطئة على مستوى المحرك.\n- جرب استعراض صفوف الجداول التجريبية مباشرة في المحرر!"
+            },
             "codeLanguage": "sql",
             "codeExplanation": {
               "en": "Composite Primary Key `(student_id, course_id)` prevents duplicate enrollments while Foreign Keys preserve integrity.",
@@ -11336,8 +12440,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Storing tags or IDs as `\"1,4,9\"` in one VARCHAR column breaks First Normal Form (1NF), kills foreign keys, and blocks B-Tree indexing! Split relations into clean child/junction rows cleanly.",
-              "ar": "وضع عدة معرّفات كنص `\"1,4,9\"` في عمود واحد يكسر التطبيع الأول 1NF ويمنع الفهارس والمفاتيح الأجنبية."
+              "en": "Storing tags or IDs as `\"1,4,9\"` in one VARCHAR column breaks First Normal Form (1NF), kills foreign keys, and blocks B-Tree indexing! Split relations into clean child/junction rows cleanly.\n\n### Anti-Patterns to Reject Immediately\n- Never pack comma-separated IDs (`\"1,4,9\"`) inside one column (breaks FKs, indexing, and 1NF cleanly).\n- Always define explicit `ON DELETE` rules matching business lifecycle.",
+              "ar": "وضع عدة معرّفات كنص `\"1,4,9\"` في عمود واحد يكسر التطبيع الأول 1NF ويمنع الفهارس والمفاتيح الأجنبية.\n\n### أنماط خاطئة يجب رفضها\n- لا تخزن قائمة معرفات نصية مفصولة بفواصل داخل عمود واحد؛ أنشئ جدول ربط نظامياً.\n- حدد سياسة الحذف `ON DELETE` بوضوح لتتوافق مع قواعد العمل."
             },
             "questions": [
               {
@@ -11386,8 +12490,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Enforce entity integrity using unique NOT NULL Primary Keys.\n- Model 1:N via foreign keys and M:N via dedicated Junction Tables.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- فهم خصائص المفتاح الأساسي والأجنبي وتكامل المراجع.\n- تمثيل علاقات 1:N و M:N بجداول وسيطة سليمة."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Enforce entity integrity using unique NOT NULL Primary Keys.\n- Model 1:N via foreign keys and M:N via dedicated Junction Tables.\n\n### Modeling Drill\nSketch exact tables, PKs, and FKs for an e-learning schema of `Instructors`, `Courses`, and `Tags` (`1:N` + `M:N`).",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- فهم خصائص المفتاح الأساسي والأجنبي وتكامل المراجع.\n- تمثيل علاقات 1:N و M:N بجداول وسيطة سليمة.\n\n### تمرين نمذجة\nصمّم جداول ومفاتيح قاعدة بيانات لـ `Instructors` و `Courses` و `Tags` مع تحديد علاقات 1:N و M:N."
             }
           }
         ],
@@ -11401,7 +12505,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "DB-REL-M-003",
           "DB-REL-M-004",
           "DB-REL-H-005",
-          "DB-REL-E-006"
+          "DB-REL-E-006",
+          "EXP-REL-101",
+          "EXP-REL-102",
+          "EXP-REL-103",
+          "EXP-REL-104",
+          "EXP-REL-105"
         ]
       }
     ]
@@ -11489,6 +12598,18 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Visual guide from basic SELECT queries to analytics.",
               "ar": "خارطة طريق تعلم SQL خطوة بخطوة."
             }
+          },
+          {
+            "title": "SQLBolt: Filtering, Grouping & Aggregations",
+            "url": "https://sqlbolt.com/",
+            "type": "article",
+            "source": "SQLBolt",
+            "category": "Interactive SQL",
+            "language": "en",
+            "description": {
+              "en": "Interactive exercises on WHERE, ORDER BY, COUNT, and HAVING.",
+              "ar": "تمارين عملية على SELECT و WHERE و التجميع."
+            }
           }
         ],
         "sections": [
@@ -11501,8 +12622,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Although SQL starts with `SELECT`, the engine evaluates clauses logically in order: `FROM` -> `WHERE` (row filter) -> `GROUP BY` -> `HAVING` (group filter) -> `SELECT` -> `ORDER BY`.\n\nWatch NULL pitfalls: `col = NULL` is ALWAYS `UNKNOWN` (falsey); always write `col IS NULL`!",
-              "ar": "رغم كتابة `SELECT` في السطر الأول، يعالج محرك قواعد البيانات الاستعلام بالترتيب: `FROM` -> `WHERE` (تصفية الصفوف) -> `GROUP BY` -> `HAVING` (تصفية المجموعات) -> `SELECT` -> `ORDER BY`.\n\nوتذكر أن مقارنة `= NULL` لا ترجع صواباً؛ نستخدم `IS NULL`."
+              "en": "Although SQL starts with `SELECT`, the engine evaluates clauses logically in order: `FROM` -> `WHERE` (row filter) -> `GROUP BY` -> `HAVING` (group filter) -> `SELECT` -> `ORDER BY`.\n\nWatch NULL pitfalls: `col = NULL` is ALWAYS `UNKNOWN` (falsey); always write `col IS NULL`!\n\n### SQL Logical Evaluation Order & Three-Valued Logic\nSQL writes `SELECT` first, yet the engine evaluates logically in order:\n`1. FROM` -> `2. WHERE` (raw row filter) -> `3. GROUP BY` -> `4. HAVING` (group filter) -> `5. SELECT` -> `6. ORDER BY` -> `7. LIMIT`.\n- That explains why column aliases from `SELECT` cannot filter inside `WHERE`, and why aggregates like `COUNT(*) > 3` belong in `HAVING`.",
+              "ar": "رغم كتابة `SELECT` في السطر الأول، يعالج محرك قواعد البيانات الاستعلام بالترتيب: `FROM` -> `WHERE` (تصفية الصفوف) -> `GROUP BY` -> `HAVING` (تصفية المجموعات) -> `SELECT` -> `ORDER BY`.\n\nوتذكر أن مقارنة `= NULL` لا ترجع صواباً؛ نستخدم `IS NULL`.\n\n### الترتيب المنطقي لتنفيذ SQL والمنطق ثلاثي القيم\nنكتب `SELECT` أولاً، لكن المحرك ينفذ الاستعلام بالترتيب:\n`FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY -> LIMIT`.\n- لذا لا تقبل `WHERE` دوال التجميع لأن التجميع يحدث بعدها؛ بل تذهب شروط المجموعات إلى `HAVING`."
             },
             "questions": [
               {
@@ -11600,7 +12721,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "مثال عملي لاستعلام تجميعي"
             },
             "isRequired": true,
-            "content": "SELECT department, COUNT(*) AS staff_count, ROUND(AVG(salary), 2) AS avg_sal\nFROM employees\nWHERE retired_at IS NULL\nGROUP BY department\nHAVING COUNT(*) >= 5\nORDER BY avg_sal DESC;",
+            "content": {
+              "en": "### Execute Real SQL Live Against Seeded Tables\n- Click **Execute SQL** above on our in-browser SQL engine over `students`, `courses`, `enrollments`, and `orders`.\n- Test changing `WHERE xp >= 1000` or adding `ORDER BY xp DESC LIMIT 2;` and watch live table output!",
+              "ar": "### تنفيذ استعلامات SQL مباشرة في المتصفح\n- اضغط **Execute SQL** للتجربة مباشرة على جداول `students` و `courses` و `enrollments` و `orders`.\n- عدّل الشروط وجرب `ORDER BY` و `LIMIT` وشاهد النتائج الحية فوراً."
+            },
             "codeLanguage": "sql",
             "codeExplanation": {
               "en": "Filters active employees first (`IS NULL`), aggregates stats per department, and keeps departments with >= 5 members.",
@@ -11653,7 +12777,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "مختبر تنفيذ استعلامات SQL التفاعلي"
             },
             "isRequired": true,
-            "content": "sql-query-visualizer",
+            "content": {
+              "en": "### Guided Lab: Interactive SQL Filter, Join & Sort Execution\nUse the SQL Visualizer and the interactive SQL Query Sandbox above to experiment directly with `SELECT`, `WHERE`, `ORDER BY`, `JOIN`, and aggregates.\n\n**Experiments to Run:**\n1. Filter rows dynamically (`WHERE xp >= 1000`) and inspect surviving output rows.\n2. Switch sort order and compare result count before/after grouping or limiting.",
+              "ar": "### المعمل التفاعلي: تنفيذ استعلامات SQL وتصفيتها\nاستخدم المختبر لتجربة شروط `WHERE` والربط والترتيب ومشاهدة الصفوف الناتجة.\n\n**تجارب مقترحة:**\n1. جرب تصفية الصفوف بشرط رقمي وشاهد النتائج.\n2. قارن الترتيب والتجميع في الاستعلامات."
+            },
             "interactiveModuleId": "sql-query-visualizer"
           },
           {
@@ -11665,8 +12792,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Remember `WHERE deleted_at = NULL` silently matches ZERO rows! Always use `IS NULL`. And in production APIs, avoid `SELECT *` without explicit column projection and `LIMIT`/pagination.",
-              "ar": "عبارة `= NULL` لا تُرجع أي صف أبداً! استخدم دائماً `IS NULL` وحدد الأعمدة المطلوبة مع `LIMIT` في التطبيقات الإنتاجية."
+              "en": "Remember `WHERE deleted_at = NULL` silently matches ZERO rows! Always use `IS NULL`. And in production APIs, avoid `SELECT *` without explicit column projection and `LIMIT`/pagination.\n\n### NULL & Aggregation Bugs\n- `= NULL` and `!= NULL` BOTH return `UNKNOWN` (empty result!); strictly use `IS NULL` / `IS NOT NULL`.\n- Avoid `SELECT *` in production queries; select explicit columns cleanly.",
+              "ar": "عبارة `= NULL` لا تُرجع أي صف أبداً! استخدم دائماً `IS NULL` وحدد الأعمدة المطلوبة مع `LIMIT` في التطبيقات الإنتاجية.\n\n### أخطاء NULL ودوال التجميع\n- المقارنة `col = NULL` تُرجع دائماً نتيجة مجهولة؛ استخدم `IS NULL` أو `IS NOT NULL`.\n- تجنب `SELECT *` في الاستعلامات الإنتاجية لحماية الأداء وتمرير الأعمدة اللازمة فقط."
             },
             "questions": [
               {
@@ -11715,8 +12842,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Filter rows accurately including `IS NULL` / `IS NOT NULL` three-valued logic.\n- Combine `WHERE` row filters with `GROUP BY` and `HAVING` group filters.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- استخدام شروط WHERE ومعالجة قيم NULL بدقة.\n- إجراء التجميع بـ GROUP BY وتصفية المجموعات عبر HAVING."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Filter rows accurately including `IS NULL` / `IS NOT NULL` three-valued logic.\n- Combine `WHERE` row filters with `GROUP BY` and `HAVING` group filters.\n\n### Live SQL Sandbox Challenge\nWrite a live query sorting all students in `students` by `xp DESC` showing strictly `name, track, xp` for learners above `1100` XP!",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- استخدام شروط WHERE ومعالجة قيم NULL بدقة.\n- إجراء التجميع بـ GROUP BY وتصفية المجموعات عبر HAVING.\n\n### تحدي SQL الحي\nاكتب استعلاماً في المحرر يعرض أسماء ومسارات ونقاط الطلاب ذوي `xp >= 1100` مرتبين تنازلياً."
             }
           }
         ],
@@ -11730,7 +12857,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "DB-SQL-M-003",
           "DB-SQL-M-004",
           "DB-SQL-H-005",
-          "DB-SQL-E-006"
+          "DB-SQL-E-006",
+          "EXP-SQL-101",
+          "EXP-SQL-102",
+          "EXP-SQL-103",
+          "EXP-SQL-104",
+          "EXP-SQL-105"
         ]
       },
       {
@@ -11793,6 +12925,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Common Table Expressions and safe join aggregation patterns.",
               "ar": "توثيق CTE وطرق ربط الجداول الآمنة."
             }
+          },
+          {
+            "title": "PostgreSQL Docs: Joins Between Tables",
+            "url": "https://www.postgresql.org/docs/current/tutorial-join.html",
+            "type": "documentation",
+            "source": "PostgreSQL Docs",
+            "category": "SQL Joins",
+            "language": "en",
+            "description": {
+              "en": "INNER, LEFT, OUTER, and self-join examples clearly illustrated.",
+              "ar": "شرح عملي لأنواع الربط بين الجداول."
+            }
+          },
+          {
+            "title": "SQLBolt: Multi-Table Joins & Aggregates",
+            "url": "https://sqlbolt.com/",
+            "type": "article",
+            "source": "SQLBolt",
+            "category": "Practice",
+            "language": "en",
+            "description": {
+              "en": "Interactive join drills preventing unmatched drops and duplication.",
+              "ar": "تمارين ربط الجداول المتعددة."
+            }
           }
         ],
         "sections": [
@@ -11805,8 +12961,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• `INNER JOIN`: Returns only rows with matches on BOTH sides.\n• `LEFT JOIN`: Preserves ALL rows from the left table; unmatched right columns become `NULL`. Caution: filtering `WHERE right_tbl.col = 'X'` turns a `LEFT JOIN` back into an `INNER JOIN`: place right-table filters inside the `ON` condition!\n• `UNION ALL` stacks results fast without `UNION`'s deduplicating sort.",
-              "ar": "• `INNER JOIN`: يُرجع الصفوف المتطابقة في الجدولين فقط.\n• `LEFT JOIN`: يحفظ جميع صفوف الجدول الأيسر ويضع NULL في أعمدة الأيمن عند عدم التطابق. (انتبه: وضع شرط على الجدول الأيمن داخل WHERE يلغي صفوف NULL، لذا ضعه في ON).\n• `UNION ALL` أسرع من `UNION` لأنه يتجنب فحص التكرار."
+              "en": "• `INNER JOIN`: Returns only rows with matches on BOTH sides.\n• `LEFT JOIN`: Preserves ALL rows from the left table; unmatched right columns become `NULL`. Caution: filtering `WHERE right_tbl.col = 'X'` turns a `LEFT JOIN` back into an `INNER JOIN`: place right-table filters inside the `ON` condition!\n• `UNION ALL` stacks results fast without `UNION`'s deduplicating sort.\n\n### Join Semantics, CTE Pipelines & Preventing Fan-Out\n- `INNER JOIN` emits matching rows on both sides; `LEFT JOIN` preserves ALL left rows padding unmatched right columns with `NULL`.\n- Multi-step CTEs (`WITH totals AS (...)`) decompose multi-table reports cleanly and prevent row fan-out bugs when combining independent `1:N` child tables.",
+              "ar": "• `INNER JOIN`: يُرجع الصفوف المتطابقة في الجدولين فقط.\n• `LEFT JOIN`: يحفظ جميع صفوف الجدول الأيسر ويضع NULL في أعمدة الأيمن عند عدم التطابق. (انتبه: وضع شرط على الجدول الأيمن داخل WHERE يلغي صفوف NULL، لذا ضعه في ON).\n• `UNION ALL` أسرع من `UNION` لأنه يتجنب فحص التكرار.\n\n### أنواع الربط، استخدام CTEs، ومنع تضاعف الصفوف\n- يُخرج `INNER JOIN` الصفوف المتطابقة فقط، بينما يحفظ `LEFT JOIN` جميع صفوف اليسار مع `NULL` لغير المطابق.\n- تقسيم الاستعلام بمراحل `WITH (...)` يوضح المنطق ويمنع مضاعفة الأرقام عند ربط جدولين تابعين معاً."
             },
             "questions": [
               {
@@ -11855,8 +13011,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Joining multiple tables lets queries reassemble normalized schemas seamlessly:\n\n1. `INNER JOIN` returns rows matching on both tables; `LEFT JOIN` keeps every left row cleanly even when zero right matches exist (filling missing columns with `NULL`).\n2. `LEFT JOIN` + Right-Table Filter Trap: Putting `WHERE right.status = 'active'` after a `LEFT JOIN` discards unmatched NULL rows, silently turning your `LEFT JOIN` into an `INNER JOIN`! Put optional right filters inside `ON ... AND right.status = 'active'` instead.\n3. Subqueries & CTEs (`WITH active_users AS (...)`): Break multi-stage analytical pipelines cleanly into readable named intermediate steps.",
-              "ar": "تسمح عمليات الربط بجمع البيانات الموزعة عبر الجداول المطبّعة:\n\n1. `INNER JOIN` يبقي المطابقات من الجانبين فقط، بينما `LEFT JOIN` يحتفظ بكل صفوف اليسار حتى لو لم يجد تطابقاً يميناً (بقيمة NULL).\n2. فخ تصفية الطرف الأيمن في `LEFT JOIN`: وضع شرط على الجدول الأيمن داخل `WHERE` يطرد الصفوف الفارغة ويحوّل الربط لـ `INNER JOIN`! ضعه داخل جملة `ON`.\n3. عبارات `WITH` (CTEs) تجعل الاستعلامات التحليلية الطويلة واضحة ومقسمة لمراحل."
+              "en": "Joining multiple tables lets queries reassemble normalized schemas seamlessly:\n\n1. `INNER JOIN` returns rows matching on both tables; `LEFT JOIN` keeps every left row cleanly even when zero right matches exist (filling missing columns with `NULL`).\n2. `LEFT JOIN` + Right-Table Filter Trap: Putting `WHERE right.status = 'active'` after a `LEFT JOIN` discards unmatched NULL rows, silently turning your `LEFT JOIN` into an `INNER JOIN`! Put optional right filters inside `ON ... AND right.status = 'active'` instead.\n3. Subqueries & CTEs (`WITH active_users AS (...)`): Break multi-stage analytical pipelines cleanly into readable named intermediate steps.\n\n### Join Semantics, CTE Pipelines & Preventing Fan-Out\n- `INNER JOIN` emits matching rows on both sides; `LEFT JOIN` preserves ALL left rows padding unmatched right columns with `NULL`.\n- Multi-step CTEs (`WITH totals AS (...)`) decompose multi-table reports cleanly and prevent row fan-out bugs when combining independent `1:N` child tables.",
+              "ar": "تسمح عمليات الربط بجمع البيانات الموزعة عبر الجداول المطبّعة:\n\n1. `INNER JOIN` يبقي المطابقات من الجانبين فقط، بينما `LEFT JOIN` يحتفظ بكل صفوف اليسار حتى لو لم يجد تطابقاً يميناً (بقيمة NULL).\n2. فخ تصفية الطرف الأيمن في `LEFT JOIN`: وضع شرط على الجدول الأيمن داخل `WHERE` يطرد الصفوف الفارغة ويحوّل الربط لـ `INNER JOIN`! ضعه داخل جملة `ON`.\n3. عبارات `WITH` (CTEs) تجعل الاستعلامات التحليلية الطويلة واضحة ومقسمة لمراحل.\n\n### أنواع الربط، استخدام CTEs، ومنع تضاعف الصفوف\n- يُخرج `INNER JOIN` الصفوف المتطابقة فقط، بينما يحفظ `LEFT JOIN` جميع صفوف اليسار مع `NULL` لغير المطابق.\n- تقسيم الاستعلام بمراحل `WITH (...)` يوضح المنطق ويمنع مضاعفة الأرقام عند ربط جدولين تابعين معاً."
             },
             "questions": [
               {
@@ -11904,7 +13060,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "تطبيق عملي: تقرير تقدم المتعلمين باستخدام CTE وLEFT JOIN"
             },
             "isRequired": true,
-            "content": "WITH user_completions AS (\n    SELECT user_id, COUNT(*) AS units_done\n    FROM user_unit_progresses\n    WHERE status IN (2, 3) -- Completed or Mastered\n    GROUP BY user_id\n)\nSELECT u.email, COALESCE(uc.units_done, 0) AS completed_units\nFROM users u\nLEFT JOIN user_completions uc ON uc.user_id = u.id\nORDER BY completed_units DESC;",
+            "content": {
+              "en": "### Reading CTE + Aggregation Pipelines\n- Notice grouping inside a CTE (`user_completed_units`) BEFORE joining to user profiles prevents multiple `SUM`/`COUNT` fan-outs.\n- Explore row matching visually inside the **SQL Query Lab** below!",
+              "ar": "### قراءة استعلامات CTE والتجميع الآمن\n- التجميع المسبق داخل CTE قبل الربط يحمي القيم الإجمالية من التكرار الكاذب.\n- جرّب تتبع شروط الربط داخل **معمل SQL التفاعلي** بالأسفل."
+            },
             "codeLanguage": "sql",
             "codeExplanation": {
               "en": "Aggregating completions inside a CTE BEFORE left-joining `users` prevents row explosion across multi-table joins and uses `COALESCE(..., 0)` so newcomers display clean zeros instead of NULL.",
@@ -11957,7 +13116,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "محاكي مقارنة INNER و LEFT JOIN التفاعلي"
             },
             "isRequired": true,
-            "content": "sql-query-visualizer",
+            "content": {
+              "en": "### Guided Lab: Interactive SQL Filter, Join & Sort Execution\nUse the SQL Visualizer and the interactive SQL Query Sandbox above to experiment directly with `SELECT`, `WHERE`, `ORDER BY`, `JOIN`, and aggregates.\n\n**Experiments to Run:**\n1. Filter rows dynamically (`WHERE xp >= 1000`) and inspect surviving output rows.\n2. Switch sort order and compare result count before/after grouping or limiting.",
+              "ar": "### المعمل التفاعلي: تنفيذ استعلامات SQL وتصفيتها\nاستخدم المختبر لتجربة شروط `WHERE` والربط والترتيب ومشاهدة الصفوف الناتجة.\n\n**تجارب مقترحة:**\n1. جرب تصفية الصفوف بشرط رقمي وشاهد النتائج.\n2. قارن الترتيب والتجميع في الاستعلامات."
+            },
             "interactiveModuleId": "sql-query-visualizer"
           },
           {
@@ -11969,8 +13131,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Forgetting an `ON` condition joins every row with every other row (`N * M` Cartesian explosion!). Likewise, joining two independent 1:N child tables in one flat query multiplies row counts, inflating `SUM()` values silently unless aggregated separately in CTEs first.",
-              "ar": "نسيان شرط الربط ينتج جداءً ديكارتياً `N * M`! كما أن ربط جدولين فرعيين معاً يضاعف قيم `SUM()` إذا لم نجمع كل فرع في CTE مستقل أولاً."
+              "en": "Forgetting an `ON` condition joins every row with every other row (`N * M` Cartesian explosion!). Likewise, joining two independent 1:N child tables in one flat query multiplies row counts, inflating `SUM()` values silently unless aggregated separately in CTEs first.\n\n### Silent Left-to-Inner Conversion Trap\n- Placing right-table filters (`WHERE r.status = 'Active'`) outside a `LEFT JOIN` drops all `NULL` unmatched rows, silently acting like an `INNER JOIN`! Put optional match filters inside `ON` instead.\n- Omitting `ON` clauses causes `O(N * M)` Cartesian cross joins.",
+              "ar": "نسيان شرط الربط ينتج جداءً ديكارتياً `N * M`! كما أن ربط جدولين فرعيين معاً يضاعف قيم `SUM()` إذا لم نجمع كل فرع في CTE مستقل أولاً.\n\n### فخ تحويل LEFT JOIN إلى INNER صامتاً\n- وضع شرط للجدول الأيمن في `WHERE` يستبعد الصفوف غير المتطابقة (`NULL`)؛ يجب وضع شروط التطابق الاختياري في `ON`.\n- نسيان جملة `ON` ينتج ضرباً ديكارتياً كارثياً."
             },
             "questions": [
               {
@@ -12019,8 +13181,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Select INNER vs LEFT vs FULL JOIN accurately including NULL unmatched-row handling.\n- Choose `UNION ALL` over `UNION` when deduplication isn't needed.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- فهم الفرق الدقيق بين INNER JOIN و LEFT JOIN وكيفية تعبئة القيم المفقودة بـ NULL.\n- استخدام الاستعلامات الفرعية و UNION ALL بكفاءة."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Select INNER vs LEFT vs FULL JOIN accurately including NULL unmatched-row handling.\n- Choose `UNION ALL` over `UNION` when deduplication isn't needed.\n\n### Applied Exercise\nIdentify why `SELECT c.title, COUNT(e.id) FROM courses c LEFT JOIN enrollments e ... GROUP BY c.id` correctly outputs `0` for empty courses whereas `COUNT(*)` would return `1`!",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- فهم الفرق الدقيق بين INNER JOIN و LEFT JOIN وكيفية تعبئة القيم المفقودة بـ NULL.\n- استخدام الاستعلامات الفرعية و UNION ALL بكفاءة.\n\n### تمرين تطبيقي\nوضّح لماذا يعيد `COUNT(e.id)` القيمة `0` للمقررات الفارغة مع `LEFT JOIN` بينما يعيد `COUNT(*)` القيمة `1` خطأً."
             }
           }
         ],
@@ -12034,7 +13196,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "DB-JNS-M-003",
           "DB-JNS-M-004",
           "DB-JNS-H-005",
-          "DB-JNS-E-006"
+          "DB-JNS-E-006",
+          "EXP-JNS-101",
+          "EXP-JNS-102",
+          "EXP-JNS-103",
+          "EXP-JNS-104",
+          "EXP-JNS-105"
         ]
       }
     ]
@@ -12095,7 +13262,9 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "passPercentage": 60,
           "questionCount": 5
         },
-        "interactiveModuleIds": [],
+        "interactiveModuleIds": [
+          "sql-query-visualizer"
+        ],
         "externalReferences": [
           {
             "title": "roadmap.sh: PostgreSQL Normalization & Modeling",
@@ -12107,6 +13276,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             "description": {
               "en": "Relational schema modeling, normalization, and integrity patterns.",
               "ar": "مبادئ تصميم الجداول والتطبيع في قواعد البيانات."
+            }
+          },
+          {
+            "title": "PostgreSQL Docs: Schema Constraints & Integrity",
+            "url": "https://www.postgresql.org/docs/current/ddl-constraints.html",
+            "type": "documentation",
+            "source": "PostgreSQL Docs",
+            "category": "Design",
+            "language": "en",
+            "description": {
+              "en": "Enforcing normalized data integrity cleanly via constraints.",
+              "ar": "حماية سلامة البيانات المطبعة بالقيود."
+            }
+          },
+          {
+            "title": "SQLBolt: Relational Modeling Foundations",
+            "url": "https://sqlbolt.com/",
+            "type": "article",
+            "source": "SQLBolt",
+            "category": "Databases",
+            "language": "en",
+            "description": {
+              "en": "Practical schema normalization and multi-table design.",
+              "ar": "ممارسات تصميم المخططات العلائقية."
             }
           }
         ],
@@ -12120,8 +13313,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Remember Codd's famous summary:\n• 1NF: Every cell holds one atomic value.\n• 2NF: No non-key column depends on only PART of a composite key ('the whole key').\n• 3NF: No non-key column depends on ANOTHER non-key column ('nothing but the key', eliminating transitive `PK -> A -> B`).\n• BCNF: Every determinant X in any dependency `X -> Y` must be a Superkey.",
-              "ar": "• 1NF: كل خانة تحوي قيمة واحدة غير قابلة للتقسيم.\n• 2NF: كل الأعمدة تعتمد على كامل المفتاح المركب لا على جزء منه.\n• 3NF: كل عمود غير مفتاحي يعتمد على المفتاح الأساسي مباشرة فقط (بلا اعتماد متعدٍ عبر عمود آخر).\n• BCNF: كل عمود محدد X في تبعية X -> Y يجب أن يكون Superkey."
+              "en": "Remember Codd's famous summary:\n• 1NF: Every cell holds one atomic value.\n• 2NF: No non-key column depends on only PART of a composite key ('the whole key').\n• 3NF: No non-key column depends on ANOTHER non-key column ('nothing but the key', eliminating transitive `PK -> A -> B`).\n• BCNF: Every determinant X in any dependency `X -> Y` must be a Superkey.\n\n### 1NF, 2NF, 3NF & Strategic Snapshot Denormalization\n- **1NF:** Every cell stores one atomic value (no comma lists).\n- **2NF:** Every non-key column depends on the WHOLE Primary Key (fixes composite keys).\n- **3NF:** Non-key attributes depend ONLY on the key (`Key, whole key, nothing but the key`)  -  removes transitive anomalies (`dept_name` depending on `dept_id`).\n- Strategic denormalization (like `order_item.unit_price_paid`) safely preserves immutable history.",
+              "ar": "• 1NF: كل خانة تحوي قيمة واحدة غير قابلة للتقسيم.\n• 2NF: كل الأعمدة تعتمد على كامل المفتاح المركب لا على جزء منه.\n• 3NF: كل عمود غير مفتاحي يعتمد على المفتاح الأساسي مباشرة فقط (بلا اعتماد متعدٍ عبر عمود آخر).\n• BCNF: كل عمود محدد X في تبعية X -> Y يجب أن يكون Superkey.\n\n### أشكال التطبيع 1NF-3NF ومتى نستثنيها للتاريخ\n- **1NF:** قيم ذرية مفردة بالخلايا دون قوائم مدمجة.\n- **2NF:** الاعتماد على كامل المفتاح الأساسي المركب لا على جزء منه.\n- **3NF:** ألا يعتمد عمود غير مفتاحي على عمود غير مفتاحي آخر.\n- النسخ المقصود لأسعار الشراء القديمة داخل الفاتورة يحمي السجل التاريخي من تغير السعر المستقبلي."
             },
             "questions": [
               {
@@ -12170,8 +13363,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Normalization prevents Insert, Update, and Delete anomalies cleanly:\n\n1. 1NF: Every cell holds one atomic value; no repeating array columns or CSV lists.\n2. 2NF: In tables with composite Primary Keys `(A, B)`, every non-key attribute depends on the ENTIRE key `(A, B)`, never partially on `A` alone.\n3. 3NF / BCNF: Zero Transitive Dependencies (`PK -> DeptId -> DeptName` -> move `DeptName` to `departments` table!).\n4. Strategic Denormalization: Once analytical read dashboards require billions of live aggregates (`user_total_xp` counters or reporting snapshots), intentional redundant caches trade write sync cost for fast reads.",
-              "ar": "يحمي التطبيع قاعدة البيانات من شذوذ الإدراج والتعديل والحذف:\n\n1. التطبيع الأول (1NF): قيم ذرية مفردة بدون قوائم مدمجة.\n2. التطبيع الثاني (2NF): في المفتاح المركب، كل عمود يعتمد على كامل المفتاح لا على نصفه فقط.\n3. التطبيع الثالث (3NF): إزالة التبعية المتعدية (`مفتاح -> رقم قسم -> اسم قسم`، لذا يُفصل جدول الأقسام).\n4. فك التطبيع المدروس: قد نخزّن مجموع النقاط XP أو لقطات تاريخية عمداً لتسريع القراءة الضخمة مع الانتباه لتحديثها برمجياً."
+              "en": "Normalization prevents Insert, Update, and Delete anomalies cleanly:\n\n1. 1NF: Every cell holds one atomic value; no repeating array columns or CSV lists.\n2. 2NF: In tables with composite Primary Keys `(A, B)`, every non-key attribute depends on the ENTIRE key `(A, B)`, never partially on `A` alone.\n3. 3NF / BCNF: Zero Transitive Dependencies (`PK -> DeptId -> DeptName` -> move `DeptName` to `departments` table!).\n4. Strategic Denormalization: Once analytical read dashboards require billions of live aggregates (`user_total_xp` counters or reporting snapshots), intentional redundant caches trade write sync cost for fast reads.\n\n### 1NF, 2NF, 3NF & Strategic Snapshot Denormalization\n- **1NF:** Every cell stores one atomic value (no comma lists).\n- **2NF:** Every non-key column depends on the WHOLE Primary Key (fixes composite keys).\n- **3NF:** Non-key attributes depend ONLY on the key (`Key, whole key, nothing but the key`)  -  removes transitive anomalies (`dept_name` depending on `dept_id`).\n- Strategic denormalization (like `order_item.unit_price_paid`) safely preserves immutable history.",
+              "ar": "يحمي التطبيع قاعدة البيانات من شذوذ الإدراج والتعديل والحذف:\n\n1. التطبيع الأول (1NF): قيم ذرية مفردة بدون قوائم مدمجة.\n2. التطبيع الثاني (2NF): في المفتاح المركب، كل عمود يعتمد على كامل المفتاح لا على نصفه فقط.\n3. التطبيع الثالث (3NF): إزالة التبعية المتعدية (`مفتاح -> رقم قسم -> اسم قسم`، لذا يُفصل جدول الأقسام).\n4. فك التطبيع المدروس: قد نخزّن مجموع النقاط XP أو لقطات تاريخية عمداً لتسريع القراءة الضخمة مع الانتباه لتحديثها برمجياً.\n\n### أشكال التطبيع 1NF-3NF ومتى نستثنيها للتاريخ\n- **1NF:** قيم ذرية مفردة بالخلايا دون قوائم مدمجة.\n- **2NF:** الاعتماد على كامل المفتاح الأساسي المركب لا على جزء منه.\n- **3NF:** ألا يعتمد عمود غير مفتاحي على عمود غير مفتاحي آخر.\n- النسخ المقصود لأسعار الشراء القديمة داخل الفاتورة يحمي السجل التاريخي من تغير السعر المستقبلي."
             },
             "questions": [
               {
@@ -12219,7 +13412,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "إعادة هيكلة SQL: إزالة التبعية المتعدية وتحقيق 3NF"
             },
             "isRequired": true,
-            "content": "-- BEFORE (Violates 3NF: repeating unit title inside every path placement)\n-- placements(path_id, unit_id, unit_title_en, display_order)\n\n-- AFTER (Normalized 3NF: Single source of truth in canonical reusable_units)\nCREATE TABLE reusable_units (\n    id VARCHAR(120) PRIMARY KEY,\n    title_en VARCHAR(200) NOT NULL\n);\nCREATE TABLE module_unit_placements (\n    module_id VARCHAR(120) NOT NULL,\n    unit_id VARCHAR(120) NOT NULL REFERENCES reusable_units(id),\n    display_order INT NOT NULL,\n    PRIMARY KEY (module_id, unit_id)\n);",
+            "content": {
+              "en": "### Refactoring Update Anomalies in SQL\n- Splitting `EmployeeDept` cleanly removes duplicate department strings so renaming `Engineering` modifies 1 row instead of 5,000 rows.\n- Verify table joins across normalized `students`, `courses`, and `enrollments` inside our interactive playground!",
+              "ar": "### إعادة هيكلة الجداول لإزالة شذوذ التحديث\n- فصل جدول الأقسام عن الموظفين يجعل تعديل اسم القسم في صف واحد بدل آلاف الصفوف.\n- راجع الجداول المطبعة في محرر SQL التفاعلي."
+            },
             "codeLanguage": "sql",
             "codeExplanation": {
               "en": "Storing unit metadata once in `reusable_units` lets admins rename a shared unit in ONE single row without inconsistent duplicates across 9 paths!",
@@ -12273,8 +13469,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Beware: An invoice/order table MUST store `price_at_purchase` directly as a historical snapshot! If an order row ONLY joined `products.current_price`, raising a product price next year would rewrite historical receipts!",
-              "ar": "تنبيه مهم: سجل الفاتورة أو الاشتراك التاريخي يجب أن يحفظ السعر وقت الدفع (`price_at_purchase`) ولا يعتمد على سعر المنتج الحالي وإلا تغيرت فواتير الماضي عند رفع الأسعار!"
+              "en": "Beware: An invoice/order table MUST store `price_at_purchase` directly as a historical snapshot! If an order row ONLY joined `products.current_price`, raising a product price next year would rewrite historical receipts!\n\n### Over-Normalizing vs Under-Normalizing\n- Never leave mutable foreign entities duplicated as stale text.\n- Conversely, avoid splitting atomic address lines into 6 tiny lookup tables unless reporting strictly needs it.",
+              "ar": "تنبيه مهم: سجل الفاتورة أو الاشتراك التاريخي يجب أن يحفظ السعر وقت الدفع (`price_at_purchase`) ولا يعتمد على سعر المنتج الحالي وإلا تغيرت فواتير الماضي عند رفع الأسعار!\n\n### التوازن في التصميم\n- لا تكرر نصوص كيانات متغيرة عبر آلاف الصفوف.\n- ولا تبالغ بتفتيت القيم البسيطة لـ 6 جداول دون حاجة تحليلات حقيقية."
             },
             "questions": [
               {
@@ -12323,8 +13519,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Default OLTP schemas to 3NF/BCNF to prevent corrupt writes; selectively denormalize read-heavy analytics views or caches intentionally.",
-              "ar": "صمّم جداول المعاملات وفق 3NF لحماية الكتابة، ولا تلجأ لفك التسوية إلا في تقارير القراءة الضخمة عن قصد."
+              "en": "Default OLTP schemas to 3NF/BCNF to prevent corrupt writes; selectively denormalize read-heavy analytics views or caches intentionally.\n\n### Schema Refactor Drill\nNormalize `OrderSheet(order_id, customer_email, customer_city, item_id, item_name, qty)` into clean 3NF tables.",
+              "ar": "صمّم جداول المعاملات وفق 3NF لحماية الكتابة، ولا تلجأ لفك التسوية إلا في تقارير القراءة الضخمة عن قصد.\n\n### تمرين تطبيع جدول\nقسّم الجدول المدمج `OrderSheet` إلى جداول مترابطة مطابقة للشكل النظامي الثالث 3NF."
             }
           }
         ],
@@ -12338,7 +13534,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "DB-NRM-M-003",
           "DB-NRM-M-004",
           "DB-NRM-H-005",
-          "DB-NRM-E-006"
+          "DB-NRM-E-006",
+          "EXP-NRM-101",
+          "EXP-NRM-102",
+          "EXP-NRM-103",
+          "EXP-NRM-104",
+          "EXP-NRM-105"
         ]
       },
       {
@@ -12397,7 +13598,9 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "passPercentage": 60,
           "questionCount": 5
         },
-        "interactiveModuleIds": [],
+        "interactiveModuleIds": [
+          "sql-query-visualizer"
+        ],
         "externalReferences": [
           {
             "title": "PostgreSQL Docs: Index Types & Partial Indexes",
@@ -12409,6 +13612,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             "description": {
               "en": "B-Tree, GIN, Hash, Partial Unique Indexes, and EXPLAIN ANALYZE.",
               "ar": "مرجع الفهارس وتحسين أداء الاستعلامات."
+            }
+          },
+          {
+            "title": "PostgreSQL Docs: Performance Tips & EXPLAIN",
+            "url": "https://www.postgresql.org/docs/current/performance-tips.html",
+            "type": "documentation",
+            "source": "PostgreSQL Docs",
+            "category": "Performance",
+            "language": "en",
+            "description": {
+              "en": "Reading EXPLAIN ANALYZE plans and avoiding sequential table scans.",
+              "ar": "قراءة خطط الأداء EXPLAIN وتحسين الفهارس."
+            }
+          },
+          {
+            "title": "roadmap.sh: PostgreSQL Indexing Deep Dive",
+            "url": "https://roadmap.sh/postgresql-dba",
+            "type": "roadmap",
+            "source": "roadmap.sh",
+            "category": "DBA",
+            "language": "en",
+            "description": {
+              "en": "B-Tree vs Hash vs GIN indexing tradeoffs.",
+              "ar": "مقارنة أنواع الفهارس واختيار الأنسب."
             }
           }
         ],
@@ -12422,8 +13649,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Databases store sorted index pages in wide B+Trees (high branching factor ~100-500 children/node, so even 1 Billion rows need only 3-4 page hops!).\n\nPitfalls that disable indexes:\n• Wrapping indexed columns in functions (`YEAR(dt) = 2026` or `LOWER(email)`).\n• Leading wildcards (`LIKE '%gmail.com'`).\n• Remember: every index speeds SELECT reads while adding write-maintenance overhead on INSERT/UPDATE/DELETE!",
-              "ar": "تُبنى فهارس SQL غالباً بهيكل B+Tree ذي تفرع واسع، فيصل لمليار صف في 3 إلى 4 قفزات فقط.\n\nأخطاء تعطل الفهرس:\n• وضع العمود داخل دالة مثل `YEAR(date)` (اجعله نطاقاً مفتوحاً SARGable).\n• بدء البحث بـ `%` مثل `LIKE '%text'`.\nتذكر أن كثرة الفهارس تبطئ INSERT و UPDATE."
+              "en": "Databases store sorted index pages in wide B+Trees (high branching factor ~100-500 children/node, so even 1 Billion rows need only 3-4 page hops!).\n\nPitfalls that disable indexes:\n• Wrapping indexed columns in functions (`YEAR(dt) = 2026` or `LOWER(email)`).\n• Leading wildcards (`LIKE '%gmail.com'`).\n• Remember: every index speeds SELECT reads while adding write-maintenance overhead on INSERT/UPDATE/DELETE!\n\n### B-Tree Leaf Pages, Composite Left-Prefix & SARGable Filters\n- A B-Tree keeps sorted pointers over multi-megabyte tables so lookups traverse ~3-4 page hops (`O(log n)`) instead of full sequential disk scans (`O(n)`).\n- **Leftmost Prefix Rule:** Composite index `(tenant_id, created_at)` speeds filters on `(tenant_id)` or `(tenant_id, created_at)` cleanly, NOT `(created_at)` alone!",
+              "ar": "تُبنى فهارس SQL غالباً بهيكل B+Tree ذي تفرع واسع، فيصل لمليار صف في 3 إلى 4 قفزات فقط.\n\nأخطاء تعطل الفهرس:\n• وضع العمود داخل دالة مثل `YEAR(date)` (اجعله نطاقاً مفتوحاً SARGable).\n• بدء البحث بـ `%` مثل `LIKE '%text'`.\nتذكر أن كثرة الفهارس تبطئ INSERT و UPDATE.\n\n### فهارس B-Tree وقاعدة البادئة اليسرى و SARGable\n- تحافظ B-Tree على ترتيب المفاتيح لتقليص البحث بالملايين إلى بضع قفزات `O(log n)`.\n- **قاعدة اليسار:** الفهرس المركب `(tenant_id, created_at)` يفيد مع `tenant_id` أولاً ولا يخدم البحث بـ `created_at` وحده بكفاءة."
             },
             "questions": [
               {
@@ -12521,7 +13748,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "إعادة كتابة الاستعلام لاستغلال الفهرس"
             },
             "isRequired": true,
-            "content": "-- SLOW: wraps indexed column, forces Full Table Scan\nSELECT * FROM orders WHERE YEAR(created_at) = 2026;\n\n-- FAST: uses B-Tree Index Range Scan cleanly!\nSELECT * FROM orders\nWHERE created_at >= '2026-01-01' AND created_at < '2027-01-01';",
+            "content": {
+              "en": "### SARGable Range Rewrites\n- Wrapping indexed columns in functions (`WHERE YEAR(created_at) = 2026`) prevents index ordering! Rewrite cleanly into a range `created_at >= '2026-01-01' AND created_at < '2027-01-01'`.\n- Run interactive indexed filters inside our SQL playground!",
+              "ar": "### صياغة شروط صديقة للفهرس (SARGable)\n- تغليف العمود بدالة مثل `YEAR(created_at)` يعطل الفهرس؛ استبدله بمقارنة نطاق مباشر (`>=` و `<`).\n- اختبر استعلامات التصفية في مختبر SQL أعلاه."
+            },
             "codeLanguage": "sql",
             "codeExplanation": {
               "en": "Keeping `created_at` isolated on the left side enables immediate B-Tree range traversal.",
@@ -12575,8 +13805,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Every extra index slows down `INSERT / UPDATE / DELETE` because B-Trees must update cleanly per write! Also avoid `WHERE LOWER(email) = 'a@b.com'` on plain indexes (`email` index gets bypassed cleanly!) -> build an expression index `ON LOWER(email)` or normalize inputs before saving.",
-              "ar": "كل فهرس إضافي يبطئ عمليات الكتابة (`INSERT/UPDATE`)! وتجنب تغليف العمود المفهرس بدالة مثل `LOWER(email)` في شرط البحث لأن المحرك سيتجاهل الفهرس العادي ويتجه لمسح كامل."
+              "en": "Every extra index slows down `INSERT / UPDATE / DELETE` because B-Trees must update cleanly per write! Also avoid `WHERE LOWER(email) = 'a@b.com'` on plain indexes (`email` index gets bypassed cleanly!) -> build an expression index `ON LOWER(email)` or normalize inputs before saving.\n\n### Write Amplification & Dead Index Traps\n- Every extra index slows `INSERT`/`UPDATE`/`DELETE` because all trees update transactionally and expand RAM buffer usage.\n- Prefix wildcards (`LIKE '%gmail'`) cannot start B-Tree prefix scans (use `pg_trgm` GIN indexes for substring search!).",
+              "ar": "كل فهرس إضافي يبطئ عمليات الكتابة (`INSERT/UPDATE`)! وتجنب تغليف العمود المفهرس بدالة مثل `LOWER(email)` في شرط البحث لأن المحرك سيتجاهل الفهرس العادي ويتجه لمسح كامل.\n\n### تضخم الكتابة وفهارس النصوص\n- الإكثار من الفهارس يبطئ الإدراج والتعديل ويستهلك مساحة الـ RAM.\n- البحث بالبادئة المتغيرة `LIKE '%text'` لا يستخدم B-Tree العادي."
             },
             "questions": [
               {
@@ -12625,8 +13855,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Explain how shallow disk-paged B+Trees accelerate point and range lookups to O(log N).\n- Write SARGable WHERE filters so the query planner doesn't fall back to full table scans.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- فهم عمل B+Tree على أقراص التخزين لتقليص البحث من مسح شامل إلى O(log N).\n- كتابة شروط بحث متوافقة مع الفهارس (SARGable)."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Explain how shallow disk-paged B+Trees accelerate point and range lookups to O(log N).\n- Write SARGable WHERE filters so the query planner doesn't fall back to full table scans.\n\n### Optimization Exercise\nGiven slow query `SELECT * FROM logs WHERE LOWER(username) = 'ahmed'`, propose two fixes (functional/expression index vs case-insensitive normalized storage).",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- فهم عمل B+Tree على أقراص التخزين لتقليص البحث من مسح شامل إلى O(log N).\n- كتابة شروط بحث متوافقة مع الفهارس (SARGable).\n\n### تمرين تحسين استعلام\nكيف تحسّن استعلاماً يبحث عبر `LOWER(username) = 'ahmed'`؟ اقترح فهرساً تعبيرياً أو توحيد حالة الحروف."
             }
           }
         ],
@@ -12640,7 +13870,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "DB-IDX-M-003",
           "DB-IDX-M-004",
           "DB-IDX-H-005",
-          "DB-IDX-E-006"
+          "DB-IDX-E-006",
+          "EXP-IDX-101",
+          "EXP-IDX-102",
+          "EXP-IDX-103",
+          "EXP-IDX-104",
+          "EXP-IDX-105"
         ]
       }
     ]
@@ -12716,6 +13951,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Read Committed, Repeatable Read, and Serializable isolation guarantees.",
               "ar": "مستويات عزل المعاملات في PostgreSQL."
             }
+          },
+          {
+            "title": "PostgreSQL Docs: Concurrency Control & Performance",
+            "url": "https://www.postgresql.org/docs/current/performance-tips.html",
+            "type": "documentation",
+            "source": "PostgreSQL Docs",
+            "category": "Transactions",
+            "language": "en",
+            "description": {
+              "en": "Keeping transactions short and avoiding lock contention.",
+              "ar": "تقليل التنافس على الأقفال وقصر المعاملات."
+            }
+          },
+          {
+            "title": "roadmap.sh: ACID & Transactions Roadmap",
+            "url": "https://roadmap.sh/postgresql-dba",
+            "type": "roadmap",
+            "source": "roadmap.sh",
+            "category": "Databases",
+            "language": "en",
+            "description": {
+              "en": "Atomicity, WAL durability, MVCC, and isolation tradeoffs.",
+              "ar": "خارطة ACID ومستويات العزل و MVCC."
+            }
           }
         ],
         "sections": [
@@ -12728,8 +13987,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• Atomicity: Either every step commits together, or ROLLBACK undoes all partial changes.\n• Consistency: Schema constraints, triggers & invariants remain valid.\n• Isolation: Protects concurrent transactions from Dirty Reads, Non-Repeatable Reads, and Phantoms.\n• Durability: Write-Ahead Log (WAL) flushes survive sudden power loss.\nIn PostgreSQL, MVCC stamps row versions so snapshot readers never block concurrent writers!",
-              "ar": "• الذرية (Atomicity): إما تنفيذ المعاملة كاملة أو إلغاؤها كاملةً عند أي خطأ.\n• الاتساق (Consistency): احترام جميع القيود.\n• العزل (Isolation): عزل المعاملات المتزامنة عن بعضها.\n• الديمومة (Durability): حفظ المعاملة المثبتة حتى لو انقطعت الكهرباء عبر سجل WAL."
+              "en": "• Atomicity: Either every step commits together, or ROLLBACK undoes all partial changes.\n• Consistency: Schema constraints, triggers & invariants remain valid.\n• Isolation: Protects concurrent transactions from Dirty Reads, Non-Repeatable Reads, and Phantoms.\n• Durability: Write-Ahead Log (WAL) flushes survive sudden power loss.\nIn PostgreSQL, MVCC stamps row versions so snapshot readers never block concurrent writers!\n\n### ACID Guarantees, WAL Durability & MVCC Snapshots\n- **Atomicity:** All-or-nothing rollback (`BEGIN ... COMMIT / ROLLBACK`).\n- **Consistency:** Every committed state obeys all FK, UNIQUE, CHECK invariants.\n- **Isolation:** Concurrent transactions don't corrupt each other; **MVCC** gives readers non-blocking consistent snapshots!\n- **Durability:** Committed changes persist safely in the sequential Write-Ahead Log (WAL) even during power outages.",
+              "ar": "• الذرية (Atomicity): إما تنفيذ المعاملة كاملة أو إلغاؤها كاملةً عند أي خطأ.\n• الاتساق (Consistency): احترام جميع القيود.\n• العزل (Isolation): عزل المعاملات المتزامنة عن بعضها.\n• الديمومة (Durability): حفظ المعاملة المثبتة حتى لو انقطعت الكهرباء عبر سجل WAL.\n\n### ركائز ACID وسجل WAL ونظام MVCC\n- **Atomicity:** تنفيذ جميع الخطوات أو التراجع الكلي.\n- **Consistency:** احترام كامل لقيود القاعدة.\n- **Isolation & MVCC:** عزل المعاملات المتزامنة مع قراءة غير حاجزة للكتابة.\n- **Durability:** ضمان بقاء المعاملة المثبتة عبر سجل WAL المتتابع حتى عند انقطاع الطاقة."
             },
             "questions": [
               {
@@ -12827,7 +14086,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "معاملة تحويل مالي محمية بـ ACID"
             },
             "isRequired": true,
-            "content": "BEGIN;\nUPDATE accounts SET balance = balance - 100 WHERE id = 1 AND balance >= 100;\nUPDATE accounts SET balance = balance + 100 WHERE id = 2;\nCOMMIT; -- ROLLBACK instead if either check fails!",
+            "content": {
+              "en": "### Atomic Transfer Transactions & Isolation Levels\n- Wrap multi-step debit + credit + ledger audit inside a strict transaction block with row locks (`FOR UPDATE`) or atomic conditional `UPDATE ... WHERE balance >= amount`.\n- Compare Read Committed vs Repeatable Read vs Serializable anomalies!",
+              "ar": "### تتبع معاملة التحويل المالي ومستويات العزل\n- اجمع خصم الحساب والإضافة في معاملة واحدة مع شروط تحقق ذرية.\n- راجع الفروق بين مستويات العزل وقراءة MVCC."
+            },
             "codeLanguage": "sql",
             "codeExplanation": {
               "en": "Wrapping both updates inside `BEGIN ... COMMIT` guarantees nobody observes half-transferred balances.",
@@ -12881,8 +14143,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Never call slow external email/payment APIs WHILE holding open row locks inside a DB transaction! Also lock multiple resources in a consistent canonical order (e.g. lowest `account_id` first) to prevent transaction deadlocks (`A waits for B, B waits for A`).",
-              "ar": "لا تحتفظ بمعاملة قاعدة بيانات مفتوحة أثناء استدعاء API خارجي بطيء! ولتفادي Deadlock عند تحديث سجلين متقابلين احجزهما دائماً بترتيب موحد (مثلاً حسب المعرّف الأصغر أولاً)."
+              "en": "Never call slow external email/payment APIs WHILE holding open row locks inside a DB transaction! Also lock multiple resources in a consistent canonical order (e.g. lowest `account_id` first) to prevent transaction deadlocks (`A waits for B, B waits for A`).\n\n### Lock Contention & Pool Exhaustion Traps\n- **NEVER make external HTTP network requests inside an open SQL transaction!** Holding DB locks while waiting seconds on external APIs crashes concurrency.\n- Always lock multi-row transfers in deterministic ID order (`min(id)` then `max(id)`) to avoid mutual Deadlocks.",
+              "ar": "لا تحتفظ بمعاملة قاعدة بيانات مفتوحة أثناء استدعاء API خارجي بطيء! ولتفادي Deadlock عند تحديث سجلين متقابلين احجزهما دائماً بترتيب موحد (مثلاً حسب المعرّف الأصغر أولاً).\n\n### تجنب اختناق الأقفال والـ Deadlocks\n- **لا تُجرِ أي اتصال شبكة HTTP خارجي أثناء معاملة قاعدة بيانات مفتوحة!**\n- رتب أقفال الصفوف المتعددة وفق ID تصاعدي دوماً لتجنب التعارض الدائري Deadlock."
             },
             "questions": [
               {
@@ -12931,8 +14193,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Explain Atomicity, Consistency, Isolation, and Durability across bank-transfer scenarios.\n- Match Dirty Read, Non-Repeatable Read, and Phantom Read anomalies to SQL Isolation Levels.\n- Describe how PostgreSQL MVCC prevents readers from blocking writers.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- توضيح أركان ACID الأربعة عملياً عند حدوث عطل أو تعارض.\n- ربط أنواع شذوذ التزامن بمستويات العزل.\n- فهم تقنية النسخ المتعددة MVCC في PostgreSQL."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Explain Atomicity, Consistency, Isolation, and Durability across bank-transfer scenarios.\n- Match Dirty Read, Non-Repeatable Read, and Phantom Read anomalies to SQL Isolation Levels.\n- Describe how PostgreSQL MVCC prevents readers from blocking writers.\n\n### Concurrency Scenarios Drill\nContrast **Dirty Read**, **Non-Repeatable Read**, and **Phantom Read**, naming which PostgreSQL isolation level stops each cleanly.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- توضيح أركان ACID الأربعة عملياً عند حدوث عطل أو تعارض.\n- ربط أنواع شذوذ التزامن بمستويات العزل.\n- فهم تقنية النسخ المتعددة MVCC في PostgreSQL.\n\n### تمرين تزامن\nقارن بين القراءة المتسخة والقراءة غير المتكررة وقراءة الشبح ومستوى العزل الكفيل بمنع كل منها."
             }
           }
         ],
@@ -12946,7 +14208,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "DB-ACD-M-003",
           "DB-ACD-M-004",
           "DB-ACD-H-005",
-          "DB-ACD-E-006"
+          "DB-ACD-E-006",
+          "EXP-ACD-101",
+          "EXP-ACD-102",
+          "EXP-ACD-103",
+          "EXP-ACD-104",
+          "EXP-ACD-105"
         ]
       }
     ]
@@ -13024,6 +14291,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Authoritative textbook chapters on threads, mutexes, and deadlock prevention.",
               "ar": "فصول متخصصة في الخيوط والمزامنة وتجنب Deadlock."
             }
+          },
+          {
+            "title": "cppreference: Mutual Exclusion & Locks (std::mutex)",
+            "url": "https://en.cppreference.com/w/cpp/thread/mutex",
+            "type": "documentation",
+            "source": "cppreference",
+            "category": "Concurrency",
+            "language": "en",
+            "description": {
+              "en": "Scoped lock guards, data races, and deadlock avoidance.",
+              "ar": "إدارة الأقفال ومنع السباق والتوقف المميت."
+            }
+          },
+          {
+            "title": "roadmap.sh: Concurrency & Threads in CS",
+            "url": "https://roadmap.sh/computer-science",
+            "type": "roadmap",
+            "source": "roadmap.sh",
+            "category": "OS",
+            "language": "en",
+            "description": {
+              "en": "Process isolation vs thread shared heap concurrency.",
+              "ar": "مقارنة العمليات والخيوط والتزامن."
+            }
           }
         ],
         "sections": [
@@ -13036,8 +14327,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• Processes own isolated virtual address spaces (safe against cross-app corruption; heavier TLB context switches). Threads inside a process share Code/Heap/Files while owning private Stack + Registers.\n• Synchronization: Protect shared read-modify-write state (`counter++`) with a Mutex (single owner) or Counting Semaphore (N permits).\n• Deadlock needs ALL 4 Coffman conditions: Mutual Exclusion, Hold & Wait, No Preemption, Circular Wait -> acquiring locks in ascending global ID breaks Circular Wait completely!",
-              "ar": "• تمتلك الـ Process ذاكرة معزولة تماماً، بينما تتشارك الـ Threads داخلها الـ Heap ولكل خيط مكدس وسجلات مستقلة.\n• التزامن: استخدام Mutex يمنع تداخل الخيوط في المقطع الحرج (Race Condition).\n• يحدث الـ Deadlock بتحقق 4 شروط، وأسهل طريقة لمنعه هي أخذ الأقفال بترتيب رقمي تصاعدي موحد."
+              "en": "• Processes own isolated virtual address spaces (safe against cross-app corruption; heavier TLB context switches). Threads inside a process share Code/Heap/Files while owning private Stack + Registers.\n• Synchronization: Protect shared read-modify-write state (`counter++`) with a Mutex (single owner) or Counting Semaphore (N permits).\n• Deadlock needs ALL 4 Coffman conditions: Mutual Exclusion, Hold & Wait, No Preemption, Circular Wait -> acquiring locks in ascending global ID breaks Circular Wait completely!\n\n### Process Isolation, Shared Thread Heaps & Deadlock Prevention\n- **Processes** own isolated virtual address spaces (`O(microseconds)` heavy switch, high safety); **Threads** inside one process share Heap/Globals while keeping private Stacks and Registers.\n- **Race Condition:** `counter++` runs 3 CPU instructions (`Load, Add, Store`), causing lost updates unless guarded by `mutex` / atomic ops.\n- **Coffman Deadlock Conditions (break ANY 1):** Mutual Exclusion, Hold & Wait, No Preemption, **Circular Wait** (broken by strict lock ordering!).",
+              "ar": "• تمتلك الـ Process ذاكرة معزولة تماماً، بينما تتشارك الـ Threads داخلها الـ Heap ولكل خيط مكدس وسجلات مستقلة.\n• التزامن: استخدام Mutex يمنع تداخل الخيوط في المقطع الحرج (Race Condition).\n• يحدث الـ Deadlock بتحقق 4 شروط، وأسهل طريقة لمنعه هي أخذ الأقفال بترتيب رقمي تصاعدي موحد.\n\n### عزل العمليات، تشارك الخيوط، ومنع Deadlock\n- تمتلك كل **عملية (Process)** ذاكرة مستقلة آمنة، بينما تتشارك **الخيوط (Threads)** الـ Heap والمتغيرات العامة وتنفرد بالـ Stack والمسجلات.\n- **حالة السباق:** تعليمة `counter++` ليست ذرية وتحتاج `mutex` أو عمليات ذرية.\n- **منع Deadlock:** كسر أحد شروط كوفمان الأربعة، وأبسطها كسر الانتظار الدائري بفرض ترتيب موحد لاكتساب الأقفال."
             },
             "questions": [
               {
@@ -13086,8 +14377,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Operating systems balance strict isolation across Processes with lightweight parallelism inside Threads:\n\n1. Process vs Thread Context Switch: Switching threads inside the SAME process preserves virtual memory tables (CR3 / TLB cache!), making thread switches vastly faster than process switches.\n2. Synchronization Primitives: Mutexes (mutual exclusion ownership locks), Semaphores (resource counting slots), and Condition Variables protect shared mutable state cleanly from Race Conditions.\n3. Four Coffman Deadlock Conditions (ALL 4 required): Mutual Exclusion, Hold and Wait, No Preemption, and Circular Wait. Breaking ANY ONE prevents deadlock!",
-              "ar": "يوازن نظام التشغيل بين عزل العمليات وسرعة التوازي داخل الخيوط:\n\n1. تبديل الخيوط (Threads) أسرع من تبديل العمليات لأن الخيوط تشترك في نفس فضاء الذاكرة الافتراضية.\n2. أدوات المزامنة مثل `Mutex` و`Semaphore` تحمي البيانات المشتركة من حالات السباق (Race Conditions).\n3. شروط Deadlock الأربعة: الاستئثار بالمورد، الانتظار مع الاحتفاظ، عدم الانتزاع، والانتظار الدائري؛ وبكسر شرط واحد فقط يختفي التوقف المتبادل."
+              "en": "Operating systems balance strict isolation across Processes with lightweight parallelism inside Threads:\n\n1. Process vs Thread Context Switch: Switching threads inside the SAME process preserves virtual memory tables (CR3 / TLB cache!), making thread switches vastly faster than process switches.\n2. Synchronization Primitives: Mutexes (mutual exclusion ownership locks), Semaphores (resource counting slots), and Condition Variables protect shared mutable state cleanly from Race Conditions.\n3. Four Coffman Deadlock Conditions (ALL 4 required): Mutual Exclusion, Hold and Wait, No Preemption, and Circular Wait. Breaking ANY ONE prevents deadlock!\n\n### Process Isolation, Shared Thread Heaps & Deadlock Prevention\n- **Processes** own isolated virtual address spaces (`O(microseconds)` heavy switch, high safety); **Threads** inside one process share Heap/Globals while keeping private Stacks and Registers.\n- **Race Condition:** `counter++` runs 3 CPU instructions (`Load, Add, Store`), causing lost updates unless guarded by `mutex` / atomic ops.\n- **Coffman Deadlock Conditions (break ANY 1):** Mutual Exclusion, Hold & Wait, No Preemption, **Circular Wait** (broken by strict lock ordering!).",
+              "ar": "يوازن نظام التشغيل بين عزل العمليات وسرعة التوازي داخل الخيوط:\n\n1. تبديل الخيوط (Threads) أسرع من تبديل العمليات لأن الخيوط تشترك في نفس فضاء الذاكرة الافتراضية.\n2. أدوات المزامنة مثل `Mutex` و`Semaphore` تحمي البيانات المشتركة من حالات السباق (Race Conditions).\n3. شروط Deadlock الأربعة: الاستئثار بالمورد، الانتظار مع الاحتفاظ، عدم الانتزاع، والانتظار الدائري؛ وبكسر شرط واحد فقط يختفي التوقف المتبادل.\n\n### عزل العمليات، تشارك الخيوط، ومنع Deadlock\n- تمتلك كل **عملية (Process)** ذاكرة مستقلة آمنة، بينما تتشارك **الخيوط (Threads)** الـ Heap والمتغيرات العامة وتنفرد بالـ Stack والمسجلات.\n- **حالة السباق:** تعليمة `counter++` ليست ذرية وتحتاج `mutex` أو عمليات ذرية.\n- **منع Deadlock:** كسر أحد شروط كوفمان الأربعة، وأبسطها كسر الانتظار الدائري بفرض ترتيب موحد لاكتساب الأقفال."
             },
             "questions": [
               {
@@ -13135,7 +14426,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "تجنب الجمود بـ std::scoped_lock في C++"
             },
             "isRequired": true,
-            "content": "std::mutex mtxA, mtxB;\nvoid safeTransfer() {\n    // std::scoped_lock acquires both using deadlock-avoidance ordering!\n    std::scoped_lock lock(mtxA, mtxB);\n    // Critical section executes safely and unlocks via RAII\n}",
+            "content": {
+              "en": "### Scoped Locks & RAII Lock Acquisition\n- Prefer C++ `std::scoped_lock(m1, m2)` or `lock_guard` so exceptions or early returns ALWAYS release mutexes cleanly.\n- Avoid naked manual `.lock()` / `.unlock()` calls across complex control paths.",
+              "ar": "### الأقفال الآمنة بـ RAII\n- اعتمد `std::scoped_lock` و `lock_guard` ليُحرر القفل تلقائياً حتى عند حدوث خطأ أو رجوع مبكر.\n- تجنب إغلاق وفتح الأقفال يدوياً في مسارات متشعبة."
+            },
             "codeLanguage": "cpp",
             "codeExplanation": {
               "en": "`std::scoped_lock` acquires multiple mutexes atomically/deadlock-free and releases automatically on return.",
@@ -13189,8 +14483,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "`counter++` executes 3 hardware steps: LOAD from RAM -> ADD 1 -> STORE back! Two threads interleaving `LOAD` both read `5` and overwrite `6`, losing an increment! Use `std::atomic<int>` or mutex locks.",
-              "ar": "العبارة `counter++` تتكون من ثلاث خطوات عتادية (قراءة، جمع، كتابة)! تداخل خيطين يضيع إحدى الزيادات، لذا يلزم `atomic` أو قفل `Mutex`."
+              "en": "`counter++` executes 3 hardware steps: LOAD from RAM -> ADD 1 -> STORE back! Two threads interleaving `LOAD` both read `5` and overwrite `6`, losing an increment! Use `std::atomic<int>` or mutex locks.\n\n### Concurrency Bugs to Catch Early\n- Acquiring `(mutexA, mutexB)` in Thread 1 while Thread 2 acquires `(mutexB, mutexA)` guarantees intermittent production Deadlocks.\n- Assuming `++counter` or `if (!map[k]) map[k] = ...` is thread-safe without locking corrupts shared structures silently.",
+              "ar": "العبارة `counter++` تتكون من ثلاث خطوات عتادية (قراءة، جمع، كتابة)! تداخل خيطين يضيع إحدى الزيادات، لذا يلزم `atomic` أو قفل `Mutex`.\n\n### أخطاء التزامن المتكررة\n- عكس ترتيب أخذ قفلين بين خيطين يصنع حالة Deadlock عشوائية صعبة التتبع.\n- افتراض ذرية الزيادة أو القراءة-ثم-الكتابة بدون تزامن يفسد البيانات المشتركة."
             },
             "questions": [
               {
@@ -13239,8 +14533,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Compare process memory isolation against lightweight thread sharing.\n- Prevent Race Conditions using Mutexes, Semaphores, and `while (!cond)` Condition Variables.\n- Break Circular Wait deadlocks via deterministic global lock ordering.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- المقارنة بين العملية (Process) والخيط (Thread) في الذاكرة وتبديل السياق.\n- حماية المقاطع الحرجة عبر Mutex و Semaphore و Condition Variable.\n- منع الجمود (Deadlock) بكسر شرط الانتظار الدائري."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Compare process memory isolation against lightweight thread sharing.\n- Prevent Race Conditions using Mutexes, Semaphores, and `while (!cond)` Condition Variables.\n- Break Circular Wait deadlocks via deterministic global lock ordering.\n\n### Applied Drill\nIdentify all 4 Coffman deadlock requirements in a two-account lock example and show exact code fixing Circular Wait cleanly.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- المقارنة بين العملية (Process) والخيط (Thread) في الذاكرة وتبديل السياق.\n- حماية المقاطع الحرجة عبر Mutex و Semaphore و Condition Variable.\n- منع الجمود (Deadlock) بكسر شرط الانتظار الدائري.\n\n### تمرين تطبيقي\nطبّق شروط كوفمان الأربعة على مسألة قفل حسابين ثم اكتب الترتيب السليم لكسر الانتظار الدائري."
             }
           }
         ],
@@ -13258,7 +14552,9 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "OS-PRC-M-003",
           "OS-PRC-M-004",
           "OS-PRC-H-005",
-          "OS-PRC-E-006"
+          "OS-PRC-E-006",
+          "EXP-PRC-101",
+          "EXP-PRC-102"
         ]
       }
     ]
@@ -13333,6 +14629,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Deep analysis of FCFS, SJF, RR, and Multi-Level Feedback Queues.",
               "ar": "تحليل عميق لمجدولات المعالج وتأثير الشريحة الزمنية."
             }
+          },
+          {
+            "title": "roadmap.sh: Operating Systems Scheduling Guide",
+            "url": "https://roadmap.sh/computer-science",
+            "type": "roadmap",
+            "source": "roadmap.sh",
+            "category": "OS",
+            "language": "en",
+            "description": {
+              "en": "Context switch cost, fairness, turnaround, and aging.",
+              "ar": "تكلفة تبديل السياق والعدالة وتفادي الحرمان."
+            }
+          },
+          {
+            "title": "CS50: Systems & Resource Scheduling Context",
+            "url": "https://cs50.harvard.edu/x/",
+            "type": "article",
+            "source": "Harvard CS50",
+            "category": "Systems",
+            "language": "en",
+            "description": {
+              "en": "How operating systems share limited CPU cores safely.",
+              "ar": "توزيع أنوية المعالج بكفاءة وعدالة."
+            }
           }
         ],
         "sections": [
@@ -13345,8 +14665,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• FCFS: Simple FIFO queue, but suffers Convoy Effect when fast I/O-bound tasks stall behind one long CPU hog.\n• SJF: Mathematically minimizes average waiting time, though burst length must be estimated and long tasks risk Starvation (cured by Priority Aging).\n• Round Robin (RR): Preemptive fixed time quantum `q` gives crisp interactive responsiveness; too small `q` wastes CPU on context-switch overhead, too large `q` degrades to FCFS.",
-              "ar": "• FCFS: بسيط لكنه يعاني من انتظار العمليات السريعة خلف عملية طويلة.\n• SJF: أقل متوسط انتظار ولكن يصعب توقع المدة وقد يجوّع المهام الطويلة.\n• Round Robin: يوزع شرائح زمنية متساوية (Quantum) ليضمن استجابة سريعة للجميع."
+              "en": "• FCFS: Simple FIFO queue, but suffers Convoy Effect when fast I/O-bound tasks stall behind one long CPU hog.\n• SJF: Mathematically minimizes average waiting time, though burst length must be estimated and long tasks risk Starvation (cured by Priority Aging).\n• Round Robin (RR): Preemptive fixed time quantum `q` gives crisp interactive responsiveness; too small `q` wastes CPU on context-switch overhead, too large `q` degrades to FCFS.\n\n### Scheduler Metrics & Quantum Tradeoffs\n- **Turnaround = Completion - Arrival** (includes **Waiting Time + CPU Run Burst**).\n- **FCFS:** Simple yet suffers **Convoy Effect** behind giant batch jobs.\n- **SJF / SRTF:** Provably minimizes average wait time cleanly, yet requires future burst estimates and risks **starvation** of long jobs without Aging.\n- **Round Robin + MLFQ:** Balances interactive Response Time using time quantums `q` while aging/demoting CPU hogs cleanly.",
+              "ar": "• FCFS: بسيط لكنه يعاني من انتظار العمليات السريعة خلف عملية طويلة.\n• SJF: أقل متوسط انتظار ولكن يصعب توقع المدة وقد يجوّع المهام الطويلة.\n• Round Robin: يوزع شرائح زمنية متساوية (Quantum) ليضمن استجابة سريعة للجميع.\n\n### مقاييس جدولة المعالج وموازنة الشرائح\n- **زمن الإتمام (Turnaround):** لحظة الانتهاء ناقص لحظة الوصول.\n- **FCFS:** تعاني من أثر القافلة خلف المهام الطويلة.\n- **SJF / SRTF:** تقلل متوسط الانتظار لكنها تتطلب تقدير زمن المهمة وقد تسبب حرمان المهام الطويلة بدون Aging.\n- **Round Robin و MLFQ:** توازن الاستجابة السريعة بالحد من استهلاك المهام الثقيلة."
             },
             "questions": [
               {
@@ -13444,7 +14764,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "محاكاة برمجية لمجدول Round Robin"
             },
             "isRequired": true,
-            "content": "from collections import deque\n\ndef round_robin(tasks, quantum=4):\n    q = deque(tasks) # [(\"P1\", 10), (\"P2\", 4), (\"P3\", 6)]\n    t = 0\n    while q:\n        name, rem = q.popleft()\n        run = min(rem, quantum)\n        t += run\n        if rem > run:\n            q.append((name, rem - run)) # Preempt & re-queue\n        else:\n            print(f\"{name} finished at t={t}\")",
+            "content": {
+              "en": "### Tracing Round Robin & Gantt Charts\n- Watch ready queue pushes and context switch points carefully in Python code walkthrough.\n- Experiment interactively in the **CPU Scheduler Gantt Lab** below comparing FCFS vs SJF vs Round Robin with small vs large quantums!",
+              "ar": "### تتبع Round Robin ومخططات Gantt\n- راقب لحظات انتهاء الشريحة وعودة المهمة لنهاية الرتل.\n- اختبر خوارزميات الجدولة عملياً في **مختبر جدولة المعالج** بالأسفل مع تغيير قيمة الشريحة."
+            },
             "codeLanguage": "python",
             "codeExplanation": {
               "en": "Each ready process runs at most `quantum` time units; unfinished jobs get preempted to the FIFO back so interactive workloads respond smoothly.",
@@ -13497,7 +14820,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "محاكي جدولة المعالج ومخطط Gantt التفاعلي"
             },
             "isRequired": true,
-            "content": "os-scheduler-visualizer",
+            "content": {
+              "en": "### Guided Lab: CPU Scheduling Gantt Chart & Time Quantum\nCompare FCFS, SJF, and Round Robin time slices over process burst arrivals.\n\n**Experiments to Run:**\n1. Run FCFS with one giant process arriving ahead of short jobs to witness the Convoy Effect.\n2. Switch to Round Robin and vary quantum `q` to balance fairness vs context switching.",
+              "ar": "### المعمل التفاعلي: مجدول المعالج ومخطط Gantt\nقارن FCFS و SJF و Round Robin عبر شرائح زمنية مختلفة.\n\n**تجارب مقترحة:**\n1. شغّل FCFS مع مهمة طويلة أولاً لمشاهدة أثر القافلة.\n2. بدّل إلى Round Robin واختبر أثر تغيير الشريحة الزمنية."
+            },
             "interactiveModuleId": "os-scheduler-visualizer"
           },
           {
@@ -13509,8 +14835,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Shortest Job First minimizes average waiting mathematically, YET real OSes cannot predict future CPU burst lengths cleanly! Instead production OS schedulers (Windows, Linux CFS, MLFQ) approximate burst behavior from recent history and fairness timers.",
-              "ar": "خوارزمية SJF مثالية نظرياً لتقليل متوسط الانتظار، لكنها تفترض معرفة المستقبل! عملياً تعتمد الأنظمة مثل Linux وWindows على المراقبة التاريخية وMLFQ."
+              "en": "Shortest Job First minimizes average waiting mathematically, YET real OSes cannot predict future CPU burst lengths cleanly! Instead production OS schedulers (Windows, Linux CFS, MLFQ) approximate burst behavior from recent history and fairness timers.\n\n### Quantum Sizing & Fairness Traps\n- Tiny time quantums waste massive CPU cycles purely on Context Switching (`save/restore registers + TLB cache churn`).\n- Huge time quantums degenerate Round Robin straight back into FCFS.",
+              "ar": "خوارزمية SJF مثالية نظرياً لتقليل متوسط الانتظار، لكنها تفترض معرفة المستقبل! عملياً تعتمد الأنظمة مثل Linux وWindows على المراقبة التاريخية وMLFQ.\n\n### مزالق ضبط الشريحة الزمنية والعدالة\n- صِغر الشريحة جداً يهدر المعالج في تبديل السياق المستمر.\n- كِبَرها جداً يحول Round Robin عملياً إلى مجرد FCFS."
             },
             "questions": [
               {
@@ -13559,8 +14885,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Compute Turnaround and Waiting Times using Gantt charts across FCFS, SJF, and Round Robin.\n- Explain the Convoy Effect (FCFS), Starvation (SJF/Priority -> cured by Aging), and Quantum tuning (RR).",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- حساب زمن الانتظار والاستجابة في مخططات الجدولة.\n- فهم تأثير القافلة في FCFS وعلاج التجويع بـ Aging واختيار شريحة Round Robin."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Compute Turnaround and Waiting Times using Gantt charts across FCFS, SJF, and Round Robin.\n- Explain the Convoy Effect (FCFS), Starvation (SJF/Priority -> cured by Aging), and Quantum tuning (RR).\n\n### Gantt Chart Computation Exercise\nCompute average Waiting Time and Turnaround Time for `P1(burst=6)`, `P2(burst=2)`, `P3(burst=4)` all arriving at `t=0` under FCFS vs SJF.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- حساب زمن الانتظار والاستجابة في مخططات الجدولة.\n- فهم تأثير القافلة في FCFS وعلاج التجويع بـ Aging واختيار شريحة Round Robin.\n\n### تمرين حساب جدول Gantt\nاحسب متوسط زمن الانتظار والإتمام للمهام `6, 2, 4` عند وصولها معاً في `t=0` تحت FCFS مقابل SJF."
             }
           }
         ],
@@ -13574,7 +14900,12 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "OS-SCH-M-003",
           "OS-SCH-M-004",
           "OS-SCH-H-005",
-          "OS-SCH-E-006"
+          "OS-SCH-E-006",
+          "EXP-SCH-101",
+          "EXP-SCH-102",
+          "EXP-SCH-103",
+          "EXP-SCH-104",
+          "EXP-SCH-105"
         ]
       }
     ]
@@ -13638,7 +14969,9 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "passPercentage": 60,
           "questionCount": 5
         },
-        "interactiveModuleIds": [],
+        "interactiveModuleIds": [
+          "memory-heap-visualizer"
+        ],
         "externalReferences": [
           {
             "title": "OSTEP: Paging, TLBs & Beyond Physical Memory",
@@ -13650,6 +14983,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             "description": {
               "en": "Virtual address translation, multi-level page tables, and swapping.",
               "ar": "ترجمة العناوين وجداول الصفحات والذاكرة الافتراضية."
+            }
+          },
+          {
+            "title": "roadmap.sh: Virtual Memory & File Systems",
+            "url": "https://roadmap.sh/computer-science",
+            "type": "roadmap",
+            "source": "roadmap.sh",
+            "category": "OS",
+            "language": "en",
+            "description": {
+              "en": "MMU translation, page replacement, and Unix inodes.",
+              "ar": "ترجمة العناوين الافتراضية ونظم الملفات."
+            }
+          },
+          {
+            "title": "CS50: Memory Layout & Systems Foundations",
+            "url": "https://cs50.harvard.edu/x/",
+            "type": "article",
+            "source": "Harvard CS50",
+            "category": "Systems",
+            "language": "en",
+            "description": {
+              "en": "Connecting pointers cleanly to virtual address translation.",
+              "ar": "ربط المؤشرات بمفاهيم الذاكرة الافتراضية."
             }
           }
         ],
@@ -13663,8 +15020,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• Paging chops virtual address spaces into 4KB pages mapped to any physical RAM frame (ending External Fragmentation), cached by the TLB.\n• Page Fault: Accessing an unmapped valid page traps to the OS kernel to load it from disk; LRU evicts stalest pages safely without Belady's Anomaly.\n• File Systems: Directory entries link names -> Inode numbers; the Inode stores size, permissions (`chmod 750` = rwx/r-x/---), and block pointers.",
-              "ar": "• يقسم الـ Paging الذاكرة إلى صفحات 4KB تلغي التجزئة الخارجية وتُسرّع بـ TLB.\n• عند طلب صفحة غير موجودة في RAM يقع Page Fault فيجلبها النظام من القرص؛ وتستبدل LRU أقدم الصفحات استخداماً.\n• يخزن Inode بيانات الملف وصلاحياته (مثل `chmod 750`) بمعزل عن اسم الملف."
+              "en": "• Paging chops virtual address spaces into 4KB pages mapped to any physical RAM frame (ending External Fragmentation), cached by the TLB.\n• Page Fault: Accessing an unmapped valid page traps to the OS kernel to load it from disk; LRU evicts stalest pages safely without Belady's Anomaly.\n• File Systems: Directory entries link names -> Inode numbers; the Inode stores size, permissions (`chmod 750` = rwx/r-x/---), and block pointers.\n\n### MMU Translation, TLB Hits, Demand Paging & Filesystems\n- Programs operate strictly in **Virtual Addresses**, divided into fixed `4 KB` **Pages** mapped via **Page Tables** to scattered physical **Frames** in RAM.\n- The hardware **TLB Cache** keeps hot virtual-to-physical mappings fast; cache misses on unmapped demand pages trigger reversible **Page Faults** loading from SSD transparently.\n- On POSIX filesystems, every file tracks metadata/block pointers inside an **Inode**, enforcing `rwx` (`4/2/1`) bits for Owner/Group/Others.",
+              "ar": "• يقسم الـ Paging الذاكرة إلى صفحات 4KB تلغي التجزئة الخارجية وتُسرّع بـ TLB.\n• عند طلب صفحة غير موجودة في RAM يقع Page Fault فيجلبها النظام من القرص؛ وتستبدل LRU أقدم الصفحات استخداماً.\n• يخزن Inode بيانات الملف وصلاحياته (مثل `chmod 750`) بمعزل عن اسم الملف.\n\n### ترجمة العناوين بالـ MMU وذاكرة TLB ونظم الملفات\n- تتعامل البرامج بعناوين افتراضية مقسمة لصفحات (`4 KB`) يترجمها جدول الصفحات لإطارات في الذاكرة الفعلية.\n- تحفظ ذاكرة **TLB** أحدث الترجمات لتسريع الوصول، بينما يجلب `Page Fault` الصفحات غير المحملة من القرص عند الطلب.\n- تحفظ نظم ملفات Unix البيانات الوصفية ومواقع الكتل في **Inode** وتضبط الصلاحيات بثلاثيات `rwx` (`4/2/1`)."
             },
             "questions": [
               {
@@ -13713,8 +15070,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Virtual Memory grants every process an isolated private address sandbox mapped safely onto physical RAM frames:\n\n1. TLB (Translation Lookaside Buffer): Because reading a multi-level page table from RAM on every memory access doubles memory latency, the MMU caches hot Virtual->Physical page translations inside an ultra-fast hardware TLB.\n2. Page Fault Handling: Reading an unmapped valid page raises a hardware trap; the OS loads the missing 4KB page from SSD Swap cleanly and resumes execution.\n3. Thrashing Danger: When combined active processes demand MORE working-set RAM than physical hardware owns, the OS wastes 99% of time swapping pages to disk rather than advancing work!",
-              "ar": "توفر الذاكرة الافتراضية لكل عملية مساحة معنونة خاصة معزولة تُترجم لإطارات في RAM:\n\n1. مخبأ TLB: يسرّع الترجمة بحفظ تطابقات الصفحات النشطة داخل المعالج دون مراجعة جدول الصفحات البطيء كل مرة.\n2. خطأ الصفحة (Page Fault): إذا احتاج البرنامج صفحة مفرغة للقرص يحمّلها النظام من Swap ويعيد التشغيل بسلاسة.\n3. ظاهرة الـ Thrashing: إذا تجاوز مجموع حاجة البرامج سعة RAM الفعلية يتعطل النظام في نقل الصفحات ذهاباً وإياباً بين الذاكرة والقرص."
+              "en": "Virtual Memory grants every process an isolated private address sandbox mapped safely onto physical RAM frames:\n\n1. TLB (Translation Lookaside Buffer): Because reading a multi-level page table from RAM on every memory access doubles memory latency, the MMU caches hot Virtual->Physical page translations inside an ultra-fast hardware TLB.\n2. Page Fault Handling: Reading an unmapped valid page raises a hardware trap; the OS loads the missing 4KB page from SSD Swap cleanly and resumes execution.\n3. Thrashing Danger: When combined active processes demand MORE working-set RAM than physical hardware owns, the OS wastes 99% of time swapping pages to disk rather than advancing work!\n\n### MMU Translation, TLB Hits, Demand Paging & Filesystems\n- Programs operate strictly in **Virtual Addresses**, divided into fixed `4 KB` **Pages** mapped via **Page Tables** to scattered physical **Frames** in RAM.\n- The hardware **TLB Cache** keeps hot virtual-to-physical mappings fast; cache misses on unmapped demand pages trigger reversible **Page Faults** loading from SSD transparently.\n- On POSIX filesystems, every file tracks metadata/block pointers inside an **Inode**, enforcing `rwx` (`4/2/1`) bits for Owner/Group/Others.",
+              "ar": "توفر الذاكرة الافتراضية لكل عملية مساحة معنونة خاصة معزولة تُترجم لإطارات في RAM:\n\n1. مخبأ TLB: يسرّع الترجمة بحفظ تطابقات الصفحات النشطة داخل المعالج دون مراجعة جدول الصفحات البطيء كل مرة.\n2. خطأ الصفحة (Page Fault): إذا احتاج البرنامج صفحة مفرغة للقرص يحمّلها النظام من Swap ويعيد التشغيل بسلاسة.\n3. ظاهرة الـ Thrashing: إذا تجاوز مجموع حاجة البرامج سعة RAM الفعلية يتعطل النظام في نقل الصفحات ذهاباً وإياباً بين الذاكرة والقرص.\n\n### ترجمة العناوين بالـ MMU وذاكرة TLB ونظم الملفات\n- تتعامل البرامج بعناوين افتراضية مقسمة لصفحات (`4 KB`) يترجمها جدول الصفحات لإطارات في الذاكرة الفعلية.\n- تحفظ ذاكرة **TLB** أحدث الترجمات لتسريع الوصول، بينما يجلب `Page Fault` الصفحات غير المحملة من القرص عند الطلب.\n- تحفظ نظم ملفات Unix البيانات الوصفية ومواقع الكتل في **Inode** وتضبط الصلاحيات بثلاثيات `rwx` (`4/2/1`)."
             },
             "questions": [
               {
@@ -13762,7 +15119,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "ترجمة العناوين وصلاحيات الملفات في Linux"
             },
             "isRequired": true,
-            "content": "# 1. 4KB Page Translation (12-bit offset = 4096 bytes)\n# Virtual Address 0x00002405 -> Page #2, Offset 0x405\n# MMU checks TLB -> Page Table[2] = Frame 9 -> Physical 0x00009405\n\n# 2. Octal Permissions (Owner | Group | Others -> r=4, w=2, x=1)\nchmod 750 deploy.sh   # rwxr-x--- (Owner=7, Group=5, Others=0)",
+            "content": {
+              "en": "### Address Arithmetic & File Modes in Action\n- Trace dividing a 4KB offset (`virtual_addr / 4096` = Page#, `virtual_addr % 4096` = Offset) alongside POSIX permission octals (`chmod 750 = rwxr-x---`).\n- Open the **Memory & Heap Lab** below to reinforce virtual stack vs dynamic heap pointers!",
+              "ar": "### حساب الصفحات وصلاحيات الملفات عملياً\n- تقسم القسمة على 4096 العنوان إلى رقم الصفحة والإزاحة داخلها.\n- اختبر نموذج Stack و Heap في **محاكي الذاكرة** بالأسفل لتعزيز فهم العناوين."
+            },
             "codeLanguage": "bash",
             "codeExplanation": {
               "en": "Paging splits addresses into a fixed offset within 4KB frames and a page index translated via TLB/Page Table. Unix `chmod` assigns bitmasks `r=4,w=2,x=1` per user class.",
@@ -13808,6 +15168,20 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             ]
           },
           {
+            "id": "sec-vm-interactive",
+            "type": "interactive",
+            "title": {
+              "en": "Interactive Virtual Stack & Dynamic Heap Addressing Lab",
+              "ar": "المختبر التفاعلي لعنونة الذاكرة الافتراضية و Heap"
+            },
+            "isRequired": true,
+            "interactiveModuleId": "memory-heap-visualizer",
+            "content": {
+              "en": "### Guided Lab: Stack Frames, Heap Blocks & Dangling Pointers\nAllocate objects dynamically on the Heap, dereference `*ptr` mutations directly, and witness dangling pointers after premature free.\n\n**Experiments to Run:**\n1. Click **Allocate Heap** to store a dynamic block address in a Stack pointer.\n2. Click **Mutate *ptr** to see indirect in-place Heap modification without copying.\n3. Click **Free Heap** and notice the warning when Stack pointers remain dangling.",
+              "ar": "### المعمل التفاعلي: مقارنة Stack و Heap والمؤشرات\nاحجز كتلاً ديناميكية في الـ Heap وعدّلها عبر المؤشر `*ptr` واكتشف خطر المؤشر المعلق.\n\n**تجارب مقترحة:**\n1. اضغط حجز Heap لملاحظة العنوان الجديد وتخزينه في Stack.\n2. عدّل القيمة عبر المؤشر لتشاهد التعديل المباشر في نفس العنوان.\n3. حرّر الكتلة ولاحظ تحذير Dangling Pointer."
+            }
+          },
+          {
             "id": "sec-vm-pitfalls",
             "type": "pitfalls",
             "title": {
@@ -13816,8 +15190,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Never deploy application secrets or scripts with `chmod 777` (world read/write/execute); enforce Principle of Least Privilege (`chmod 600` for private keys, `750` for executables).",
-              "ar": "إعطاء تصريح `chmod 777` للملفات والمفاتيح ثغرة أمنية خطيرة؛ التزم دائماً بأقل صلاحية لازمة مثل `600` للمفاتيح السرية."
+              "en": "Never deploy application secrets or scripts with `chmod 777` (world read/write/execute); enforce Principle of Least Privilege (`chmod 600` for private keys, `750` for executables).\n\n### Thrashing & File Security Traps\n- Exceeding physical RAM working sets causes **Thrashing**, stalling CPU throughput under endless disk page-swap I/O.\n- Avoid `chmod 777` world-writable scripts on servers; limit permissions strictly to least privilege (`640`/`750`).",
+              "ar": "إعطاء تصريح `chmod 777` للملفات والمفاتيح ثغرة أمنية خطيرة؛ التزم دائماً بأقل صلاحية لازمة مثل `600` للمفاتيح السرية.\n\n### أخطاء التزاحم وصلاحيات الملفات\n- استهلاك كامل الذاكرة الفيزيائية يدفع النظام إلى Thrashing ينهار عنده الأداء تماماً.\n- تجنب منح `777` للجميع؛ طبّق مبدأ أقل صلاحية لازمة (`640`/`750`)."
             },
             "questions": [
               {
@@ -13866,8 +15240,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Trace Virtual -> Physical translation through Page Tables and the hardware TLB.\n- Explain Demand Paging & Page Faults plus why LRU avoids Belady's Anomaly.\n- Separate File Inode metadata from Directory Entries and interpret `chmod` octal permissions.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- تتبع ترجمة العنوان الافتراضي إلى فيزيائي عبر جدول الصفحات و TLB.\n- فهم Page Fault وأفضلية LRU على FIFO.\n- فهم بنية Inode ونظام صلاحيات الملفات في Linux."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Trace Virtual -> Physical translation through Page Tables and the hardware TLB.\n- Explain Demand Paging & Page Faults plus why LRU avoids Belady's Anomaly.\n- Separate File Inode metadata from Directory Entries and interpret `chmod` octal permissions.\n\n### Applied Drill\nFor 4KB (`4096`-byte) pages, compute Page Number and Page Offset for virtual byte address `10,000` (`page = 2, offset = 1808`), and decode `chmod 640` permissions.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- تتبع ترجمة العنوان الافتراضي إلى فيزيائي عبر جدول الصفحات و TLB.\n- فهم Page Fault وأفضلية LRU على FIFO.\n- فهم بنية Inode ونظام صلاحيات الملفات في Linux.\n\n### تمرين تطبيقي\nلصفحات بحجم `4096` بايت، أوجد رقم الصفحة والإزاحة للعنوان `10,000` ثم فك شفرة الصلاحية `chmod 640`."
             }
           }
         ],
@@ -13882,7 +15256,11 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "OS-VM-M-003",
           "OS-VM-M-004",
           "OS-VM-H-005",
-          "OS-VM-E-006"
+          "OS-VM-E-006",
+          "EXP-VM-101",
+          "EXP-VM-102",
+          "EXP-VM-103",
+          "EXP-VM-104"
         ]
       }
     ]
@@ -13961,6 +15339,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Protocol encapsulation, TCP/UDP, IP routing, and DNS.",
               "ar": "طبقات الشبكة وبروتوكولات النقل والعنونة."
             }
+          },
+          {
+            "title": "Beej's Guide to Network Programming",
+            "url": "https://beej.us/guide/bgnet/",
+            "type": "documentation",
+            "source": "Beej's Guide",
+            "category": "Sockets & TCP/IP",
+            "language": "en",
+            "description": {
+              "en": "Legendary practical guide to TCP/UDP sockets and byte streams.",
+              "ar": "المرجع العملي الأشهر لبرمجة الشبكات و TCP/UDP."
+            }
+          },
+          {
+            "title": "MDN: How Networks Transport Web Traffic",
+            "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Web_standards/How_the_web_works",
+            "type": "documentation",
+            "source": "MDN",
+            "category": "Networking",
+            "language": "en",
+            "description": {
+              "en": "How TCP streams, IP packets, and DNS link clients and APIs.",
+              "ar": "نقل حزم الشبكة واتصالات TCP و DNS."
+            }
           }
         ],
         "sections": [
@@ -13973,8 +15375,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Packets encapsulate outward down the stack: Application Payload -> Transport Segment (TCP/UDP Port) -> Network Packet (Src/Dst IP + TTL) -> Data Link Frame (MAC via ARP + CRC). TCP ensures reliable ordered streams with 3-way SYN/SYN-ACK/ACK handshake and AIMD congestion control; UDP sends connectionless datagrams for video/games/DNS.",
-              "ar": "تُغلّف البيانات عبر الطبقات: التطبيقات -> النقل (المنافذ في TCP/UDP) -> الشبكة (عناوين IP و TTL) -> ربط البيانات (عناوين MAC عبر ARP).\nيوفر TCP الموثوقية والتحكم بالازدحام، بينما يفضل UDP السرعة للبث والألعاب."
+              "en": "Packets encapsulate outward down the stack: Application Payload -> Transport Segment (TCP/UDP Port) -> Network Packet (Src/Dst IP + TTL) -> Data Link Frame (MAC via ARP + CRC). TCP ensures reliable ordered streams with 3-way SYN/SYN-ACK/ACK handshake and AIMD congestion control; UDP sends connectionless datagrams for video/games/DNS.\n\n### Layered Encapsulation, Subnetting & TCP vs UDP\n- **Encapsulation:** App data wraps inside `TCP/UDP Segment` -> `IP Packet` -> `Ethernet Frame` across 4 TCP/IP layers.\n- **TCP:** Reliable, ordered byte-stream starting with 3-way handshake (`SYN`, `SYN-ACK`, `ACK`) plus congestion & flow control  -  ideal for HTTP APIs & SQL DBs.\n- **UDP:** Minimal header, zero handshake/retransmit stalls  -  ideal for DNS lookups, VoIP, and real-time multiplayer state.",
+              "ar": "تُغلّف البيانات عبر الطبقات: التطبيقات -> النقل (المنافذ في TCP/UDP) -> الشبكة (عناوين IP و TTL) -> ربط البيانات (عناوين MAC عبر ARP).\nيوفر TCP الموثوقية والتحكم بالازدحام، بينما يفضل UDP السرعة للبث والألعاب.\n\n### تغليف الطبقات، الشبكات الفرعية، و TCP مقابل UDP\n- **التغليف:** تُغلف بيانات التطبيق برأس TCP ثم IP ثم إطار الإيثرنت عبر الطبقات الأربع.\n- **TCP:** قناة موثوقة ومرتبة تبدأ بمصافحة ثلاثية وتضبط التدفق والازدحام (مثالي للويب وقواعد البيانات).\n- **UDP:** سريع دون مصافحة أو إعادة إرسال (مثالي لـ DNS والبث والألعاب الحية)."
             },
             "questions": [
               {
@@ -14023,8 +15425,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Reliable communication splits cleanly across OSI/TCP-IP protocol encapsulation:\n\n1. TCP 3-Way Handshake (`SYN -> SYN-ACK -> ACK`): Synchronizes sequence numbers and confirms bidirectional readiness before sending HTTP/database streams; checksums, sequence ordering, and retransmissions recover dropped packets seamlessly.\n2. UDP Stateless Datagrams: Skips handshake and ACKs, trading guaranteed delivery for minimal jitter latency (ideal for voice calls, DNS queries, and live multiplayer games!).\n3. CIDR Subnet Masks (`192.168.1.0/24`): `/24` locks the leftmost 24 network bits, leaving 8 host bits (`2^8 - 2 = 254` assignable host IPs excluding network/broadcast addresses).",
-              "ar": "تُبنى موثوقية الشبكة بتقسيم المهام عبر الطبقات:\n\n1. مصافحة TCP الثلاثية (`SYN -> SYN-ACK -> ACK`): تؤسس قناة مرتبة ومضمونة تعيد إرسال الحزم الضائعة.\n2. بروتوكول UDP: أسرع وأخف بدون مصافحة أو إعادة إرسال؛ مثالي للألعاب الحية والمكالمات الصوتية وDNS.\n3. قناع الشبكة CIDR مثل `/24`: يثبت أول 24 بت كعنوان شبكة ويترك 8 بتات للعناوين الفرعية (`254` جهازاً فعلياً)."
+              "en": "Reliable communication splits cleanly across OSI/TCP-IP protocol encapsulation:\n\n1. TCP 3-Way Handshake (`SYN -> SYN-ACK -> ACK`): Synchronizes sequence numbers and confirms bidirectional readiness before sending HTTP/database streams; checksums, sequence ordering, and retransmissions recover dropped packets seamlessly.\n2. UDP Stateless Datagrams: Skips handshake and ACKs, trading guaranteed delivery for minimal jitter latency (ideal for voice calls, DNS queries, and live multiplayer games!).\n3. CIDR Subnet Masks (`192.168.1.0/24`): `/24` locks the leftmost 24 network bits, leaving 8 host bits (`2^8 - 2 = 254` assignable host IPs excluding network/broadcast addresses).\n\n### Layered Encapsulation, Subnetting & TCP vs UDP\n- **Encapsulation:** App data wraps inside `TCP/UDP Segment` -> `IP Packet` -> `Ethernet Frame` across 4 TCP/IP layers.\n- **TCP:** Reliable, ordered byte-stream starting with 3-way handshake (`SYN`, `SYN-ACK`, `ACK`) plus congestion & flow control  -  ideal for HTTP APIs & SQL DBs.\n- **UDP:** Minimal header, zero handshake/retransmit stalls  -  ideal for DNS lookups, VoIP, and real-time multiplayer state.",
+              "ar": "تُبنى موثوقية الشبكة بتقسيم المهام عبر الطبقات:\n\n1. مصافحة TCP الثلاثية (`SYN -> SYN-ACK -> ACK`): تؤسس قناة مرتبة ومضمونة تعيد إرسال الحزم الضائعة.\n2. بروتوكول UDP: أسرع وأخف بدون مصافحة أو إعادة إرسال؛ مثالي للألعاب الحية والمكالمات الصوتية وDNS.\n3. قناع الشبكة CIDR مثل `/24`: يثبت أول 24 بت كعنوان شبكة ويترك 8 بتات للعناوين الفرعية (`254` جهازاً فعلياً).\n\n### تغليف الطبقات، الشبكات الفرعية، و TCP مقابل UDP\n- **التغليف:** تُغلف بيانات التطبيق برأس TCP ثم IP ثم إطار الإيثرنت عبر الطبقات الأربع.\n- **TCP:** قناة موثوقة ومرتبة تبدأ بمصافحة ثلاثية وتضبط التدفق والازدحام (مثالي للويب وقواعد البيانات).\n- **UDP:** سريع دون مصافحة أو إعادة إرسال (مثالي لـ DNS والبث والألعاب الحية)."
             },
             "questions": [
               {
@@ -14072,7 +15474,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "فحص المنافذ المفتوحة والاتصالات الشبكية عملياً"
             },
             "isRequired": true,
-            "content": "# 1. Verify TCP round-trip reachability & DNS resolution\nping -c 3 api.github.com\n\n# 2. Test whether backend port 5058 accepts TCP handshake\nnc -zv 127.0.0.1 5058\n\n# Standard Ports Reference:\n# 22 = SSH | 53 = DNS | 80 = HTTP | 443 = HTTPS | 5432 = PostgreSQL",
+            "content": {
+              "en": "### Inspecting Live Network Interfaces & CIDR Subnetting\n- Check CIDR masks like `192.168.1.0/24`: 24 fixed network bits + 8 host bits (`2^8 - 2 = 254` usable hosts excluding network `.0` and broadcast `.255`).\n- Trace packet wrapping interactively in the **Packet Encapsulation Visualizer** below!",
+              "ar": "### فحص المنافذ والشبكات الفرعية CIDR\n- القناع `/24` يترك 8 بتات للمضيفين أي `254` عنواناً صالحاً باستبعاد عنوان الشبكة والبث.\n- تتبّع تغليف الحزم في **محاكي حزم الشبكة** بالأسفل."
+            },
             "codeLanguage": "bash",
             "codeExplanation": {
               "en": "Transport ports multiplex distinct services on one single IP (`127.0.0.1:5058` for API vs `127.0.0.1:5432` for PostgreSQL).",
@@ -14125,7 +15530,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "مختبر حزم الشبكة والمصافحة الثلاثية التفاعلي"
             },
             "isRequired": true,
-            "content": "network-packet-visualizer",
+            "content": {
+              "en": "### Guided Lab: Packet Lifecycle (DNS -> TCP/TLS -> HTTP)\nFollow how application payloads wrap in TCP headers, IP headers, and link frames before routing across hops.\n\n**Experiments to Run:**\n1. Trigger a packet hop and inspect DNS resolution before the TCP 3-way handshake (`SYN`, `SYN-ACK`, `ACK`).\n2. Compare Connection Setup latency vs HTTP payload transfer.\n3. Observe encapsulation layers adding/stripping headers at sender and receiver.",
+              "ar": "### المعمل التفاعلي: رحلة الحزمة (DNS -> TCP -> HTTP)\nراقب كيف تغلّف بيانات الطلب بطبقات TCP و IP وتنتقل بين المضيف والخادم.\n\n**تجارب مقترحة:**\n1. راقب استعلام DNS قبل بدء مصافحة TCP الثلاثية (`SYN`, `SYN-ACK`, `ACK`).\n2. قارن تأخير تأسيس الاتصال بزمن نقل البيانات الفعلية.\n3. تتبّع إضافة وإزالة الرؤوس عند المرسل والمستقبل."
+            },
             "interactiveModuleId": "network-packet-visualizer"
           },
           {
@@ -14137,8 +15545,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "TCP provides an ordered **byte stream**, NOT atomic message framing! One `send()` of 10 KB might arrive in two separate `recv()` slices (or merged with the next packet), requiring length headers or delimiters in custom socket protocols.",
-              "ar": "بروتوكول TCP ينقل تيار بايتات متصلاً وليس حزماً منفصلة الحدود، لذا قد تصل الرسالة مجزأة وتحتاج طولاً أو فاصلاً مثل `\\n` لتجميعها."
+              "en": "TCP provides an ordered **byte stream**, NOT atomic message framing! One `send()` of 10 KB might arrive in two separate `recv()` slices (or merged with the next packet), requiring length headers or delimiters in custom socket protocols.\n\n### TCP Stream Boundaries Misconception\n- **TCP is a continuous byte stream, NOT preserved discrete packets!** One `send()` of 2 KB might arrive across two `recv()` chunks or merged; always delimit payloads (e.g., Content-Length or newline framing).\n- Never expose database ports (`5432`) publicly; bind internal services cleanly.",
+              "ar": "بروتوكول TCP ينقل تيار بايتات متصلاً وليس حزماً منفصلة الحدود، لذا قد تصل الرسالة مجزأة وتحتاج طولاً أو فاصلاً مثل `\\n` لتجميعها.\n\n### مغالطة حدود الرسائل في TCP\n- **TCP تيار بايتات متصل وليس رسائل منفصلة!** قد ينقسم الإرسال على عدة دفعات قراءة؛ لذا استعمل فواصل أو طول محتوى صريح.\n- لا تكشف منافذ قواعد البيانات للإنترنت العام أبداً."
             },
             "questions": [
               {
@@ -14187,8 +15595,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Map OSI 7 layers and TCP/IP 4 layers accurately with their protocol headers.\n- Calculate CIDR subnet host counts and trace ARP + IP TTL forwarding.\n- Compare TCP (reliable ordered congestion-controlled) vs UDP (low-latency).",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- الربط بين طبقات OSI و TCP/IP وما تحمله كل طبقة.\n- حساب عدد عناوين الأجهزة في الشبكات الفرعية CIDR.\n- اختيار TCP أو UDP حسب متطلبات الموثوقية مقابل زمن الاستجابة."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Map OSI 7 layers and TCP/IP 4 layers accurately with their protocol headers.\n- Calculate CIDR subnet host counts and trace ARP + IP TTL forwarding.\n- Compare TCP (reliable ordered congestion-controlled) vs UDP (low-latency).\n\n### Subnetting & Protocol Exercise\nCompute usable host capacity for a `/26` subnet (`64 - 2 = 62` hosts) and classify 4 protocols across TCP vs UDP.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- الربط بين طبقات OSI و TCP/IP وما تحمله كل طبقة.\n- حساب عدد عناوين الأجهزة في الشبكات الفرعية CIDR.\n- اختيار TCP أو UDP حسب متطلبات الموثوقية مقابل زمن الاستجابة.\n\n### تمرين عنونة وبروتوكولات\nاحسب عدد الأجهزة القابلة للعنونة في شبكة فرعية `/26`، وصنّف HTTP و DNS و SSH و بث الفيديو بين TCP و UDP."
             }
           }
         ],
@@ -14274,6 +15682,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Authoritative guide to HTTP methods, status codes, headers, and TLS.",
               "ar": "المرجع الكامل لبروتوكول HTTP ورموز الحالة والتشفير."
             }
+          },
+          {
+            "title": "MDN: HTTP Request Methods Guide",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods",
+            "type": "documentation",
+            "source": "MDN",
+            "category": "HTTP",
+            "language": "en",
+            "description": {
+              "en": "Idempotency and semantics across GET, POST, PUT, PATCH, DELETE.",
+              "ar": "تفاصيل أفعال HTTP وخاصية Idempotency."
+            }
+          },
+          {
+            "title": "MDN: HTTP Response Status Codes Reference",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status",
+            "type": "documentation",
+            "source": "MDN",
+            "category": "HTTP",
+            "language": "en",
+            "description": {
+              "en": "Official semantics for 2xx, 3xx, 401, 403, 404, and 5xx.",
+              "ar": "مرجع رموز استجابة HTTP القياسية."
+            }
           }
         ],
         "sections": [
@@ -14286,8 +15718,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "DNS translates hostnames to IPs across cached Root -> TLD -> Authoritative servers. Over TCP/TLS, HTTP transfers stateless requests (GET/POST/PUT/DELETE) returning semantic status codes: 200 OK, 301 Redirect, 401 Need Auth, 403 Forbidden (authenticated but no permission), 404 Not Found, 500 Server Error.",
-              "ar": "يحوّل DNS أسماء النطاقات إلى IP، ويرسل HTTP طلبات REST مع رموز قياسية: 200 للنجاح، 401 لعدم تسجيل الدخول، 403 لعدم الصلاحية رغم معرفة الهوية، و 500 لخطأ الخادم."
+              "en": "DNS translates hostnames to IPs across cached Root -> TLD -> Authoritative servers. Over TCP/TLS, HTTP transfers stateless requests (GET/POST/PUT/DELETE) returning semantic status codes: 200 OK, 301 Redirect, 401 Need Auth, 403 Forbidden (authenticated but no permission), 404 Not Found, 500 Server Error.\n\n### DNS Resolution, REST Idempotency & HTTPS/JWT Security\n- **HTTP Verbs:** `GET` reads safely, `POST` creates non-idempotently, `PUT` replaces idempotently, `PATCH` updates partially, `DELETE` removes cleanly.\n- **Status Semantics:** `200/201` (Success), `400` (Bad validation), `401` (Missing/invalid token), `403` (Insufficient role), `404` (Missing entity), `5xx` (Server crash).\n- **HTTPS + JWT:** TLS encrypts the transport channel; JWT signatures prove claims (`sub`, `role`, `exp`) remained untampered.",
+              "ar": "يحوّل DNS أسماء النطاقات إلى IP، ويرسل HTTP طلبات REST مع رموز قياسية: 200 للنجاح، 401 لعدم تسجيل الدخول، 403 لعدم الصلاحية رغم معرفة الهوية، و 500 لخطأ الخادم.\n\n### نظام DNS، أفعال HTTP، وأمان HTTPS و JWT\n- **الأفعال:** `GET` قراءة، `POST` إنشاء، `PUT` استبدال كامل متكرر الأثر، `PATCH` تعديل جزئي، `DELETE` حذف.\n- **الرموز:** `2xx` نجاح، `400` مدخل خاطئ، `401` غير مصادق، `403` ممنوع الصلاحية، `404` غير موجود.\n- **الأمان:** يحمي TLS الاتصال، ويضمن توقيع JWT عدم تلاعب المهاجم بالأدوار والصلاحيات."
             },
             "questions": [
               {
@@ -14336,8 +15768,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Modern web APIs layer application semantics safely over encrypted TLS channels:\n\n1. HTTP Idempotency: `GET`, `PUT`, and `DELETE` should be safe to retry idempotently upon network drops, whereas repeated `POST` payments can duplicate charges unless guarded by idempotency keys or DB constraints.\n2. Authentication: Stateless JWT tokens encode signed claims (`sub`, `role`, `exp`) in `Authorization: Bearer ...` headers or HttpOnly SameSite cookies.\n3. DNS Caching & TTL: Recursive resolvers cache IP mappings according to record TTL; TLS verifies server identity certificates via trusted Certificate Authorities before exchanging HTTP data.",
-              "ar": "تعتمد واجهات الويب الحديثة على معايير واضحة ومشفرة:\n\n1. قابلية إعادة المحاولة (Idempotency): استدعاءات `GET` و`PUT` و`DELETE` آمنة التكرار عند تقطع الشبكة، بينما `POST` قد يكرر العملية ما لم نضع حارساً مثل قيد اشتراك واحد.\n2. المصادقة بالتواقيع JWT عبر ترويسة `Authorization: Bearer` أو الكوكيز المحمية `HttpOnly`.\n3. تشفير TLS/HTTPS يتحقق من شهادة الخادم ويمنع التنصت أو تعديل البيانات أثناء العبور."
+              "en": "Modern web APIs layer application semantics safely over encrypted TLS channels:\n\n1. HTTP Idempotency: `GET`, `PUT`, and `DELETE` should be safe to retry idempotently upon network drops, whereas repeated `POST` payments can duplicate charges unless guarded by idempotency keys or DB constraints.\n2. Authentication: Stateless JWT tokens encode signed claims (`sub`, `role`, `exp`) in `Authorization: Bearer ...` headers or HttpOnly SameSite cookies.\n3. DNS Caching & TTL: Recursive resolvers cache IP mappings according to record TTL; TLS verifies server identity certificates via trusted Certificate Authorities before exchanging HTTP data.\n\n### DNS Resolution, REST Idempotency & HTTPS/JWT Security\n- **HTTP Verbs:** `GET` reads safely, `POST` creates non-idempotently, `PUT` replaces idempotently, `PATCH` updates partially, `DELETE` removes cleanly.\n- **Status Semantics:** `200/201` (Success), `400` (Bad validation), `401` (Missing/invalid token), `403` (Insufficient role), `404` (Missing entity), `5xx` (Server crash).\n- **HTTPS + JWT:** TLS encrypts the transport channel; JWT signatures prove claims (`sub`, `role`, `exp`) remained untampered.",
+              "ar": "تعتمد واجهات الويب الحديثة على معايير واضحة ومشفرة:\n\n1. قابلية إعادة المحاولة (Idempotency): استدعاءات `GET` و`PUT` و`DELETE` آمنة التكرار عند تقطع الشبكة، بينما `POST` قد يكرر العملية ما لم نضع حارساً مثل قيد اشتراك واحد.\n2. المصادقة بالتواقيع JWT عبر ترويسة `Authorization: Bearer` أو الكوكيز المحمية `HttpOnly`.\n3. تشفير TLS/HTTPS يتحقق من شهادة الخادم ويمنع التنصت أو تعديل البيانات أثناء العبور.\n\n### نظام DNS، أفعال HTTP، وأمان HTTPS و JWT\n- **الأفعال:** `GET` قراءة، `POST` إنشاء، `PUT` استبدال كامل متكرر الأثر، `PATCH` تعديل جزئي، `DELETE` حذف.\n- **الرموز:** `2xx` نجاح، `400` مدخل خاطئ، `401` غير مصادق، `403` ممنوع الصلاحية، `404` غير موجود.\n- **الأمان:** يحمي TLS الاتصال، ويضمن توقيع JWT عدم تلاعب المهاجم بالأدوار والصلاحيات."
             },
             "questions": [
               {
@@ -14385,7 +15817,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "تطبيق عملي: استدعاء API محمي بالتوكن ومعالجة الاستجابة"
             },
             "isRequired": true,
-            "content": "const res = await fetch(\"/api/subscriptions/select\", {\n  method: \"POST\",\n  headers: {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": `Bearer ${accessToken}`\n  },\n  body: JSON.stringify({ planCode: \"pro\", billingCycle: \"monthly\" })\n});\n\nif (res.status === 401) redirectToLogin();\nif (!res.ok) throw new Error(\"Plan request rejected: \" + res.status);",
+            "content": {
+              "en": "### Handling API Requests & Error Payloads Cleanly\n- Always verify `res.ok` / status codes explicitly and show actionable client feedback without crashing UI components.\n- Test parsing mock JWT payloads cleanly in **Live JS Sandbox** noticing headers/claims sit readable in Base64 until verified server-side!",
+              "ar": "### التعامل الاحترافي مع استجابات API\n- افحص رمز الاستجابة دوماً ولا تفترض نجاح الشبكة في كل طلب.\n- اختبر فك ترميز Base64 لرسالة JWT تجريبية في **Live JS Sandbox** لتدرك لماذا يلزم التحقق من التوقيع بالخادم."
+            },
             "codeLanguage": "ts",
             "codeExplanation": {
               "en": "Always inspect HTTP status codes explicitly: `401` signals expired/missing auth credentials, `403` signals missing permissions, and `200/201` confirms backend persistence.",
@@ -14438,7 +15873,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "محاكي طلبات DNS و HTTP التفاعلي"
             },
             "isRequired": true,
-            "content": "network-packet-visualizer",
+            "content": {
+              "en": "### Guided Lab: Packet Lifecycle (DNS -> TCP/TLS -> HTTP)\nFollow how application payloads wrap in TCP headers, IP headers, and link frames before routing across hops.\n\n**Experiments to Run:**\n1. Trigger a packet hop and inspect DNS resolution before the TCP 3-way handshake (`SYN`, `SYN-ACK`, `ACK`).\n2. Compare Connection Setup latency vs HTTP payload transfer.\n3. Observe encapsulation layers adding/stripping headers at sender and receiver.",
+              "ar": "### المعمل التفاعلي: رحلة الحزمة (DNS -> TCP -> HTTP)\nراقب كيف تغلّف بيانات الطلب بطبقات TCP و IP وتنتقل بين المضيف والخادم.\n\n**تجارب مقترحة:**\n1. راقب استعلام DNS قبل بدء مصافحة TCP الثلاثية (`SYN`, `SYN-ACK`, `ACK`).\n2. قارن تأخير تأسيس الاتصال بزمن نقل البيانات الفعلية.\n3. تتبّع إضافة وإزالة الرؤوس عند المرسل والمستقبل."
+            },
             "interactiveModuleId": "network-packet-visualizer"
           },
           {
@@ -14450,8 +15888,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Base64 JWT payloads can be read easily by anyone! Never inspect raw decoded tokens blindly on the server without cryptographic signature validation, and NEVER place secret database passwords or JWT signing keys inside `NEXT_PUBLIC_*` frontend files.",
-              "ar": "محتوى JWT مشفّر بـ Base64 وليس مخفياً! لذا يتحقق الخادم من التوقيع السري قبل الوثوق بأي دور، ولا توضع مفاتيح الأسرار أبداً في كود الواجهة الأمامية."
+              "en": "Base64 JWT payloads can be read easily by anyone! Never inspect raw decoded tokens blindly on the server without cryptographic signature validation, and NEVER place secret database passwords or JWT signing keys inside `NEXT_PUBLIC_*` frontend files.\n\n### Critical Web Auth Mistakes\n- Decoding a JWT on frontend or backend WITHOUT verifying its HMAC/RSA signature allows attackers to spoof `role: SuperAdmin` in 5 seconds.\n- Never leak raw SQL/stack exceptions or secrets inside `500` API responses.",
+              "ar": "محتوى JWT مشفّر بـ Base64 وليس مخفياً! لذا يتحقق الخادم من التوقيع السري قبل الوثوق بأي دور، ولا توضع مفاتيح الأسرار أبداً في كود الواجهة الأمامية.\n\n### أخطاء أمنية حرجة في تطبيقات الويب\n- قراءة محتوى JWT دون التحقق من التوقيع بالخادم تتيح لأي شخص تزوير دوره إلى `SuperAdmin` فوراً.\n- لا ترسل تفاصيل الأخطاء الداخلية أو نصوص SQL في استجابات الأخطاء للمتصفح."
             },
             "questions": [
               {
@@ -14500,8 +15938,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Trace recursive DNS resolution from Root -> TLD -> Authoritative nameserver.\n- Distinguish HTTP 2xx/3xx/4xx/5xx semantics (401 Unauthorized vs 403 Forbidden).\n- Explain how TLS hybrid cryptography combines certificate authentication with fast AES/ChaCha20.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- تتبع استعلامات DNS حتى الوصول للخادم الموثوق.\n- التمييز الدقيق بين رموز HTTP مثل 401 و 403 و 500.\n- فهم الجمع بين التشفير غير المتماثل والمتماثل في HTTPS/TLS."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Trace recursive DNS resolution from Root -> TLD -> Authoritative nameserver.\n- Distinguish HTTP 2xx/3xx/4xx/5xx semantics (401 Unauthorized vs 403 Forbidden).\n- Explain how TLS hybrid cryptography combines certificate authentication with fast AES/ChaCha20.\n\n### API Design Drill\nDesign crisp REST endpoints (`method + path + status`) for enrolling in a path, completing a quiz, and rejecting unauthorized admin access (`403`).",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- تتبع استعلامات DNS حتى الوصول للخادم الموثوق.\n- التمييز الدقيق بين رموز HTTP مثل 401 و 403 و 500.\n- فهم الجمع بين التشفير غير المتماثل والمتماثل في HTTPS/TLS.\n\n### تمرين تصميم REST API\nحدّد مسارات HTTP والرموز المناسبة لتسجيل مسار جديد، تسليم اختبار، ورفض طالب يحاول استدعاء لوحة الإدارة (`403`)."
             }
           }
         ],
@@ -14517,7 +15955,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "NW-APP-M-003",
           "NW-APP-M-004",
           "NW-APP-H-005",
-          "NW-APP-E-006"
+          "NW-APP-E-006",
+          "EXP-NW-101",
+          "EXP-NW-102",
+          "EXP-NW-103"
         ]
       }
     ]
@@ -14592,6 +16033,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Clean Architecture layers, Domain vs Infrastructure, and dependency inversion.",
               "ar": "مبادئ المعمارية النظيفة والطبقات في تطبيقات الويب."
             }
+          },
+          {
+            "title": "Refactoring Guru: Strategy & SOLID Architecture",
+            "url": "https://refactoring.guru/design-patterns/strategy",
+            "type": "article",
+            "source": "Refactoring Guru",
+            "category": "Design Patterns",
+            "language": "en",
+            "description": {
+              "en": "Replacing brittle conditionals with clean interchangeable strategies.",
+              "ar": "تطبيق نمط الاستراتيجية لتبسيط الكود."
+            }
+          },
+          {
+            "title": "Refactoring Guru: Observer Design Pattern",
+            "url": "https://refactoring.guru/design-patterns/observer",
+            "type": "article",
+            "source": "Refactoring Guru",
+            "category": "Design Patterns",
+            "language": "en",
+            "description": {
+              "en": "Event-driven publish/subscribe decoupling cleanly explained.",
+              "ar": "فصل المكونات باستخدام نمط Observer."
+            }
           }
         ],
         "sections": [
@@ -14604,8 +16069,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• S: Single Responsibility: One module, one cohesive reason to change.\n• O: Open/Closed: Add behaviors via abstractions without modifying tested core code.\n• L: Liskov Substitution: Subtypes preserve base contracts.\n• I: Interface Segregation: Small role-focused interfaces.\n• D: Dependency Inversion: Business logic depends on interfaces, not concrete SQL/HTTP drivers.\n\nCombined with Factory Method, Adapter, and Strategy patterns, systems stay loosely coupled and effortlessly testable!",
-              "ar": "• المسؤولية الفردية SRP: كل صنف لسبب تغيير واحد.\n• الفتح/الإغلاق OCP: التوسع دون كسر الكود القديم.\n• استبدال ليسكوف LSP: الالتزام بعقود الفئة الأساسية.\n• فصل الواجهات ISP: واجهات صغيرة محددة.\n• عكس التبعيات DIP: الاعتماد على التجريد لا التنفيذ الملموس."
+              "en": "• S: Single Responsibility: One module, one cohesive reason to change.\n• O: Open/Closed: Add behaviors via abstractions without modifying tested core code.\n• L: Liskov Substitution: Subtypes preserve base contracts.\n• I: Interface Segregation: Small role-focused interfaces.\n• D: Dependency Inversion: Business logic depends on interfaces, not concrete SQL/HTTP drivers.\n\nCombined with Factory Method, Adapter, and Strategy patterns, systems stay loosely coupled and effortlessly testable!\n\n### SOLID Principles & Clean Layered Architecture\n- **SRP:** Separate auth, pricing, and DB persistence so each module owns one single reason to change.\n- **OCP + Strategy:** Swap payment providers or scoring policies via interfaces without modifying tested core loops.\n- **LSP:** Subtypes preserve parent behavioral guarantees.\n- **ISP:** Keep interfaces small and focused (`IReader` + `IWriter` vs bloated God interfaces).\n- **DIP:** Core domain depends strictly on abstract interfaces rather than concrete SQL drivers.",
+              "ar": "• المسؤولية الفردية SRP: كل صنف لسبب تغيير واحد.\n• الفتح/الإغلاق OCP: التوسع دون كسر الكود القديم.\n• استبدال ليسكوف LSP: الالتزام بعقود الفئة الأساسية.\n• فصل الواجهات ISP: واجهات صغيرة محددة.\n• عكس التبعيات DIP: الاعتماد على التجريد لا التنفيذ الملموس.\n\n### مبادئ SOLID والمعمارية النظيفة ذات الطبقات\n- **SRP:** لكل مكون مسؤولية واضحة واحدة.\n- **OCP:** توسيع السلوك عبر الواجهات دون كسر المنطق المستقر.\n- **LSP & ISP:** التزام الفئات الفرعية بالعقد وتجنب الواجهات المتضخمة.\n- **DIP:** اعتماد خدمات التطبيق على واجهات مجردة لا على تفاصيل قاعدة البيانات المباشرة."
             },
             "questions": [
               {
@@ -14654,8 +16119,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Great production software resists rot when features multiply:\n\n1. S - Single Responsibility & O - Open/Closed: Separate pricing/grading rules from HTTP transport formatting; add new strategies cleanly via interfaces instead of editing huge switch-statements everywhere.\n2. L / I / D - Dependency Inversion: Core domain entities NEVER import database drivers or UI components; infrastructure implements domain/application interfaces cleanly.\n3. Design Patterns in Real Apps: **Repository** isolates data queries, **Strategy** swaps sorting/pricing rules cleanly, **Factory** validates entity invariants at birth, and **Observer** emits domain events without tight coupling.",
-              "ar": "المعمارية النظيفة تحمي المشروع من التعقيد مع توسع الفريق والميزات:\n\n1. المسؤولية الواحدة وفتح/إغلاق التوسيع (SRP & OCP): فصل قواعد المنطق عن واجهات HTTP والبيانات.\n2. عكس الاعتماديات (DIP): طبقة Domain في القلب لا تعتمد على قاعدة البيانات ولا إطار الواجهة.\n3. أنماط التصميم العملية: Factory لضبط إنشاء الكيانات، وStrategy لتبديل الخوارزميات، وRepository لعزل الاستعلامات."
+              "en": "Great production software resists rot when features multiply:\n\n1. S - Single Responsibility & O - Open/Closed: Separate pricing/grading rules from HTTP transport formatting; add new strategies cleanly via interfaces instead of editing huge switch-statements everywhere.\n2. L / I / D - Dependency Inversion: Core domain entities NEVER import database drivers or UI components; infrastructure implements domain/application interfaces cleanly.\n3. Design Patterns in Real Apps: **Repository** isolates data queries, **Strategy** swaps sorting/pricing rules cleanly, **Factory** validates entity invariants at birth, and **Observer** emits domain events without tight coupling.\n\n### SOLID Principles & Clean Layered Architecture\n- **SRP:** Separate auth, pricing, and DB persistence so each module owns one single reason to change.\n- **OCP + Strategy:** Swap payment providers or scoring policies via interfaces without modifying tested core loops.\n- **LSP:** Subtypes preserve parent behavioral guarantees.\n- **ISP:** Keep interfaces small and focused (`IReader` + `IWriter` vs bloated God interfaces).\n- **DIP:** Core domain depends strictly on abstract interfaces rather than concrete SQL drivers.",
+              "ar": "المعمارية النظيفة تحمي المشروع من التعقيد مع توسع الفريق والميزات:\n\n1. المسؤولية الواحدة وفتح/إغلاق التوسيع (SRP & OCP): فصل قواعد المنطق عن واجهات HTTP والبيانات.\n2. عكس الاعتماديات (DIP): طبقة Domain في القلب لا تعتمد على قاعدة البيانات ولا إطار الواجهة.\n3. أنماط التصميم العملية: Factory لضبط إنشاء الكيانات، وStrategy لتبديل الخوارزميات، وRepository لعزل الاستعلامات.\n\n### مبادئ SOLID والمعمارية النظيفة ذات الطبقات\n- **SRP:** لكل مكون مسؤولية واضحة واحدة.\n- **OCP:** توسيع السلوك عبر الواجهات دون كسر المنطق المستقر.\n- **LSP & ISP:** التزام الفئات الفرعية بالعقد وتجنب الواجهات المتضخمة.\n- **DIP:** اعتماد خدمات التطبيق على واجهات مجردة لا على تفاصيل قاعدة البيانات المباشرة."
             },
             "questions": [
               {
@@ -14703,7 +16168,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "تطبيق نمط الاستراتيجية والاعتماد على الواجهة"
             },
             "isRequired": true,
-            "content": "interface PricingRule { apply(amount: number): number; }\nclass StudentDiscount implements PricingRule { apply(a: number) { return a * 0.8; } }\nfunction checkout(amount: number, rule: PricingRule) {\n  return rule.apply(amount); // Follows OCP + DIP + Strategy!\n}",
+            "content": {
+              "en": "### Replacing Brittle `if/else` Switches with Strategy Maps\n- Notice how a `Map<StrategyKey, Handler>` eliminates repetitive branch chains cleanly while keeping every handler independently testable.\n- Experiment with a Discount Strategy interface directly in **Live JS Sandbox**.",
+              "ar": "### استبدال تفرعات `if/else` الطويلة بنمط Strategy\n- توظيف خريطة الواجهات يجعل إضافة طريقة جديدة دون لمس الكود القائم أمراً مأموناً.\n- طبّق نمط الاستراتيجية لحساب الخصومات في **Live JS Sandbox**."
+            },
             "codeLanguage": "ts",
             "codeExplanation": {
               "en": "Adding a HolidayDiscount needs ZERO changes to `checkout()`: pure OCP & Strategy.",
@@ -14757,8 +16225,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Avoid creating 600-line controller methods mixing SQL transactions, business rules, and email text in one block! Equally, remember KISS/YAGNI: don't build 10 speculative abstraction layers when a clean shared helper function handles the current requirement simply.",
-              "ar": "لا تكدّس منطق المعاملات والأعمال في دالة ضخمة واحدة؛ وبالمقابل التزم بمبدأ KISS ولا تفرط في التجريد بلا داعٍ حقيقي."
+              "en": "Avoid creating 600-line controller methods mixing SQL transactions, business rules, and email text in one block! Equally, remember KISS/YAGNI: don't build 10 speculative abstraction layers when a clean shared helper function handles the current requirement simply.\n\n### Over-Engineering vs Copy-Paste Drift\n- Duplicating non-trivial logic across 4 controllers causes silent bugs when rules change; extract one parameterized shared helper cleanly!\n- Conversely, avoid building 5 abstract factory wrappers for a simple 10-line one-off script.",
+              "ar": "لا تكدّس منطق المعاملات والأعمال في دالة ضخمة واحدة؛ وبالمقابل التزم بمبدأ KISS ولا تفرط في التجريد بلا داعٍ حقيقي.\n\n### موازنة الهندسة: بين التكرار والتعقيد الزائد\n- نسخ المنطق ذاته في عدة ملفات يخلق أخطاء صامتة عند التعديل؛ استخرج دالة مشتركة نظيفة.\n- ولا تصنع طبقات تجريد معقدة دون حاجة فعلية تتطلب المرونة."
             },
             "questions": [
               {
@@ -14807,8 +16275,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Refactor coupled classes using SRP, OCP, LSP, ISP, and DIP.\n- Choose Creational (Factory), Structural (Adapter), and Behavioral (Strategy) patterns appropriately.",
-              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- إعادة هيكلة الكود المترابط وفق مبادئ SOLID الخمسة.\n- تمييز وتطبيق أنماط Factory و Adapter و Strategy."
+              "en": "Review these core objectives before starting the Final Mastery Assessment:\n\n- Refactor coupled classes using SRP, OCP, LSP, ISP, and DIP.\n- Choose Creational (Factory), Structural (Adapter), and Behavioral (Strategy) patterns appropriately.\n\n### Refactoring Challenge\nTake two duplicated validation blocks differing solely by tier multiplier cleanly into one pure shared TypeScript helper.",
+              "ar": "راجع أهداف الإتقان الأساسية قبل بدء التقييم النهائي للوحدة:\n\n- إعادة هيكلة الكود المترابط وفق مبادئ SOLID الخمسة.\n- تمييز وتطبيق أنماط Factory و Adapter و Strategy.\n\n### تحدي إعادة الهيكلة\nادمج كتلتين متشابهتين لحساب أسعار الباقات في دالة مساعدة موحدة تقبل المعاملات كمدخلات."
             }
           }
         ],
@@ -14826,7 +16294,9 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
           "SE-DES-M-003",
           "SE-DES-M-004",
           "SE-DES-H-005",
-          "SE-DES-E-006"
+          "SE-DES-E-006",
+          "EXP-SE-101",
+          "EXP-SE-102"
         ]
       },
       {
@@ -14891,6 +16361,30 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "en": "Official Pro Git guide to clean branching, rebasing, and merging.",
               "ar": "الكتاب الرسمي لتعلم فروع Git والدمج بأمان."
             }
+          },
+          {
+            "title": "Martin Fowler: The Practical Test Pyramid",
+            "url": "https://martinfowler.com/articles/practical-test-pyramid.html",
+            "type": "article",
+            "source": "Martin Fowler",
+            "category": "Testing Architecture",
+            "language": "en",
+            "description": {
+              "en": "Balancing unit, integration, and end-to-end tests cleanly.",
+              "ar": "موازنة هرم الاختبارات من الوحدات للتكامل."
+            }
+          },
+          {
+            "title": "Learn Git Branching: Interactive Sandbox",
+            "url": "https://learngitbranching.js.org/",
+            "type": "article",
+            "source": "LearnGitBranching",
+            "category": "Interactive Git",
+            "language": "en",
+            "description": {
+              "en": "Visual interactive challenges mastering branches, rebase, and merges.",
+              "ar": "مختبر تفاعلي لإتقان فروع ودمج Git."
+            }
           }
         ],
         "sections": [
@@ -14903,8 +16397,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "• Testing Pyramid: Large fast base of isolated Unit Tests -> Integration Tests verifying DB/service collaboration -> concise apex of End-to-End tests over critical user flows.\n• Git Hygiene: Small atomic commits (`git add` -> `git commit`), feature branches, and NEVER rebasing shared `main`!\n• Agile Methodologies: Scrum uses time-boxed Sprints + Retrospectives; Kanban enforces continuous pull flow with WIP limits.",
-              "ar": "• هرم الاختبارات: قاعدة عريضة من اختبارات الوحدات السريعة المعزولة، ثم اختبارات التكامل للخدمات وقاعدة البيانات، ثم اختبارات شاملة لأهم المسارات.\n• في Git: لا تُعد كتابة تاريخ فرع عام مشترك بـ rebase.\n• Scrum تعتمد على Sprints محددة المدة، بينما تعتمد Kanban على حدود WIP والتدفق المستمر."
+              "en": "• Testing Pyramid: Large fast base of isolated Unit Tests -> Integration Tests verifying DB/service collaboration -> concise apex of End-to-End tests over critical user flows.\n• Git Hygiene: Small atomic commits (`git add` -> `git commit`), feature branches, and NEVER rebasing shared `main`!\n• Agile Methodologies: Scrum uses time-boxed Sprints + Retrospectives; Kanban enforces continuous pull flow with WIP limits.\n\n### The Testing Pyramid & Clean Git Workflow\n- **Unit Tests (Fastest & Widest Base):** Pure domain rules & edge cases in isolation using **Arrange -> Act -> Assert**.\n- **Integration Tests:** Real EF Core / DB constraints, controller routing, HTTP status codes, and security gates (`401/403`) running cleanly together.\n- **E2E Verification:** Full browser flows verifying auth cookies, RTL layout alignment, interactive widgets, and network persistence.\n- **Git Discipline:** Feature branches -> atomic commits -> code review -> CI green tests -> merge cleanly without secrets!",
+              "ar": "• هرم الاختبارات: قاعدة عريضة من اختبارات الوحدات السريعة المعزولة، ثم اختبارات التكامل للخدمات وقاعدة البيانات، ثم اختبارات شاملة لأهم المسارات.\n• في Git: لا تُعد كتابة تاريخ فرع عام مشترك بـ rebase.\n• Scrum تعتمد على Sprints محددة المدة، بينما تعتمد Kanban على حدود WIP والتدفق المستمر.\n\n### هرم الاختبارات وسير عمل Git الاحترافي\n- **اختبارات الوحدات:** سريعة ومستقلة تتحقق من القواعد والحالات الحدية بهيكل `Arrange -> Act -> Assert`.\n- **اختبارات التكامل:** تختبر تفاعل المتحكمات وقواعد البيانات وقيود الأمان `401/403` فعلياً.\n- **الاختبارات الشاملة E2E:** تتحقق من رحلة المستخدم كاملةً في المتصفح.\n- **Git المنضبط:** فروع ميزات، التزامات نظيفة خالية من الأسرار، ومراجعة آلية."
             },
             "questions": [
               {
@@ -14953,8 +16447,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Reliable continuous delivery combines layered automated verification with disciplined version control:\n\n1. The Testing Pyramid: Fast **Unit Tests** isolate core logic at the wide base -> **Integration Tests** verify DB transactions, migrations, and HTTP contracts -> lean **E2E Verification** exercises critical full user journeys live.\n2. Test Independence: Every test must set up clean isolated state (unique DB/InMemory database per run) with zero cross-test order reliance.\n3. Trunk / Feature-Branch Git Discipline: Branch cleanly (`feat/...`, `fix/...`), review focused diffs, avoid `--force` rewriting shared public branches (`main`), and gate merges on zero lint/build/test failures.",
-              "ar": "يعتمد التسليم البرمجي الموثوق على هرم اختبارات متكامل وإدارة شفرة منضبطة:\n\n1. هرم الاختبارات: اختبارات الوحدات السريعة في القاعدة، ثم اختبارات التكامل للتحقق من القاعدة والـ API، ثم التحقق الشامل End-to-End.\n2. استقلالية الاختبار: كل اختبار يجهز بيئته النظيفة ولا يعتمد على ترتيب اختبارات أخرى.\n3. انضباط Git: تطوير الميزات في فروع مستقلة، ومراجعة الفروقات النظيفة، ومنع force push على الفروع المشتركة مثل main."
+              "en": "Reliable continuous delivery combines layered automated verification with disciplined version control:\n\n1. The Testing Pyramid: Fast **Unit Tests** isolate core logic at the wide base -> **Integration Tests** verify DB transactions, migrations, and HTTP contracts -> lean **E2E Verification** exercises critical full user journeys live.\n2. Test Independence: Every test must set up clean isolated state (unique DB/InMemory database per run) with zero cross-test order reliance.\n3. Trunk / Feature-Branch Git Discipline: Branch cleanly (`feat/...`, `fix/...`), review focused diffs, avoid `--force` rewriting shared public branches (`main`), and gate merges on zero lint/build/test failures.\n\n### The Testing Pyramid & Clean Git Workflow\n- **Unit Tests (Fastest & Widest Base):** Pure domain rules & edge cases in isolation using **Arrange -> Act -> Assert**.\n- **Integration Tests:** Real EF Core / DB constraints, controller routing, HTTP status codes, and security gates (`401/403`) running cleanly together.\n- **E2E Verification:** Full browser flows verifying auth cookies, RTL layout alignment, interactive widgets, and network persistence.\n- **Git Discipline:** Feature branches -> atomic commits -> code review -> CI green tests -> merge cleanly without secrets!",
+              "ar": "يعتمد التسليم البرمجي الموثوق على هرم اختبارات متكامل وإدارة شفرة منضبطة:\n\n1. هرم الاختبارات: اختبارات الوحدات السريعة في القاعدة، ثم اختبارات التكامل للتحقق من القاعدة والـ API، ثم التحقق الشامل End-to-End.\n2. استقلالية الاختبار: كل اختبار يجهز بيئته النظيفة ولا يعتمد على ترتيب اختبارات أخرى.\n3. انضباط Git: تطوير الميزات في فروع مستقلة، ومراجعة الفروقات النظيفة، ومنع force push على الفروع المشتركة مثل main.\n\n### هرم الاختبارات وسير عمل Git الاحترافي\n- **اختبارات الوحدات:** سريعة ومستقلة تتحقق من القواعد والحالات الحدية بهيكل `Arrange -> Act -> Assert`.\n- **اختبارات التكامل:** تختبر تفاعل المتحكمات وقواعد البيانات وقيود الأمان `401/403` فعلياً.\n- **الاختبارات الشاملة E2E:** تتحقق من رحلة المستخدم كاملةً في المتصفح.\n- **Git المنضبط:** فروع ميزات، التزامات نظيفة خالية من الأسرار، ومراجعة آلية."
             },
             "questions": [
               {
@@ -15002,7 +16496,10 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
               "ar": "نمط اختبارات AAA وسلامة فروع Git"
             },
             "isRequired": true,
-            "content": "// Arrange - Act - Assert isolated unit test\nfunction testBinarySearchTargetFound() {\n  const sorted = [2, 5, 8, 12, 16];        // Arrange\n  const idx = binarySearch(sorted, 12);     // Act\n  assertEqual(idx, 3);                      // Assert\n}\n// Git clean feature branch discipline:\n// git checkout -b feat/auth-refresh && git commit -m \"fix: handle 401 refresh\"",
+            "content": {
+              "en": "### Writing Honest Assertions & Git Safety\n- Assertions must fail loudly whenever real invariants break  -  NEVER relax tests just to force green CI!\n- Practice structuring a crisp Arrange-Act-Assert unit test inside **Live JS Sandbox** testing edge cases like empty arrays and zero bounds.",
+              "ar": "### كتابة اختبارات صادقة وحماية الفروع\n- يجب أن يفشل الاختبار بوضوح إذا انكسر الشرط الحقيقي دون تخفيف التوقعات.\n- جرب كتابة اختبار منظم بهيكل Arrange-Act-Assert في **Live JS Sandbox**."
+            },
             "codeLanguage": "ts",
             "codeExplanation": {
               "en": "Structuring every unit test as Arrange -> Act -> Assert keeps assertions clear and fast, while committing small changes on isolated feature branches protects `main`.",
@@ -15056,8 +16553,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Mocking out the exact function under test proves nothing! Always test real business behavior and edge cases cleanly: concurrent double clicks, empty results, rejection state preservation, and invalid permissions (`401/403`).",
-              "ar": "لا تُفقد الاختبار معناه بمزج بيانات وهمية تُنجح النتيجة حتماً؛ اختبر القواعد الفعلية مثل الحفظ الحقيقي والرفض وحماية الصلاحيات وتعدد الطلبات."
+              "en": "Mocking out the exact function under test proves nothing! Always test real business behavior and edge cases cleanly: concurrent double clicks, empty results, rejection state preservation, and invalid permissions (`401/403`).\n\n### Weak Test Patterns to Avoid\n- Testing only mocks returning fixed dummy values hides real SQL/serialization/status contract bugs!\n- Sharing mutable global state across tests creates flaky ordering failures; isolate fresh DB/inputs per test.",
+              "ar": "لا تُفقد الاختبار معناه بمزج بيانات وهمية تُنجح النتيجة حتماً؛ اختبر القواعد الفعلية مثل الحفظ الحقيقي والرفض وحماية الصلاحيات وتعدد الطلبات.\n\n### أخطاء اختبارات يجب تجنبها\n- الاكتفاء بـ Mocks صماء يخفي أعطال الـ SQL وعقود JSON والرموز الحقيقية.\n- مشاركة حالة متغيرة بين الاختبارات تسبب نتائج متقلبة؛ اعزل بيانات كل اختبار."
             },
             "questions": [
               {
@@ -15106,8 +16603,8 @@ export const CONCEPTS: Record<string, CanonicalConcept> = {
             },
             "isRequired": true,
             "content": {
-              "en": "Key Takeaways:\n- Structure every unit test cleanly as Arrange -> Act -> Assert.\n- Protect critical database invariants with integration tests AND database constraints.\n- Verify full build + automated tests + live smoke journeys before shipping changes.",
-              "ar": "الخلاصة:\n- هيكل Arrange-Act-Assert، اختبارات تكامل لقاعدة البيانات، وفحص عملي بعد البناء."
+              "en": "Key Takeaways:\n- Structure every unit test cleanly as Arrange -> Act -> Assert.\n- Protect critical database invariants with integration tests AND database constraints.\n- Verify full build + automated tests + live smoke journeys before shipping changes.\n\n### Verification Habit Drill\nBefore finalizing any code fix, run unit tests + typecheck + punctuation check + clean `git status` diff check scanning strictly for accidentally staged `.env` or secret values.",
+              "ar": "الخلاصة:\n- هيكل Arrange-Act-Assert، اختبارات تكامل لقاعدة البيانات، وفحص عملي بعد البناء.\n\n### تدريب التحقق النهائي\nقبل أي نشر، نفّذ الاختبارات الفردية والتكاملية وفحص الأنواع وراجع الفروقات عبر `git diff` للتأكد من خلوها من أي أسرار."
             }
           }
         ],

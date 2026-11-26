@@ -60,85 +60,44 @@
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #09090b;
+  --background: #09090b;
+  --foreground: #fafafa;
 
-  --muted: #f4f4f5;
-  --muted-foreground: #71717a;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
 
-  --card: #ffffff;
-  --card-foreground: #09090b;
+  --card: #111116;
+  --card-foreground: #fafafa;
 
-  --popover: #ffffff;
-  --popover-foreground: #09090b;
+  --popover: #111116;
+  --popover-foreground: #fafafa;
 
-  --border: #e4e4e7;
-  --input: #e4e4e7;
-  --ring: #4f46e5; /* Indigo 600 */
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #6366f1; /* Indigo 500 */
 
-  --primary: #4f46e5; /* Indigo 600 */
+  --primary: #6366f1; /* Indigo 500 */
   --primary-foreground: #ffffff;
 
-  --secondary: #f4f4f5;
-  --secondary-foreground: #18181b;
+  --secondary: #27272a;
+  --secondary-foreground: #fafafa;
 
-  --accent: #f4f4f5;
-  --accent-foreground: #18181b;
+  --accent: #27272a;
+  --accent-foreground: #fafafa;
 
-  --destructive: #ef4444; /* Red 500 */
-  --destructive-foreground: #ffffff;
-
-  --success: #22c55e; /* Green 500 */
-  --success-foreground: #ffffff;
+  --destructive: #7f1d1d; /* Red 900 */
+  --destructive-foreground: #fca5a5; /* Red 300 */
   
-  --warning: #f59e0b; /* Amber 500 */
-  --warning-foreground: #ffffff;
+  --success: #14532d; /* Green 900 */
+  --success-foreground: #86efac; /* Green 300 */
   
-  --info: #3b82f6; /* Blue 500 */
-  --info-foreground: #ffffff;
+  --warning: #78350f; /* Amber 900 */
+  --warning-foreground: #fcd34d; /* Amber 300 */
+  
+  --info: #1e3a8a; /* Blue 900 */
+  --info-foreground: #93c5fd; /* Blue 300 */
 
   --radius: 0.5rem;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #09090b;
-    --foreground: #fafafa;
-
-    --muted: #27272a;
-    --muted-foreground: #a1a1aa;
-
-    --card: #09090b;
-    --card-foreground: #fafafa;
-
-    --popover: #09090b;
-    --popover-foreground: #fafafa;
-
-    --border: #27272a;
-    --input: #27272a;
-    --ring: #6366f1; /* Indigo 500 */
-
-    --primary: #6366f1; /* Indigo 500 */
-    --primary-foreground: #ffffff;
-
-    --secondary: #27272a;
-    --secondary-foreground: #fafafa;
-
-    --accent: #27272a;
-    --accent-foreground: #fafafa;
-
-    --destructive: #7f1d1d; /* Red 900 */
-    --destructive-foreground: #fca5a5; /* Red 300 */
-    
-    --success: #14532d; /* Green 900 */
-    --success-foreground: #86efac; /* Green 300 */
-    
-    --warning: #78350f; /* Amber 900 */
-    --warning-foreground: #fcd34d; /* Amber 300 */
-    
-    --info: #1e3a8a; /* Blue 900 */
-    --info-foreground: #93c5fd; /* Blue 300 */
-  }
 }
 
 /* RTL Support */

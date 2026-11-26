@@ -8,6 +8,7 @@ import { operating_systems_questions } from './operating-systems';
 import { programming_fundamentals_questions } from './programming-fundamentals';
 import { oop_questions } from './oop';
 import { software_engineering_questions } from './software-engineering';
+import { EXPANDED_QUESTIONS } from './expanded';
 
 import { AssessmentQuestion } from '../schema';
 
@@ -21,5 +22,6 @@ export const QUESTION_BANK: AssessmentQuestion[] = [
   ...operating_systems_questions,
   ...programming_fundamentals_questions,
   ...oop_questions,
-  ...software_engineering_questions
+  ...software_engineering_questions,
+  ...EXPANDED_QUESTIONS
 ];

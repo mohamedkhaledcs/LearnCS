@@ -20,11 +20,21 @@ public class AdminController(AppDbContext db) : ApiControllerBase
 {
     private bool IsSuperAdmin() => User.IsInRole("SuperAdmin");
 
+    private static bool IsPlatformOwner(User user) =>
+        string.Equals(user.Email, "admin@learncs.dev", StringComparison.OrdinalIgnoreCase);
+
     private static List<string> TryReadList(string? json)
     {
         if (string.IsNullOrWhiteSpace(json)) return [];
         try { return JsonSerializer.Deserialize<List<string>>(json) ?? []; }
         catch { return []; }
+    }
+
+    private static T? TryReadJson<T>(string? json) where T : class
+    {
+        if (string.IsNullOrWhiteSpace(json)) return null;
+        try { return JsonSerializer.Deserialize<T>(json); }
+        catch { return null; }
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -182,6 +192,8 @@ public class AdminController(AppDbContext db) : ApiControllerBase
                 u.EmailVerified,
                 u.FullName,
                 u.AccountStatus,
+                IsActive = string.Equals(u.AccountStatus, AccountStatus.Active.ToString(), StringComparison.OrdinalIgnoreCase),
+                IsProtectedOwner = string.Equals(u.Email, "admin@learncs.dev", StringComparison.OrdinalIgnoreCase),
                 Roles = u.Roles.Count > 0 ? u.Roles : new List<string> { "User" },
                 PlanId = sub?.PlanId ?? "plan-free",
                 Plan = sub?.Plan?.Name ?? "Free",
@@ -319,6 +331,8 @@ public class AdminController(AppDbContext db) : ApiControllerBase
 
         if (string.Equals(request.Status, "Suspended", StringComparison.OrdinalIgnoreCase))
         {
+            if (IsPlatformOwner(user))
+                return BadRequest(new { message = "The platform SuperAdmin owner account cannot be suspended or deactivated." });
             if (id == actorId)
                 return BadRequest(new { message = "You cannot suspend your own account." });
             if (targetIsSuperAdmin && !IsSuperAdmin())
@@ -369,6 +383,11 @@ public class AdminController(AppDbContext db) : ApiControllerBase
         var wasSuperAdmin = oldRoles.Any(r => r.Equals("SuperAdmin", StringComparison.OrdinalIgnoreCase));
         var willKeepSuperAdmin = role.Name.Equals("SuperAdmin", StringComparison.OrdinalIgnoreCase);
 
+        if (IsPlatformOwner(user) && !willKeepSuperAdmin)
+        {
+            return BadRequest(new { message = "Cannot remove the SuperAdmin role from the protected platform owner account." });
+        }
+
         if (wasSuperAdmin && !willKeepSuperAdmin)
         {
             var superAdminCount = await db.UserRoles.CountAsync(
@@ -399,6 +418,61 @@ public class AdminController(AppDbContext db) : ApiControllerBase
         await db.SaveChangesAsync(cancellationToken);
 
         return Ok(new { user.Id, Role = role.Name });
+    }
+
+    [HttpGet("roles")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetRolesAndPermissions(CancellationToken cancellationToken)
+    {
+        var roles = await db.Roles.AsNoTracking()
+            .OrderBy(r => r.Name)
+            .ToListAsync(cancellationToken);
+
+        var roleAssignments = await db.UserRoles.AsNoTracking()
+            .GroupBy(ur => ur.RoleId)
+            .Select(g => new { RoleId = g.Key, UsersCount = g.Count() })
+            .ToDictionaryAsync(x => x.RoleId, x => x.UsersCount, cancellationToken);
+
+        var capabilitiesByRole = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["SuperAdmin"] = [
+                "Unrestricted platform governance & protected owner status",
+                "Manage user accounts, role assignments & role capabilities",
+                "Manage subscription plans, pricing & approve/reject requests",
+                "Full curriculum, unit, section, resource & question bank CRUD",
+                "Review all learning paths and paid units without altering learner subscriptions",
+                "View audit logs, coverage reports & learner analytics"
+            ],
+            ["Admin"] = [
+                "Manage standard learner accounts and view learner progress",
+                "Approve or reject subscription upgrade requests",
+                "Edit curriculum units, lesson sections & question bank items",
+                "Preview all paths and paid units for review"
+            ],
+            ["ContentManager"] = [
+                "Author and edit curriculum paths, modules, units & sections",
+                "Manage question bank items & interactive lab mappings",
+                "Preview unpublished Draft/Review curriculum content"
+            ],
+            ["User"] = [
+                "Enroll in learning paths & track section/unit mastery",
+                "Earn XP, study streaks, badges & request subscription upgrades"
+            ],
+            ["Learner"] = [
+                "Enroll in learning paths & track section/unit mastery",
+                "Earn XP, study streaks, badges & request subscription upgrades"
+            ]
+        };
+
+        return Ok(roles.Select(r => new
+        {
+            r.Id,
+            r.Name,
+            r.Description,
+            r.IsSystemRole,
+            UsersCount = roleAssignments.TryGetValue(r.Id, out var c) ? c : 0,
+            Capabilities = capabilitiesByRole.TryGetValue(r.Name, out var caps) ? caps : []
+        }));
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -610,14 +684,17 @@ public class AdminController(AppDbContext db) : ApiControllerBase
                 p.DescriptionEn,
                 p.DescriptionAr,
                 Price = p.MonthlyPrice,
+                p.MonthlyPrice,
                 p.OriginalMonthlyPrice,
                 p.AnnualPrice,
                 p.OriginalAnnualPrice,
                 BillingInterval = "Monthly",
                 Features = TryReadList(p.FeaturesEnJson),
+                FeaturesEn = TryReadList(p.FeaturesEnJson),
                 FeaturesAr = TryReadList(p.FeaturesArJson),
                 p.IsPopular,
                 p.IsActive,
+                p.DisplayOrder,
                 SubscribersCount = activeCount,
                 PendingRequestsCount = pendingCount
             };
@@ -740,7 +817,73 @@ public class AdminController(AppDbContext db) : ApiControllerBase
             .Select(g => new { UnitId = g.Key, Count = g.Select(x => x.QuestionId).Distinct().Count() })
             .ToDictionaryAsync(x => x.UnitId, x => x.Count, cancellationToken);
 
-        return Ok(paths.Select(p =>
+        var concepts = await db.CanonicalConcepts
+            .AsNoTracking()
+            .OrderBy(c => c.Domain)
+            .ThenBy(c => c.Id)
+            .Select(c => new
+            {
+                c.Id,
+                c.TitleEn,
+                c.TitleAr,
+                c.DescriptionEn,
+                c.DescriptionAr,
+                c.Domain,
+                PublishStatus = c.PublishStatus.ToString()
+            })
+            .ToListAsync(cancellationToken);
+
+        var allUnits = await db.ReusableUnits
+            .Include(u => u.Sections.OrderBy(s => s.DisplayOrder))
+            .AsNoTracking()
+            .OrderBy(u => u.Id)
+            .ToListAsync(cancellationToken);
+
+        object MapUnitDto(ReusableUnit u)
+        {
+            questionCountsByUnit.TryGetValue(u.Id, out var qCount);
+            return new
+            {
+                u.Id,
+                u.ConceptId,
+                u.TitleEn,
+                u.TitleAr,
+                u.DescriptionEn,
+                u.DescriptionAr,
+                u.Difficulty,
+                u.EstimatedMinutes,
+                u.Version,
+                u.IsFreeTier,
+                u.QuizPassPercentage,
+                u.QuizQuestionCount,
+                PublishStatus = u.PublishStatus.ToString(),
+                MappedQuestionsCount = qCount,
+                Tags = TryReadList(u.TagsJson),
+                InteractiveModuleIds = TryReadList(u.InteractiveModuleIdsJson),
+                ExternalReferences = TryReadJson<List<object>>(u.ExternalReferencesJson) ?? [],
+                ObjectivesEn = TryReadList(u.ObjectivesEnJson),
+                ObjectivesAr = TryReadList(u.ObjectivesArJson),
+                Sections = u.Sections.OrderBy(s => s.DisplayOrder).Select(s => new
+                {
+                    s.Id,
+                    s.Type,
+                    s.TitleEn,
+                    s.TitleAr,
+                    s.ContentEn,
+                    s.ContentAr,
+                    s.DisplayOrder,
+                    s.IsRequired,
+                    s.CodeSnippet,
+                    s.CodeLanguage,
+                    s.CodeExplanationEn,
+                    s.CodeExplanationAr,
+                    s.ExpectedOutput,
+                    s.InteractiveModuleId
+                })
+            };
+        }
+
+        var pathDtos = paths.Select(p =>
         {
             var uniqueUnits = p.Modules.SelectMany(m => m.Placements).Select(pl => pl.UnitId).Distinct().Count();
             return new
@@ -750,6 +893,8 @@ public class AdminController(AppDbContext db) : ApiControllerBase
                 p.TitleAr,
                 p.DescriptionEn,
                 p.DescriptionAr,
+                p.TargetAudienceEn,
+                p.TargetAudienceAr,
                 p.Category,
                 p.DisplayOrder,
                 PublishStatus = p.PublishStatus.ToString(),
@@ -758,50 +903,133 @@ public class AdminController(AppDbContext db) : ApiControllerBase
                 Modules = p.Modules.OrderBy(m => m.DisplayOrder).Select(m => new
                 {
                     m.Id,
+                    m.PathId,
                     m.TitleEn,
                     m.TitleAr,
                     m.DescriptionEn,
                     m.DescriptionAr,
                     m.DisplayOrder,
-                    Units = m.Placements.OrderBy(pl => pl.DisplayOrder).Where(pl => pl.Unit != null).Select(pl =>
-                    {
-                        var u = pl.Unit!;
-                        questionCountsByUnit.TryGetValue(u.Id, out var qCount);
-                        return new
-                        {
-                            u.Id,
-                            u.ConceptId,
-                            u.TitleEn,
-                            u.TitleAr,
-                            u.DescriptionEn,
-                            u.DescriptionAr,
-                            u.Difficulty,
-                            u.EstimatedMinutes,
-                            u.Version,
-                            u.IsFreeTier,
-                            u.QuizPassPercentage,
-                            u.QuizQuestionCount,
-                            PublishStatus = u.PublishStatus.ToString(),
-                            MappedQuestionsCount = qCount,
-                            Sections = u.Sections.OrderBy(s => s.DisplayOrder).Select(s => new
-                            {
-                                s.Id,
-                                s.Type,
-                                s.TitleEn,
-                                s.TitleAr,
-                                s.ContentEn,
-                                s.ContentAr,
-                                s.DisplayOrder,
-                                s.IsRequired,
-                                s.CodeSnippet,
-                                s.CodeLanguage,
-                                s.InteractiveModuleId
-                            })
-                        };
-                    })
+                    Units = m.Placements.OrderBy(pl => pl.DisplayOrder).Where(pl => pl.Unit != null).Select(pl => MapUnitDto(pl.Unit!))
                 })
             };
-        }));
+        }).ToList();
+
+        return Ok(new
+        {
+            Paths = pathDtos,
+            Concepts = concepts,
+            Units = allUnits.Select(MapUnitDto).ToList()
+        });
+    }
+
+    [HttpPost("curriculum/paths")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateCurriculumPath([FromBody] AdminUpsertPathRequest request, CancellationToken cancellationToken)
+    {
+        var id = string.IsNullOrWhiteSpace(request.Id)
+            ? $"path-{Guid.NewGuid().ToString()[..6]}"
+            : request.Id.Trim().ToLowerInvariant();
+        if (await db.CurriculumPaths.AnyAsync(p => p.Id == id, cancellationToken))
+            return BadRequest(new { message = $"Path '{id}' already exists." });
+
+        var publishStatus = Enum.TryParse<ContentPublishStatus>(request.PublishStatus ?? "Published", true, out var ps)
+            ? ps
+            : ContentPublishStatus.Published;
+
+        var path = CurriculumPath.Create(
+            id,
+            request.TitleEn,
+            request.TitleAr,
+            request.DescriptionEn,
+            request.DescriptionAr,
+            string.IsNullOrWhiteSpace(request.Category) ? "Core Computer Science" : request.Category,
+            request.DisplayOrder,
+            request.TargetAudienceEn,
+            request.TargetAudienceAr,
+            "[]",
+            "[]",
+            publishStatus
+        );
+
+        db.CurriculumPaths.Add(path);
+        db.AuditLogs.Add(AuditLog.Create("CurriculumPathCreated", "CurriculumPath", GetUserId(), newValues: id, actorUserId: GetUserId(), details: $"Created path {id}"));
+        await db.SaveChangesAsync(cancellationToken);
+        return Created($"/api/admin/curriculum", new { path.Id, path.TitleEn, path.TitleAr, path.DisplayOrder, PublishStatus = path.PublishStatus.ToString() });
+    }
+
+    [HttpPut("curriculum/paths/{pathId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateCurriculumPath(string pathId, [FromBody] AdminUpsertPathRequest request, CancellationToken cancellationToken)
+    {
+        var path = await db.CurriculumPaths.FirstOrDefaultAsync(p => p.Id == pathId.Trim().ToLowerInvariant(), cancellationToken);
+        if (path == null) return NotFound(new { message = $"Path '{pathId}' not found." });
+
+        var publishStatus = Enum.TryParse<ContentPublishStatus>(request.PublishStatus ?? path.PublishStatus.ToString(), true, out var ps)
+            ? ps
+            : path.PublishStatus;
+
+        path.Update(
+            string.IsNullOrWhiteSpace(request.TitleEn) ? path.TitleEn : request.TitleEn,
+            string.IsNullOrWhiteSpace(request.TitleAr) ? path.TitleAr : request.TitleAr,
+            request.DescriptionEn ?? path.DescriptionEn,
+            request.DescriptionAr ?? path.DescriptionAr,
+            string.IsNullOrWhiteSpace(request.Category) ? path.Category : request.Category,
+            request.DisplayOrder > 0 ? request.DisplayOrder : path.DisplayOrder,
+            request.TargetAudienceEn ?? path.TargetAudienceEn,
+            request.TargetAudienceAr ?? path.TargetAudienceAr,
+            path.PrerequisitesJson,
+            path.RecommendedNextPathsJson,
+            publishStatus
+        );
+
+        db.AuditLogs.Add(AuditLog.Create("CurriculumPathUpdated", "CurriculumPath", GetUserId(), newValues: path.Id, actorUserId: GetUserId(), details: $"Updated path {path.Id}"));
+        await db.SaveChangesAsync(cancellationToken);
+        return Ok(new { path.Id, path.TitleEn, path.TitleAr, path.Category, path.DisplayOrder, PublishStatus = path.PublishStatus.ToString() });
+    }
+
+    [HttpPost("curriculum/modules")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> CreateCurriculumModule([FromBody] AdminUpsertModuleRequest request, CancellationToken cancellationToken)
+    {
+        var pathId = request.PathId.Trim().ToLowerInvariant();
+        if (!await db.CurriculumPaths.AnyAsync(p => p.Id == pathId, cancellationToken))
+            return NotFound(new { message = $"Path '{pathId}' not found." });
+
+        var id = string.IsNullOrWhiteSpace(request.Id)
+            ? $"mod-{pathId}-{Guid.NewGuid().ToString()[..6]}"
+            : request.Id.Trim().ToLowerInvariant();
+        if (await db.CurriculumModules.AnyAsync(m => m.Id == id, cancellationToken))
+            return BadRequest(new { message = $"Module '{id}' already exists." });
+
+        var mod = CurriculumModule.Create(id, pathId, request.TitleEn, request.TitleAr, request.DescriptionEn ?? "", request.DescriptionAr ?? "", request.DisplayOrder);
+        db.CurriculumModules.Add(mod);
+        db.AuditLogs.Add(AuditLog.Create("CurriculumModuleCreated", "CurriculumModule", GetUserId(), newValues: id, actorUserId: GetUserId(), details: $"Created module {id} under {pathId}"));
+        await db.SaveChangesAsync(cancellationToken);
+        return Created($"/api/admin/curriculum", new { mod.Id, mod.PathId, mod.TitleEn, mod.TitleAr, mod.DisplayOrder });
+    }
+
+    [HttpPut("curriculum/modules/{moduleId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateCurriculumModule(string moduleId, [FromBody] AdminUpsertModuleRequest request, CancellationToken cancellationToken)
+    {
+        var mod = await db.CurriculumModules.FirstOrDefaultAsync(m => m.Id == moduleId.Trim().ToLowerInvariant(), cancellationToken);
+        if (mod == null) return NotFound(new { message = $"Module '{moduleId}' not found." });
+
+        mod.Update(
+            string.IsNullOrWhiteSpace(request.TitleEn) ? mod.TitleEn : request.TitleEn,
+            string.IsNullOrWhiteSpace(request.TitleAr) ? mod.TitleAr : request.TitleAr,
+            request.DescriptionEn ?? mod.DescriptionEn,
+            request.DescriptionAr ?? mod.DescriptionAr,
+            request.DisplayOrder > 0 ? request.DisplayOrder : mod.DisplayOrder
+        );
+
+        db.AuditLogs.Add(AuditLog.Create("CurriculumModuleUpdated", "CurriculumModule", GetUserId(), newValues: mod.Id, actorUserId: GetUserId(), details: $"Updated module {mod.Id}"));
+        await db.SaveChangesAsync(cancellationToken);
+        return Ok(new { mod.Id, mod.PathId, mod.TitleEn, mod.TitleAr, mod.DisplayOrder });
     }
 
     [HttpPut("curriculum/units/{unitId}")]
@@ -825,10 +1053,10 @@ public class AdminController(AppDbContext db) : ApiControllerBase
             request.EstimatedMinutes ?? unit.EstimatedMinutes,
             request.Tags != null ? JsonSerializer.Serialize(request.Tags) : unit.TagsJson,
             unit.PrerequisitesJson,
-            unit.InteractiveModuleIdsJson,
-            unit.ExternalReferencesJson,
-            unit.ObjectivesEnJson,
-            unit.ObjectivesArJson,
+            request.InteractiveModuleIds != null ? JsonSerializer.Serialize(request.InteractiveModuleIds) : unit.InteractiveModuleIdsJson,
+            request.ExternalReferences != null ? JsonSerializer.Serialize(request.ExternalReferences) : unit.ExternalReferencesJson,
+            request.ObjectivesEn != null ? JsonSerializer.Serialize(request.ObjectivesEn) : unit.ObjectivesEnJson,
+            request.ObjectivesAr != null ? JsonSerializer.Serialize(request.ObjectivesAr) : unit.ObjectivesArJson,
             request.IsFreeTier ?? unit.IsFreeTier,
             request.QuizPassPercentage ?? unit.QuizPassPercentage,
             request.QuizQuestionCount ?? unit.QuizQuestionCount,
@@ -903,6 +1131,21 @@ public class AdminController(AppDbContext db) : ApiControllerBase
         db.AuditLogs.Add(AuditLog.Create("UnitSectionUpdated", "UnitSection", GetUserId(), newValues: section.Id, actorUserId: GetUserId(), details: $"Updated section {section.Id}"));
         await db.SaveChangesAsync(cancellationToken);
         return Ok(new { section.Id, section.UnitId, section.TitleEn, section.TitleAr, section.DisplayOrder });
+    }
+
+    [HttpDelete("curriculum/sections/{sectionId}")]
+    [Authorize(Roles = "Admin,SuperAdmin")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteUnitSection(string sectionId, CancellationToken cancellationToken)
+    {
+        var section = await db.UnitSections.FirstOrDefaultAsync(s => s.Id == sectionId, cancellationToken);
+        if (section == null) return NotFound(new { message = $"Section '{sectionId}' not found." });
+
+        db.UnitSections.Remove(section);
+        db.AuditLogs.Add(AuditLog.Create("UnitSectionDeleted", "UnitSection", GetUserId(), oldValues: section.Id, actorUserId: GetUserId(), details: $"Deleted section {section.Id} from {section.UnitId}"));
+        await db.SaveChangesAsync(cancellationToken);
+        return Ok(new { Deleted = sectionId });
     }
 
     [HttpGet("questions")]
@@ -1001,6 +1244,59 @@ public class AdminController(AppDbContext db) : ApiControllerBase
         db.AuditLogs.Add(AuditLog.Create("QuestionCreated", "QuestionBankItem", GetUserId(), newValues: id, actorUserId: GetUserId(), details: $"Created question {id} in {request.Domain}/{request.Subtopic}"));
         await db.SaveChangesAsync(cancellationToken);
         return Created($"/api/admin/questions", new { item.Id, item.Domain, item.Topic, item.Subtopic });
+    }
+
+    [HttpPut("questions/{questionId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateQuestion(string questionId, [FromBody] AdminUpsertQuestionRequest request, CancellationToken cancellationToken)
+    {
+        var item = await db.QuestionBankItems
+            .Include(q => q.Options)
+            .FirstOrDefaultAsync(q => q.Id == questionId, cancellationToken);
+        if (item == null) return NotFound(new { message = $"Question '{questionId}' not found." });
+
+        if (request.Options == null || request.Options.Count < 2 || !request.Options.Any(o => o.IsCorrect))
+            return BadRequest(new { message = "At least 2 options and 1 correct option are required." });
+
+        item.Update(
+            request.Domain,
+            request.Topic,
+            request.Subtopic,
+            request.Difficulty,
+            request.QuestionType ?? item.QuestionType,
+            request.QuestionEn,
+            request.QuestionAr,
+            request.ExplanationEn,
+            request.ExplanationAr,
+            request.CodeSnippet,
+            request.CodeLanguage,
+            item.Specialization,
+            item.TagsJson,
+            item.PublishStatus
+        );
+
+        db.QuestionBankOptions.RemoveRange(item.Options);
+        var order = 0;
+        foreach (var opt in request.Options)
+        {
+            db.QuestionBankOptions.Add(QuestionBankOption.Create(item.Id, opt.Key, opt.TextEn, opt.TextAr, opt.IsCorrect, order++));
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.AttachToUnitId))
+        {
+            var unitId = request.AttachToUnitId.Trim().ToLowerInvariant();
+            if (await db.ReusableUnits.AnyAsync(u => u.Id == unitId, cancellationToken)
+                && !await db.UnitQuestionMappings.AnyAsync(m => m.UnitId == unitId && m.QuestionId == item.Id, cancellationToken))
+            {
+                db.UnitQuestionMappings.Add(UnitQuestionMapping.Create(unitId, item.Id, request.AttachToSectionId, 999));
+            }
+        }
+
+        db.AuditLogs.Add(AuditLog.Create("QuestionUpdated", "QuestionBankItem", GetUserId(), newValues: item.Id, actorUserId: GetUserId(), details: $"Updated question {item.Id}"));
+        await db.SaveChangesAsync(cancellationToken);
+        return Ok(new { item.Id, item.Domain, item.Topic, item.Subtopic, item.Difficulty });
     }
 
     [HttpDelete("questions/{questionId}")]
@@ -1119,10 +1415,35 @@ public record AdminUpdateUnitRequest(
     string? Difficulty = null,
     int? EstimatedMinutes = null,
     List<string>? Tags = null,
+    List<string>? InteractiveModuleIds = null,
+    List<object>? ExternalReferences = null,
+    List<string>? ObjectivesEn = null,
+    List<string>? ObjectivesAr = null,
     bool? IsFreeTier = null,
     int? QuizPassPercentage = null,
     int? QuizQuestionCount = null,
     string? PublishStatus = null
+);
+public record AdminUpsertPathRequest(
+    string? Id,
+    string TitleEn,
+    string TitleAr,
+    string DescriptionEn,
+    string DescriptionAr,
+    string? Category = null,
+    int DisplayOrder = 1,
+    string? TargetAudienceEn = null,
+    string? TargetAudienceAr = null,
+    string? PublishStatus = null
+);
+public record AdminUpsertModuleRequest(
+    string? Id,
+    string PathId,
+    string TitleEn,
+    string TitleAr,
+    string? DescriptionEn = null,
+    string? DescriptionAr = null,
+    int DisplayOrder = 1
 );
 public record AdminUpsertSectionRequest(
     string? Id,
