@@ -1,0 +1,1414 @@
+{
+  "Discrete Mathematics": {
+    "Logic": {
+      "Propositions": [
+        "DM-PROP-E-001",
+        "DM-LOG-E-002"
+      ],
+      "Logical Operators": [
+        "DM-OP-E-001"
+      ],
+      "Truth Tables": [
+        "DM-TT-E-001"
+      ],
+      "Logical Equivalence": [
+        "DM-EQUIV-M-001",
+        "DM-LOG-H-005"
+      ],
+      "Predicates": [
+        "DM-PRED-E-001",
+        "DM-LOG-E-006"
+      ],
+      "Quantifiers": [
+        "DM-QUANT-M-001",
+        "DM-LOG-M-003"
+      ],
+      "Rules of Inference": [
+        "DM-INF-M-001"
+      ]
+    },
+    "Set Theory": {
+      "Sets & Cardinality": [
+        "DM-SET-E-001"
+      ],
+      "Set Operations": [
+        "DM-SETOP-E-001",
+        "DM-SET-E-002"
+      ],
+      "Subsets & Empty Set": [
+        "DM-SUB-E-001"
+      ],
+      "Power Sets": [
+        "DM-PSET-M-001",
+        "DM-SET-M-004"
+      ],
+      "Cartesian Products": [
+        "DM-CART-E-001"
+      ]
+    },
+    "Relations": {
+      "Relation Properties": [
+        "DM-RELP-M-001"
+      ],
+      "Equivalence Relations": [
+        "DM-EQREL-M-001",
+        "DM-SET-E-006"
+      ],
+      "Partial Orders": [
+        "DM-PART-M-001"
+      ]
+    },
+    "Functions": {
+      "Injective (One-to-One)": [
+        "DM-INJ-E-001"
+      ],
+      "Surjective (Onto)": [
+        "DM-SURJ-E-001"
+      ],
+      "Bijective Functions": [
+        "DM-BIJ-M-001"
+      ],
+      "Composition": [
+        "DM-COMP-M-001"
+      ],
+      "Inverse Functions": [
+        "DM-INV-E-001"
+      ],
+      "Bijective": [
+        "DM-SET-M-003"
+      ]
+    },
+    "Proof Techniques": {
+      "Direct Proof": [
+        "DM-DIRP-E-001"
+      ],
+      "Proof by Contradiction": [
+        "DM-CONTRA-M-001"
+      ],
+      "Contrapositive Proof": [
+        "DM-CPOS-M-001"
+      ],
+      "Mathematical Induction": [
+        "DM-IND-M-001",
+        "DM-SET-H-005"
+      ],
+      "Strong Induction": [
+        "DM-SIND-H-001"
+      ]
+    },
+    "Counting": {
+      "Sum Rule": [
+        "DM-SUMR-E-001"
+      ],
+      "Product Rule": [
+        "DM-PRODR-E-001",
+        "DM-CNT-E-002"
+      ],
+      "Permutations": [
+        "DM-PERM-E-001"
+      ],
+      "Combinations": [
+        "DM-COMB-E-001"
+      ],
+      "Pigeonhole Principle": [
+        "DM-PHP-M-001",
+        "DM-CNT-H-005"
+      ],
+      "Inclusion-Exclusion Principle": [
+        "DM-PIE-M-001"
+      ],
+      "Permutations vs Combinations": [
+        "DM-CNT-M-003"
+      ],
+      "Inclusion-Exclusion": [
+        "DM-CNT-E-006"
+      ]
+    },
+    "Recurrence Relations": {
+      "Linear Recurrences": [
+        "DM-LINREC-M-001"
+      ],
+      "Solving Recurrences": [
+        "DM-SOLREC-M-001"
+      ],
+      "Master Theorem": [
+        "DM-MAST-H-001",
+        "DM-CNT-M-004"
+      ]
+    },
+    "Graph Theory": {
+      "Graph Properties": [
+        "DM-GPROP-E-001"
+      ],
+      "Walks, Trails & Paths": [
+        "DM-GPATH-E-001"
+      ],
+      "Cycles & Euler/Hamilton": [
+        "DM-GCYC-M-001"
+      ],
+      "Tree Invariants": [
+        "DM-GTREE-E-001"
+      ],
+      "Bipartite Graphs": [
+        "DM-BIP-M-001"
+      ],
+      "Connectivity & Bridges": [
+        "DM-GCONN-M-001"
+      ]
+    },
+    "Boolean Algebra": {
+      "Boolean Expressions": [
+        "DM-BOOL-E-001"
+      ],
+      "De Morgan's Laws": [
+        "DM-BLAW-E-001"
+      ],
+      "Simplification": [
+        "DM-BSIMP-M-001"
+      ],
+      "Logic Gates": [
+        "PRE-BIT-E-005"
+      ],
+      "Boolean Laws": [
+        "DM-LOG-M-004"
+      ]
+    }
+  },
+  "Competitive Programming": {
+    "Techniques": {
+      "Two Pointers": [
+        "CP-TP-M-001"
+      ],
+      "Sliding Window": [
+        "CP-SW-E-001"
+      ],
+      "Prefix Sums": [
+        "CP-PREF-E-001"
+      ],
+      "Difference Arrays": [
+        "CP-DIFF-M-001"
+      ],
+      "Coordinate Compression": [
+        "CP-COORD-M-001"
+      ],
+      "Meet in the Middle": [
+        "CP-MITM-H-001"
+      ]
+    },
+    "Graph Techniques": {
+      "Dijkstra Variants": [
+        "CP-DIJKV-H-001"
+      ],
+      "Bellman-Ford & SPFA": [
+        "CP-BFV-H-001"
+      ],
+      "Floyd-Warshall Loop Order": [
+        "CP-FWV-M-001"
+      ],
+      "Lowest Common Ancestor (LCA)": [
+        "CP-LCA-H-001"
+      ],
+      "Tree Diameter": [
+        "CP-DIAM-M-001"
+      ],
+      "Disjoint Set Union (DSU)": [
+        "CP-DSU-M-001"
+      ],
+      "Topological Sorting": [
+        "CP-TOPO-M-001"
+      ],
+      "Strongly Connected Components (SCC)": [
+        "CP-SCC-H-001"
+      ],
+      "Disjoint Set Union": [
+        "CP-RNG-M-003"
+      ]
+    },
+    "Range Queries": {
+      "Segment Tree": [
+        "CP-SEG-M-001"
+      ],
+      "Lazy Propagation": [
+        "CP-LAZY-H-001"
+      ],
+      "Fenwick Tree (BIT)": [
+        "CP-BIT-M-001"
+      ],
+      "Sparse Table": [
+        "CP-SPARSE-H-001"
+      ]
+    },
+    "Strings": {
+      "KMP Algorithm": [
+        "CP-KMP-H-001"
+      ],
+      "Z-Algorithm": [
+        "CP-Z-H-001"
+      ],
+      "Polynomial Rolling Hash": [
+        "CP-HASH-M-001"
+      ],
+      "Trie (Prefix Tree)": [
+        "CP-TRIE-M-001"
+      ]
+    },
+    "Math & Number Theory": {
+      "Modular Arithmetic": [
+        "CP-MOD-M-001",
+        "CP-INT-M-003"
+      ],
+      "Sieve of Eratosthenes": [
+        "CP-SIEVE-M-001"
+      ],
+      "GCD & LCM": [
+        "CP-GCD-E-001"
+      ],
+      "Combinatorics": [
+        "CP-COMB-M-001"
+      ],
+      "Euclidean GCD": [
+        "CP-NTH-E-002"
+      ],
+      "Prime Sieve": [
+        "CP-NTH-M-003"
+      ],
+      "Binary Exponentiation": [
+        "CP-NTH-M-004"
+      ],
+      "Modular Inverse": [
+        "CP-NTH-H-005"
+      ],
+      "Primality & Factorization": [
+        "CP-NTH-E-006"
+      ]
+    },
+    "Array Techniques": {
+      "Prefix Sums": [
+        "CP-ARR-E-002",
+        "CP-ARR-M-004",
+        "CP-ARR-H-005"
+      ],
+      "Difference Array": [
+        "CP-ARR-M-003",
+        "CP-ARR-M-006"
+      ]
+    },
+    "Contest Techniques": {
+      "Fast I/O": [
+        "CP-INT-E-002"
+      ]
+    },
+    "Competitive Programming": {
+      "Verdicts": [
+        "CP-INT-M-004"
+      ],
+      "Meet in the Middle": [
+        "CP-INT-H-005"
+      ],
+      "Coordinate Compression": [
+        "CP-INT-E-006"
+      ]
+    },
+    "Two Pointers & Sliding Window": {
+      "Two Pointers": [
+        "CP-TWP-E-002",
+        "CP-TWP-M-004"
+      ],
+      "Sliding Window": [
+        "CP-TWP-M-003",
+        "CP-TWP-H-005",
+        "CP-TWP-E-006"
+      ]
+    },
+    "Advanced Data Structures": {
+      "Fenwick Tree": [
+        "CP-RNG-E-002"
+      ],
+      "Segment Trees": [
+        "CP-RNG-M-004"
+      ],
+      "Segment Trees vs BIT": [
+        "CP-RNG-E-006"
+      ]
+    },
+    "String Algorithms": {
+      "KMP": [
+        "CP-RNG-H-005"
+      ]
+    }
+  },
+  "Algorithms": {
+    "Searching": {
+      "Linear Search": [
+        "AL-SEARCH-E-001",
+        "AL-LNS-E-002",
+        "AL-LNS-M-003",
+        "AL-LNS-M-004",
+        "AL-LNS-E-005",
+        "AL-LNS-H-006"
+      ],
+      "Binary Search": [
+        "AL-SEARCH-M-002",
+        "AL-SEARCH-H-003",
+        "AL-BSR-E-002",
+        "AL-BSR-M-003",
+        "AL-BSR-M-004",
+        "AL-BSR-H-005",
+        "AL-BSR-E-006"
+      ],
+      "Binary Search Variants": [
+        "AL-BSVAR-M-001",
+        "AL-BOA-E-002",
+        "AL-BOA-M-003",
+        "AL-BOA-H-005",
+        "AL-BOA-E-006"
+      ],
+      "Ternary Search": [
+        "AL-TERN-H-001",
+        "AL-BOA-M-004"
+      ],
+      "Interpolation Search": [
+        "AL-INTP-M-001"
+      ]
+    },
+    "Sorting": {
+      "Stability": [
+        "AL-STAB-E-001",
+        "AL-SRT-E-006"
+      ],
+      "In-Place Sorting": [
+        "AL-INP-E-001"
+      ],
+      "Bubble Sort": [
+        "AL-BUB-E-001"
+      ],
+      "Selection Sort": [
+        "AL-SEL-E-001"
+      ],
+      "Insertion Sort": [
+        "AL-INS-E-001",
+        "AL-SRT-M-004"
+      ],
+      "Merge Sort": [
+        "AL-SORT-M-002",
+        "AL-SRT-E-002"
+      ],
+      "Quick Sort": [
+        "AL-SORT-E-001",
+        "AL-SRT-H-005"
+      ],
+      "Heap Sort": [
+        "AL-HEAPSORT-M-001"
+      ],
+      "Counting Sort": [
+        "AL-COUNT-M-001"
+      ],
+      "Radix Sort": [
+        "AL-RADIX-M-001"
+      ],
+      "Bucket Sort": [
+        "AL-BUCK-M-001"
+      ],
+      "Counting & Radix Sort": [
+        "AL-SRT-M-003"
+      ]
+    },
+    "Recursion & Backtracking": {
+      "Recursion Fundamentals": [
+        "AL-REC-E-001"
+      ],
+      "Backtracking": [
+        "AL-BACK-M-001",
+        "AL-REC-M-003"
+      ],
+      "Base Cases": [
+        "AL-REC-E-002"
+      ],
+      "Recursion Trees": [
+        "AL-REC-M-004",
+        "AL-REC-E-005"
+      ]
+    },
+    "Divide and Conquer": {
+      "Fundamentals": [
+        "AL-DC-E-001"
+      ],
+      "Binary Exponentiation": [
+        "AL-REC-H-006"
+      ]
+    },
+    "Greedy Algorithms": {
+      "Fundamentals": [
+        "AL-GREEDY-E-001"
+      ],
+      "Interval Scheduling": [
+        "AL-INT-M-001",
+        "AL-GRD-M-004"
+      ],
+      "Huffman Coding": [
+        "AL-HUFF-M-001",
+        "AL-GRD-M-003"
+      ],
+      "Fractional Knapsack": [
+        "AL-GRD-E-002"
+      ],
+      "Counterexamples": [
+        "AL-GRD-H-005"
+      ],
+      "Proofs": [
+        "AL-GRD-E-006"
+      ]
+    },
+    "Dynamic Programming": {
+      "Memoization": [
+        "AL-DP-M-001"
+      ],
+      "1D DP": [
+        "AL-DP1D-E-001",
+        "AL-DPR-M-003"
+      ],
+      "2D DP": [
+        "AL-DP2D-M-001",
+        "AL-DPR-E-006"
+      ],
+      "0/1 Knapsack": [
+        "AL-DPKNAP-M-001"
+      ],
+      "Subsequences": [
+        "AL-DPLCS-M-001",
+        "AL-DPR-M-004"
+      ],
+      "Interval DP": [
+        "AL-DPINT-H-001"
+      ],
+      "Bitmask DP": [
+        "AL-DPBIT-H-001"
+      ],
+      "Tree DP": [
+        "AL-DPTREE-H-001"
+      ],
+      "Memoization vs Tabulation": [
+        "AL-DPR-E-002"
+      ],
+      "Knapsack": [
+        "AL-DPR-H-005"
+      ]
+    },
+    "Graph Algorithms": {
+      "Fundamentals": [
+        "AL-GRAPH-E-001"
+      ],
+      "BFS": [
+        "AL-BFS-E-001",
+        "AL-GTR-E-002"
+      ],
+      "DFS": [
+        "AL-DFS-M-001"
+      ],
+      "Shortest Path": [
+        "AL-GRAPH-H-001"
+      ],
+      "Bellman-Ford": [
+        "AL-BF-M-001"
+      ],
+      "Floyd-Warshall": [
+        "AL-FW-M-001"
+      ],
+      "Kruskal MST": [
+        "AL-KRUSK-M-001"
+      ],
+      "Prim MST": [
+        "AL-PRIM-M-001"
+      ],
+      "Topological Sort": [
+        "DS-GRP-M-003"
+      ],
+      "Shortest Paths": [
+        "AL-GTR-M-003"
+      ],
+      "Dijkstra": [
+        "AL-GTR-M-004"
+      ],
+      "MST": [
+        "AL-GTR-H-005"
+      ],
+      "Multi-Source BFS": [
+        "AL-GTR-E-006"
+      ]
+    },
+    "Complexity Analysis": {
+      "Big-O": [
+        "AL-BIGO-E-001",
+        "AL-CMP-E-002",
+        "AL-CMP-E-005"
+      ],
+      "Time Complexity": [
+        "AL-TIME-M-001",
+        "PF-LOP-M-004",
+        "PF-LOP-H-006",
+        "AL-CMP-M-003",
+        "AL-CMP-H-006"
+      ],
+      "Space Complexity": [
+        "AL-SPACE-M-001",
+        "AL-CMP-M-004"
+      ]
+    }
+  },
+  "Data Structures": {
+    "Arrays": {
+      "Static Arrays": [
+        "DS-ARR-E-001"
+      ],
+      "Matrices": [
+        "DS-MAT-M-001"
+      ],
+      "Traversal": [
+        "DS-ARRTRAV-E-001"
+      ],
+      "Insertion": [
+        "DS-ARRINS-E-001",
+        "DS-ARR-E-002"
+      ],
+      "Deletion": [
+        "DS-ARRDEL-E-001",
+        "DS-ARR-H-006"
+      ],
+      "Dynamic Arrays": [
+        "DS-ARR-M-003"
+      ],
+      "Strings": [
+        "DS-ARR-E-004"
+      ],
+      "2D Matrices": [
+        "DS-ARR-M-005"
+      ]
+    },
+    "Linked Lists": {
+      "Singly Linked List": [
+        "DS-LL-M-001",
+        "DS-LL-E-002",
+        "DS-LL-M-004"
+      ],
+      "Doubly Linked List": [
+        "DS-DLL-M-001",
+        "DS-LL-M-003"
+      ],
+      "Circular Linked List": [
+        "DS-CLL-E-001",
+        "DS-LL-E-006"
+      ],
+      "Cycle Detection": [
+        "DS-LL-H-005"
+      ]
+    },
+    "Stacks": {
+      "Applications": [
+        "DS-STACK-M-001"
+      ],
+      "Stack Applications": [
+        "DS-SQ-E-002"
+      ],
+      "Monotonic Stack": [
+        "DS-SQ-H-005"
+      ],
+      "Bracket Matching": [
+        "DS-SQ-E-006"
+      ]
+    },
+    "Queues": {
+      "Simple Queue": [
+        "DS-Q-E-001"
+      ],
+      "Circular Queue": [
+        "DS-CQ-M-001"
+      ],
+      "Priority Queue": [
+        "DS-PQ-M-001"
+      ],
+      "Deque": [
+        "DS-DEQ-M-001",
+        "DS-SQ-M-004"
+      ],
+      "Queue Applications": [
+        "DS-SQ-M-003"
+      ]
+    },
+    "Hash Tables": {
+      "Hash Functions & Load Factor": [
+        "DS-HASHF-M-001"
+      ],
+      "Collision Handling": [
+        "DS-HASH-H-001"
+      ],
+      "Open Addressing": [
+        "DS-OPENA-H-001"
+      ],
+      "Hash Functions": [
+        "DS-HSH-E-002"
+      ],
+      "Collisions": [
+        "DS-HSH-M-003"
+      ],
+      "HashMap vs TreeMap": [
+        "DS-HSH-M-004"
+      ],
+      "Mutable Keys": [
+        "DS-HSH-H-005"
+      ],
+      "Rehashing": [
+        "DS-HSH-E-006"
+      ]
+    },
+    "Trees": {
+      "Binary Trees": [
+        "DS-BT-E-001",
+        "DS-TRE-E-002"
+      ],
+      "Binary Search Trees": [
+        "DS-TREE-M-001"
+      ],
+      "AVL Trees": [
+        "DS-AVL-M-001"
+      ],
+      "Red-Black Trees": [
+        "DS-RB-H-001"
+      ],
+      "Tree Traversals": [
+        "DS-TTR-E-001",
+        "DS-TRE-M-003"
+      ],
+      "Heaps": [
+        "DS-HEAP-M-001"
+      ],
+      "Tries": [
+        "DS-TRIE-E-001",
+        "DS-TRE-H-005"
+      ],
+      "Balanced Trees": [
+        "DS-TRE-E-006"
+      ]
+    },
+    "Graphs": {
+      "Adjacency Matrix": [
+        "DS-ADJM-E-001"
+      ],
+      "Adjacency List": [
+        "DS-ADJL-E-001"
+      ],
+      "Representations": [
+        "DS-GRP-E-002"
+      ],
+      "Weighted Graphs": [
+        "DS-GRP-M-004"
+      ],
+      "Handshaking Lemma": [
+        "DS-GRP-H-005"
+      ],
+      "Components": [
+        "DS-GRP-E-006"
+      ]
+    },
+    "Heaps & Priority Queues": {
+      "Binary Heaps": [
+        "DS-TRE-M-004"
+      ]
+    }
+  },
+  "Databases": {
+    "Fundamentals": {
+      "Relational Keys": [
+        "DB-FUND-E-001"
+      ]
+    },
+    "Database Design": {
+      "ER Modeling": [
+        "DB-ER-E-001",
+        "DB-REL-M-003"
+      ],
+      "1NF": [
+        "DB-1NF-E-001"
+      ],
+      "2NF": [
+        "DB-2NF-M-001"
+      ],
+      "Normalization": [
+        "DB-NORM-H-001",
+        "DB-NRM-E-002",
+        "DB-NRM-M-003",
+        "DB-NRM-M-004"
+      ],
+      "BCNF": [
+        "DB-BCNF-H-001",
+        "DB-NRM-H-005"
+      ],
+      "Schema Keys": [
+        "DB-REL-H-005"
+      ],
+      "One-to-Many": [
+        "DB-REL-E-006"
+      ],
+      "Denormalization": [
+        "DB-NRM-E-006"
+      ]
+    },
+    "SQL": {
+      "Fundamentals": [
+        "DB-SQL-E-001"
+      ],
+      "Filtering": [
+        "DB-FILT-E-001"
+      ],
+      "Joins": [
+        "DB-JOIN-M-003",
+        "DB-JNS-E-002",
+        "DB-JNS-M-003"
+      ],
+      "Grouping & Aggregations": [
+        "DB-GRP-M-001"
+      ],
+      "Subqueries & CTEs": [
+        "DB-SUB-M-001"
+      ],
+      "Set Operations": [
+        "DB-SET-E-001"
+      ],
+      "Queries": [
+        "DB-SQL-E-002"
+      ],
+      "Filtering & NULL": [
+        "DB-SQL-M-003"
+      ],
+      "COUNT Semantics": [
+        "DB-SQL-M-004"
+      ],
+      "SQL Injection": [
+        "DB-SQL-H-005"
+      ],
+      "Execution Order": [
+        "DB-SQL-E-006"
+      ],
+      "CTEs vs Set Ops": [
+        "DB-JNS-M-004"
+      ],
+      "CTEs": [
+        "DB-JNS-H-005"
+      ],
+      "GROUP BY": [
+        "DB-JNS-E-006"
+      ]
+    },
+    "Transactions": {
+      "ACID Properties": [
+        "DB-ACID-M-001"
+      ],
+      "Concurrency Control": [
+        "DB-CONC-H-001"
+      ],
+      "Isolation Levels": [
+        "DB-ISO-H-001"
+      ],
+      "ACID": [
+        "DB-ACD-E-002"
+      ],
+      "Durability": [
+        "DB-ACD-M-003"
+      ],
+      "Isolation Anomalies": [
+        "DB-ACD-M-004"
+      ],
+      "MVCC": [
+        "DB-ACD-H-005"
+      ],
+      "Isolation": [
+        "DB-ACD-E-006"
+      ]
+    },
+    "Indexing": {
+      "B-Trees": [
+        "DB-INDEX-M-002"
+      ],
+      "Hash Indexes": [
+        "DB-HIDX-M-001"
+      ]
+    },
+    "Query Optimization": {
+      "Execution Plans": [
+        "DB-OPT-H-001"
+      ],
+      "Indexes": [
+        "DB-IDX-E-002"
+      ],
+      "Composite Index": [
+        "DB-IDX-M-003"
+      ],
+      "N+1 Query Problem": [
+        "DB-IDX-M-004"
+      ],
+      "SARGable Predicates": [
+        "DB-IDX-H-005"
+      ],
+      "EXPLAIN ANALYZE": [
+        "DB-IDX-E-006"
+      ]
+    },
+    "Relational Model": {
+      "Primary Keys": [
+        "DB-REL-E-002"
+      ],
+      "Foreign Keys": [
+        "DB-REL-M-004"
+      ]
+    }
+  },
+  "Networking": {
+    "Fundamentals": {
+      "Client-Server & URLs": [
+        "NW-CONC-E-001"
+      ],
+      "Network Topologies": [
+        "NW-TOP-E-001"
+      ],
+      "OSI Model": [
+        "NW-OSI-E-001"
+      ]
+    },
+    "Network Models": {
+      "TCP/IP Model": [
+        "NW-TCPIP-E-001"
+      ]
+    },
+    "Application Layer": {
+      "HTTP": [
+        "NW-HTTP-H-001"
+      ],
+      "HTTPS & TLS": [
+        "NW-HTTPS-M-001"
+      ],
+      "DNS": [
+        "NW-DNS-E-001"
+      ],
+      "SMTP": [
+        "NW-SMTP-E-001"
+      ],
+      "FTP vs SFTP": [
+        "NW-FTP-E-001"
+      ],
+      "DNS Resolution": [
+        "PRE-WEB-E-002"
+      ],
+      "HTTP Status": [
+        "PRE-WEB-M-003"
+      ],
+      "Frontend vs Backend": [
+        "PRE-WEB-M-004"
+      ],
+      "HTTP Verbs": [
+        "PRE-WEB-E-005"
+      ],
+      "Next.js Rendering": [
+        "PRE-WEB-H-006"
+      ],
+      "HTTP Semantics": [
+        "NW-APP-E-002"
+      ],
+      "DNS Records": [
+        "NW-APP-M-003"
+      ],
+      "Cookies & Security": [
+        "NW-APP-M-004"
+      ],
+      "HTTPS / TLS": [
+        "NW-APP-H-005"
+      ],
+      "Protocols": [
+        "NW-APP-E-006"
+      ]
+    },
+    "Transport Layer": {
+      "TCP": [
+        "NW-TCP-M-001"
+      ],
+      "UDP": [
+        "NW-UDP-E-001"
+      ],
+      "Ports & Multiplexing": [
+        "NW-PORT-E-001"
+      ],
+      "TCP Congestion Control": [
+        "NW-CC-H-001",
+        "NW-PRT-H-005"
+      ],
+      "TCP vs UDP": [
+        "NW-PRT-E-002"
+      ]
+    },
+    "Network Layer": {
+      "IP Addressing": [
+        "NW-IP-M-002"
+      ],
+      "IPv6": [
+        "NW-IPV6-E-001"
+      ],
+      "Subnetting (CIDR)": [
+        "NW-SUB-M-001"
+      ],
+      "IP Routing": [
+        "NW-ROUT-M-001"
+      ],
+      "Subnetting": [
+        "NW-PRT-M-003"
+      ],
+      "NAT & DHCP": [
+        "NW-PRT-E-006"
+      ]
+    },
+    "Data Link Layer": {
+      "MAC & ARP": [
+        "NW-MAC-E-001"
+      ],
+      "Ethernet Frames": [
+        "NW-ETH-E-001"
+      ]
+    },
+    "OSI & TCP/IP": {
+      "Layer Responsibilities": [
+        "NW-PRT-M-004"
+      ]
+    }
+  },
+  "Operating Systems": {
+    "Fundamentals": {
+      "OS Role & Kernel": [
+        "OS-CONC-E-001"
+      ],
+      "System Calls": [
+        "OS-SYSC-E-001"
+      ]
+    },
+    "Processes & Threads": {
+      "Processes": [
+        "OS-PROC-E-001"
+      ],
+      "Threads": [
+        "OS-THR-E-001",
+        "OS-PRC-E-006"
+      ],
+      "Context Switching": [
+        "OS-CTX-M-001"
+      ],
+      "Processes vs Threads": [
+        "OS-PRC-E-002"
+      ]
+    },
+    "CPU Scheduling": {
+      "FCFS": [
+        "OS-FCFS-E-001",
+        "OS-SCH-E-002"
+      ],
+      "SJF": [
+        "OS-SJF-M-001"
+      ],
+      "Round Robin": [
+        "OS-SCHED-M-003",
+        "OS-SCH-M-003"
+      ],
+      "Priority Scheduling": [
+        "OS-PRIO-M-001",
+        "OS-SCH-M-004"
+      ],
+      "Metrics": [
+        "OS-SCH-H-005"
+      ],
+      "Preemptive vs Non-Preemptive": [
+        "OS-SCH-E-006"
+      ]
+    },
+    "Concurrency": {
+      "Race Conditions": [
+        "OS-RACE-M-001",
+        "OS-PRC-M-003"
+      ],
+      "Synchronization": [
+        "OS-SYNC-M-001",
+        "OS-PRC-M-004"
+      ],
+      "Semaphores": [
+        "OS-SEM-M-001"
+      ],
+      "Monitors & Condition Variables": [
+        "OS-MON-H-001"
+      ],
+      "Deadlocks": [
+        "OS-PRC-H-005"
+      ]
+    },
+    "Deadlocks": {
+      "Deadlock Prevention": [
+        "OS-DLPREV-M-001"
+      ],
+      "Banker's Algorithm": [
+        "OS-DLAV-H-001"
+      ],
+      "Deadlock Detection": [
+        "OS-DLDET-M-001"
+      ]
+    },
+    "Memory Management": {
+      "Paging & TLB": [
+        "OS-PAGE-M-001"
+      ],
+      "Segmentation": [
+        "OS-SEG-E-001"
+      ],
+      "Virtual Memory": [
+        "OS-MEM-H-001"
+      ],
+      "Page Replacement": [
+        "OS-PAGEREPL-M-001",
+        "OS-VM-M-003"
+      ],
+      "Paging": [
+        "OS-VM-E-002"
+      ],
+      "Paging Arithmetic": [
+        "OS-VM-M-004"
+      ]
+    },
+    "File Systems": {
+      "Files & Directories": [
+        "OS-FS-E-002"
+      ],
+      "Permissions": [
+        "OS-PERM-E-001"
+      ],
+      "Inodes & Permissions": [
+        "OS-VM-H-005"
+      ],
+      "Inodes": [
+        "OS-VM-E-006"
+      ]
+    },
+    "OS Role": {
+      "Privilege Modes": [
+        "PRE-OS-E-002"
+      ],
+      "CPU Registers": [
+        "PRE-CPU-E-003"
+      ],
+      "Buffered I/O": [
+        "PRE-BUS-H-005"
+      ]
+    }
+  },
+  "Programming Fundamentals": {
+    "Variables & Data Types": {
+      "Primitive Types": [
+        "PF-VAR-E-001",
+        "PF-VAR-E-005"
+      ],
+      "Type Conversion": [
+        "PF-CAST-E-001",
+        "PF-VAR-M-002"
+      ],
+      "Constants": [
+        "PF-CONST-E-001",
+        "PF-VAR-E-003"
+      ]
+    },
+    "Operators & Expressions": {
+      "Arithmetic & Modulo": [
+        "PF-ARITH-E-001"
+      ],
+      "Logical Operators": [
+        "PF-LOG-E-001",
+        "PF-CND-M-003",
+        "PF-CND-E-005"
+      ],
+      "Binary & Bitwise Operations": [
+        "PF-BIT-M-001"
+      ],
+      "Arithmetic": [
+        "PF-VAR-M-004"
+      ],
+      "Increment Operators": [
+        "PF-VAR-H-006"
+      ]
+    },
+    "Data Representation": {
+      "Bits, Bytes & Hexadecimal": [
+        "PRE-BIN-E-001"
+      ],
+      "Hexadecimal": [
+        "PRE-REP-E-002"
+      ],
+      "Floating Point": [
+        "PRE-REP-M-003"
+      ],
+      "Signed Integers": [
+        "PRE-REP-M-004"
+      ],
+      "Character Encoding": [
+        "PRE-REP-E-005"
+      ],
+      "Binary Width": [
+        "PRE-REP-H-006"
+      ]
+    },
+    "Computer Basics": {
+      "CPU Execution & RAM": [
+        "PRE-CPU-E-001"
+      ],
+      "Memory Hierarchy": [
+        "PRE-CPU-M-002"
+      ]
+    },
+    "Control Structures": {
+      "Conditionals & Switch": [
+        "PF-COND-E-001"
+      ],
+      "Loops": [
+        "PF-LOOP-M-001",
+        "PF-LOP-E-002",
+        "PF-LOP-M-003",
+        "PF-LOP-E-005"
+      ],
+      "Conditionals": [
+        "PF-CND-E-002",
+        "PF-CND-M-004",
+        "PF-CND-H-006"
+      ]
+    },
+    "Functions": {
+      "Parameters & Arguments": [
+        "PF-FUNC-M-002"
+      ],
+      "Return Values": [
+        "PF-RET-E-001",
+        "PF-FNC-E-004",
+        "PF-FNC-H-006"
+      ],
+      "Scope & Shadowing": [
+        "PF-SCOPE-M-001"
+      ],
+      "Parameters": [
+        "PF-FNC-E-002",
+        "PF-FNC-M-005"
+      ],
+      "Scope": [
+        "PF-FNC-M-003"
+      ]
+    },
+    "Memory Fundamentals": {
+      "Stack vs Heap": [
+        "PF-MEM-H-001",
+        "PF-MEM-E-002"
+      ],
+      "Pointers & References": [
+        "PF-PTR-H-001"
+      ],
+      "Primary vs Secondary": [
+        "PRE-RAM-E-004"
+      ],
+      "Pointers": [
+        "PF-MEM-M-003",
+        "PF-MEM-H-005"
+      ],
+      "Memory Leaks": [
+        "PF-MEM-M-004"
+      ],
+      "RAII": [
+        "PF-MEM-E-006"
+      ]
+    },
+    "Operators": {
+      "Bitwise Masking": [
+        "PRE-BIT-E-002"
+      ],
+      "Bit Shifts": [
+        "PRE-BIT-M-003"
+      ],
+      "Bitwise Precedence": [
+        "PRE-BIT-M-004"
+      ],
+      "XOR Canceling": [
+        "PRE-BIT-H-006"
+      ]
+    },
+    "Compilation": {
+      "Toolchains": [
+        "PRE-PRG-M-003"
+      ]
+    },
+    "Type Checking": {
+      "Static Analysis": [
+        "PRE-PRG-M-005"
+      ]
+    }
+  },
+  "Object-Oriented Programming": {
+    "Fundamentals": {
+      "Classes & Objects": [
+        "OOP-CLS-E-001"
+      ],
+      "Constructors": [
+        "OOP-CTOR-E-001"
+      ]
+    },
+    "Core Principles": {
+      "Encapsulation": [
+        "OOP-ENCAP-E-001",
+        "OOP-ENC-M-004",
+        "OOP-ENC-E-005"
+      ],
+      "Inheritance": [
+        "OOP-INHERIT-M-001",
+        "OOP-PLY-M-004"
+      ],
+      "Polymorphism": [
+        "OOP-POLY-M-001",
+        "OOP-PLY-E-002"
+      ],
+      "Abstraction": [
+        "OOP-ABS-E-001",
+        "OOP-PLY-E-005"
+      ]
+    },
+    "Relationships": {
+      "Composition": [
+        "OOP-COMP-M-001"
+      ],
+      "Aggregation": [
+        "OOP-AGG-M-001"
+      ],
+      "Association": [
+        "OOP-ASSOC-E-001"
+      ]
+    },
+    "Advanced Concepts": {
+      "Interfaces": [
+        "OOP-INTF-M-001",
+        "OOP-PLY-M-003"
+      ],
+      "Abstract Classes": [
+        "OOP-ABCLS-M-001",
+        "OOP-PLY-H-006"
+      ]
+    },
+    "SOLID Principles": {
+      "Single Responsibility (SRP)": [
+        "OOP-SRP-E-001"
+      ],
+      "Open/Closed (OCP)": [
+        "OOP-OCP-M-001"
+      ],
+      "Liskov Substitution (LSP)": [
+        "OOP-LSP-H-001"
+      ],
+      "Interface Segregation (ISP)": [
+        "OOP-ISP-M-001"
+      ],
+      "Dependency Inversion (DIP)": [
+        "OOP-DIP-M-001"
+      ],
+      "SRP": [
+        "SE-DES-E-002"
+      ],
+      "OCP": [
+        "SE-DES-M-003"
+      ],
+      "ISP": [
+        "SE-DES-M-004"
+      ]
+    },
+    "OOP Fundamentals": {
+      "Classes and Objects": [
+        "OOP-ENC-E-002"
+      ],
+      "Constructors": [
+        "OOP-ENC-M-003",
+        "OOP-ENC-H-006"
+      ]
+    }
+  },
+  "Software Engineering": {
+    "SDLC": {
+      "Requirements Engineering": [
+        "SE-REQ-E-001"
+      ],
+      "Software Architecture": [
+        "SE-DES-M-001"
+      ],
+      "Compilation": [
+        "PRE-PRG-E-002"
+      ],
+      "Logic Errors": [
+        "PRE-PRG-H-006"
+      ]
+    },
+    "Methodologies": {
+      "Agile": [
+        "SE-AGILE-E-001"
+      ],
+      "Scrum": [
+        "SE-SCRUM-E-001"
+      ],
+      "Kanban": [
+        "SE-KAN-E-001"
+      ],
+      "Waterfall": [
+        "SE-WF-E-001"
+      ],
+      "Verification": [
+        "SE-TST-H-005"
+      ]
+    },
+    "Testing": {
+      "Unit Testing": [
+        "SE-UNIT-E-001",
+        "SE-TST-E-002"
+      ],
+      "Integration Testing": [
+        "SE-TEST-M-001",
+        "SE-TST-M-003"
+      ],
+      "System & E2E Testing": [
+        "SE-SYS-M-001"
+      ],
+      "Problem Solving": [
+        "PRE-PRG-E-004"
+      ],
+      "Test Isolation": [
+        "SE-TST-E-006"
+      ]
+    },
+    "Version Control": {
+      "Git Fundamentals": [
+        "SE-GIT-E-001"
+      ],
+      "Branching & Merging": [
+        "SE-BR-M-001"
+      ],
+      "Git Branching": [
+        "SE-TST-M-004"
+      ]
+    },
+    "Design Patterns": {
+      "Creational Patterns": [
+        "SE-DPCR-M-001"
+      ],
+      "Structural Patterns": [
+        "SE-DPST-M-001"
+      ],
+      "Behavioral Patterns": [
+        "SE-DPBH-M-001"
+      ],
+      "Behavioral": [
+        "SE-DES-H-005"
+      ],
+      "Creational": [
+        "SE-DES-E-006"
+      ]
+    }
+  }
+}

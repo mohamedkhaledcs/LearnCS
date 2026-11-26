@@ -1,0 +1,14 @@
+{
+  "name": "learncs-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LearnCS Computer Science Learning Experience Platform",
+  "scripts": {
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "dotnet run --project backend/src/LearnCS.API",
+    "build:frontend": "npm --prefix frontend run build",
+    "build:backend": "dotnet build backend/LearnCS.sln",
+    "typecheck": "npm --prefix frontend run build",
+    "validate:curriculum": "npm --prefix frontend run validate:curriculum"
+  }
+}
